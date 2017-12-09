@@ -83,8 +83,8 @@ MongoClient.connect(url, function(err, db) {
         db.collection('sessionDB').updateOne({'username': user}, {$set: {current_sessionID: sessionPass}});
           db.close();
 
-    });
-});
+        });
+      });
 
 
 How to start running the webserver
@@ -137,22 +137,22 @@ userDB
 The userDB holds information about the registered user as seen below.
 All passwords are hashed for security using bcrypt. 
 
-var insertUser = function(db, req, hash, callback) {
-   db.collection('userDB').insertOne( {
-      "bio-data" : {
-         "fullName" : req.body.firstName + " " + req.body.lastName, 
-         "country" : "USA",
-         "birthdate" :  req.body.dobYear,
-         "membership" : false
-      },
-      "username" : req.body.user_reg,
-      "emailAddress" : req.body.emailAddress,
-      "hashedPass" : hash
-   }, function(err, result) {
-    assert.equal(err, null);
-    console.log("Inserted a user_document into the userDB collection.");
-    callback();
-  });
+    var insertUser = function(db, req, hash, callback) {
+       db.collection('userDB').insertOne( {
+          "bio-data" : {
+             "fullName" : req.body.firstName + " " + req.body.lastName, 
+             "country" : "USA",
+             "birthdate" :  req.body.dobYear,
+             "membership" : false
+          },
+          "username" : req.body.user_reg,
+          "emailAddress" : req.body.emailAddress,
+          "hashedPass" : hash
+       }, function(err, result) {
+        assert.equal(err, null);
+        console.log("Inserted a user_document into the userDB collection.");
+        callback();
+      });
 =================================================================================
 
 

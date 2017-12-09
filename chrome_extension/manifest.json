@@ -10,8 +10,8 @@
     "default_popup": "popup.html"
   },
   "permissions": [
-    "http://www.google.com/"
-	"www.s-cord0.com/*",
+    "http://www.google.com/",
+    "www.s-cord0.com/*",
     "activeTab",
     "storage"
   ]

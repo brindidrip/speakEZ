@@ -92,7 +92,7 @@ How to start running the webserver
 
 Domain: s-cord0.com (the original name of the application -- domains are expensive)
 
-Route53 controls the domain and NS. Using an AWS EC2 instance, I set the security groups open to all users. Meaning nothing is secure
+Route53 controls the domain and NS. Using an AWS EC2 instance, I set the security groups open to all incoming users. Meaning nothing is secure
 right now and anyone can SSH in. There is a ssh key required to get access though, which I have included on my github repo.
 
 TO SSH IN: sudo ssh -i sshkeys/scord-mainkey.pem ec2-user@ec2-18-217-88-70.us-east-2.compute.amazonaws.com
@@ -110,7 +110,7 @@ Redirect incoming port 80 traffic to route 3000 using iptables.
 MongoDB
 =================================================================================
 
-The application uses MongoDB. The mongodb instance is stored on a google cloud platform VM instance. I have created a VM with linux and have installed MongoDB there. In order to authenticate with admin, the user is "domenico" and the password is "default". 
+This application uses MongoDB. The mongodb instance is stored on a google cloud platform VM instance. I have created a VM with linux and have installed MongoDB there. In order to authenticate with admin, the user is "domenico" and the password is "default". 
 
 Command line entry:
 

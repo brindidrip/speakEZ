@@ -92,18 +92,21 @@ How to start running the webserver
 
 Domain: s-cord0.com (the original name of the application -- domains are expensive)
 
-Route53 controls the domain and NS. Using an AWS EC2 instance, I set the security groups open to all incoming users. Meaning nothing is secure
+Route53 controls the domain and NS. Using an AWS EC2 instance, I set the security groups open to all incoming users; meaning nothing is secure
 right now and anyone can SSH in. There is a ssh key required to get access though, which I have included on my github repo.
 
 TO SSH IN: sudo ssh -i sshkeys/scord-mainkey.pem ec2-user@ec2-18-217-88-70.us-east-2.compute.amazonaws.com
 
-REQUIREMENT: Use nvm install 7.7 to run async functions.
+REQUIREMENT: Use nvm install 7.4 to run async functions.
 
-Once I set up node and npm using YUM, I was able to generate an express application and test out the functionality. Using sudo PORT=80 node ./bin/www launched the server.
+Once I set up node and npm using YUM, I was able to generate an express application and test out the functionality. Using sudo PORT=8080 node ./bin/www launched the server.
 
 Instead of running app with SUDO:
-sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 3000
-Redirect incoming port 80 traffic to route 3000 using iptables.
+sudo iptables -t nat -A PREROUTING -p tcp --dport 8080 -j REDIRECT --to-ports 3000
+Redirect incoming port 80 traffic to port 3000 using iptables.
+
+- Make sure to run npm install express if first time running
+
 
 
 

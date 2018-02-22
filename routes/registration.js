@@ -9,7 +9,7 @@ var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
 var ObjectId = require('mongodb').ObjectID;
 
-var url = 'mongodb://35.196.154.162:27017/admin'
+var url = 'mongodb://35.227.19.224:27017/admin'
     
 router.use(bodyParser.json());
 

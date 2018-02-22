@@ -20,7 +20,7 @@ const mongodb = require('mongodb');
 
 
 
-var url = 'mongodb://domenico:default@35.196.154.162:27017/admin'
+var url = 'mongodb://domenico:default@35.227.19.224:27017/admin'
 var app = express();
 
 app.use(bodyParser.json());

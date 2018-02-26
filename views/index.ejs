@@ -9,13 +9,13 @@
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.3.0/milligram.min.css">
     <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel='stylesheet' href='/stylesheets/customAudio.css' />
     <link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/google/code-prettify/master/loader/prettify.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.css">
 
     <title>speakEZ - A way to easily embed your voice across the internets.</title>
   
-    
   </head>
   
     <body>
@@ -30,7 +30,7 @@
                </a>
                
           <ul class="navigation-list float-right">
-            <li class="navigation-item">
+            <li class="navigation-item" id="navigation-item">
               <a class="navigation-link" href="#popover-grid" data-popover="">Login</a>
               <div class="popover" id="popover-grid">
           
@@ -88,14 +88,34 @@
       <button class="button" onclick="startRecording(this);">record</button>
       <button class="button" onclick="stopRecording(this);" disabled>stop</button>
         
+      <button id="saveButton" class="button" >Save</button>
+      
+      <div class="recordings">
+        <ul class="recordingslist" id="recordingslist">
+        <audio id="music">
+          
+        </audio>
+        
+      </ul>
+    </div>
+    
+  <div id ="tokenBlob">
+        <h1 id="tokenBlobTxt"></h1>
+        
+        
+      </div>
+
+
     </section>
+ 
+    
   </header>
+  
 
 
   <section class="container" id="why">
     <h3 class="title">Summary of how it works</h3>
-      
-      <p> insert read me</p>
+    
   </section>
   
   <footer class="footer">
@@ -140,9 +160,27 @@
 </main>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="/javascripts/recorder.js"></script>
+    <script src="/javascripts/customAudio.js"></script>
+
 
 <script>
 
+var currentBlob = new FormData();
+
+
+$(document).click(function(evt){    
+      if( $('#popover-grid').css('display') == 'block') {
+        $('#popover-grid').toggle( "popover" );
+            }
+
+      else if( $('#popover-support').css('display') == 'block') {
+        $('#popover-support').toggle( "popover" );
+            }
+            
+      return;
+});
+
+// Pop-over list button functionality
 $(document).ready(function(){
   $('.navigation-link').on('click',function(ev){
     ev.preventDefault();
@@ -166,27 +204,81 @@ $(document).ready(function(){
     return;
     });
 });
-  
-  /*
-  $(document).click(function(evt){    
-      if( $('#popover-grid').css('display') == 'block') {
-        $('#popover-grid').toggle( "popover" );
-            }
 
-      else( $('#popover-support').css('display') == 'block') {
-        $('#popover-support').toggle( "popover" );
-            }
+
+  function toArrayBuffer(buf) {
+    var ab = new ArrayBuffer(buf.length);
+    var view = new Uint8Array(ab);
+    for (var i = 0; i < buf.length; ++i) {
+        view[i] = buf[i];
+    }
+    return ab;
+}
+
+// Save a recording and generate a unique blobToken  
+$("#saveButton").click(function(e) {
+    e.preventDefault();
+    
+    // ajax POST method
+    // POSTS blob data to route /speakEZ/DB which stores data in mongoDB
+    // Returns a uniquely identifiable token to represent the blob
+    // or returns an error
+    
+    // Blob was too large to pass through ajax call, so it was appended to a FormData().
+    // Since we are POSTing a file, contentType must be false.
+    // processData must be false, otherwise jQuery tries to convert FormData to a string.
+    $.ajax({
+        type: "POST",
+        url: "/speakEZ/DB",
+        data: currentBlob,
+        contentType: false,
+        processData: false,
+        success: function(result) {
+          try {
+            alert("um, success")
             
-      return;
+            // Store buffer from response in a buffer array and then into a Blob
+            var bf = toArrayBuffer(result.blob.data);
+            var storedBlob = new Blob([bf], {type: 'audio/wav'});
 
+            // Debugging Purposes:
+            // Use a file reader to read blob. 
+            
+            //  var myReader = new FileReader();
+            //  myReader.onload = function(event){
+            //  console.log(JSON.stringify(myReader.result));
+            //        };
+            //  myReader.readAsText(blob);
+          
+                        }
+          // TODO
+          // Set appropriate catch/alert.
+          catch(e) {
+            alert(e);
+                }
+                
+            // If successful POST, then use recorder library to append a text      
+            // node containing a unique blobToken
+            var txtNode = document.getElementById("tokenBlobTxt");
+            txtNode.innerHTML = "speakEZ://" + myObj;
+            
+            // Create a blobURL
+            var url = URL.createObjectURL(storedBlob);
+            
+            // Replaces existing token
+            var parent = document.getElementById("recordingslist");
+            var child = document.getElementById("recording-item-sample")
+            parent.removeChild(child);
+
+        },
+        
+        error: function(result) {
+            alert('error');
+            alert(result);
+        }
+    });
 });
-  */
   
- 
-
-  var audio_context;
-  var recorder;
-
   function startUserMedia(stream) {
     var input = audio_context.createMediaStreamSource(stream);
     console.log('Media stream created.');
@@ -197,6 +289,10 @@ $(document).ready(function(){
   }
 
   function startRecording(button) {
+    // Reset text node.
+    var txtNode = document.getElementById("tokenBlobTxt");
+    txtNode.innerHTML = "";
+    
     recorder && recorder.record();
     button.disabled = true;
     button.nextElementSibling.disabled = false;
@@ -210,26 +306,43 @@ $(document).ready(function(){
     console.log('Stopped recording.');
     
     // create WAV download link using audio data blob
-    createDownloadLink();
-    
+    generateSample();
     recorder.clear();
+    
   }
-
-  function createDownloadLink() {
+  
+  function generateSample() {
+    
     recorder && recorder.exportWAV(function(blob) {
-      var url = URL.createObjectURL(blob);
-      var li = document.createElement('li');
-      var au = document.createElement('audio');
-      var hf = document.createElement('a');
-      
-      au.controls = true;
-      au.src = url;
-      hf.href = url;
-      hf.download = new Date().toISOString() + '.wav';
-      hf.innerHTML = hf.download;
-      li.appendChild(au);
-      li.appendChild(hf);
-      recordingslist.appendChild(li);
+        var url = URL.createObjectURL(blob);
+        
+        // Store blob into FormData
+        var data = new FormData();
+        data.append('upl', blob);
+        
+        currentBlob = data;
+  
+        //console.log(new Blob([currentBlob.get('upl')], {type: 'audio/wav'}));
+
+        // li to hold audio player
+        var li = document.createElement('li');
+        li.setAttribute("class", "recording-item-sample");
+        li.setAttribute("id", "recording-item-sample");
+        
+        var au = document.getElementById('music');
+
+        au.src = url;
+
+        // audio player appending
+        audioDiv.appendChild(pButton);
+        timeline.appendChild(playhead);
+        audioDiv.appendChild(timeline);
+
+        li.appendChild(au);
+        li.appendChild(audioDiv);
+ 
+        recordingslist.appendChild(li);
+  
     });
   }
 
@@ -248,6 +361,7 @@ $(document).ready(function(){
     }
     
     navigator.getUserMedia({audio: true}, startUserMedia, function(e) {
+      alert("No live audio input detected. fix it you idiot.")
       console.log('No live audio input: ' + e);
     });
   };

@@ -20,10 +20,8 @@ var fs = require('fs');
 
 var url = 'mongodb://domenico:default@35.227.19.224:27017/admin'
 
-
-router.use(bodyParser.json());
-router.use(bodyParser.urlencoded({ extended: true,limit: '50mb' }));
-
+router.use(bodyParser.json({limit: "50mb"}));
+router.use(bodyParser.urlencoded({limit: "50mb", extended: true, parameterLimit:50000}));
 
 var insertBlob = function(db, blob, user, filename, fp, callback) {
    db.collection('recordingsDB').insertOne({
@@ -90,6 +88,16 @@ MongoClient.connect(url, function(err, db) {
 });
 });
 }
+
+function toBuffer(ab) {
+    var buf = new Buffer(ab.byteLength);
+    var view = new Uint8Array(ab);
+    for (var i = 0; i < buf.length; ++i) {
+        buf[i] = view[i];
+    }
+    return buf;
+}
+
 /* GET home page. */
 router.get('/', auth, function(req, res, next) {
 
@@ -110,28 +118,42 @@ AuthenticateUser(req.session.loginID, req.session.username, function(boolVal){
 });
 
 
-
 });
 
 
+// Store blob data into DB
 router.post('/DB', type, function(req,res,next){
   
  //var newPath =  _utils.DetermineFileName(req.file.originalname, __dirname + '/public/uploads/');
- console.log(req.file.path);
-  
+console.log("req.file.path:" + req.file.encoding);
 // Connect to DB
 MongoClient.connect(url, function(err, db) {
   assert.equal(null, err);
   // Authenticate
     db.authenticate('domenico', 'default', function(err, result) {
       assert.equal(true, result);
-      var newImg = fs.readFileSync(req.file.path);
-      var encImg = newImg.toString('base64');
-//console.log(encImg);
-      insertBlob(db,encImg, req.session.username, req.file.filename, req.file.path, function(delFile){
+      
+      //var newImg = fs.readFileSync(req.file.path);
+
+      var ab = fs.readFileSync(req.file.path);
+      
+       var buf = new Buffer(ab.byteLength);
+    var view = new Uint8Array(ab);
+    for (var i = 0; i < buf.length; ++i) {
+        buf[i] = view[i];
+    }
+    
+ 
+      //var encImg = newImg.toString('base64');
+      //console.log(encImg);
+      insertBlob(db, buf, req.session.username, req.file.filename, req.file.path, function(delFile){
         
-        fs.unlinkSync(delFile);
-        var sendBack = {"blob" : newImg, "blobToken" : req.file.filename};
+        //Remove file from local directory once its in database.
+        // Use unlinkSync since its an async db insertion func call
+        //fs.unlinkSync(delFile);
+        
+        
+        var sendBack = {"blob" : buf, "blobToken" : req.file.filename};
         db.close();
         res.send(sendBack);
       });

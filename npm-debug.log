@@ -1,34 +1,34 @@
 0 info it worked if it ends with ok
-1 verbose cli [ '/home/ec2-user/.nvm/versions/node/v7.6.0/bin/node',
-1 verbose cli   '/home/ec2-user/.nvm/versions/node/v7.6.0/bin/npm',
+1 verbose cli [ '/home/ubuntu/.nvm/versions/node/v7.7.4/bin/node',
+1 verbose cli   '/home/ubuntu/.nvm/versions/node/v7.7.4/bin/npm',
 1 verbose cli   'start' ]
 2 info using npm@4.1.2
-3 info using node@v7.6.0
+3 info using node@v7.7.4
 4 verbose run-script [ 'prestart', 'start', 'poststart' ]
 5 info lifecycle speakEZ-0@0.0.0~prestart: speakEZ-0@0.0.0
 6 silly lifecycle speakEZ-0@0.0.0~prestart: no script for prestart, continuing
 7 info lifecycle speakEZ-0@0.0.0~start: speakEZ-0@0.0.0
 8 verbose lifecycle speakEZ-0@0.0.0~start: unsafe-perm in lifecycle true
-9 verbose lifecycle speakEZ-0@0.0.0~start: PATH: /home/ec2-user/.nvm/versions/node/v7.6.0/lib/node_modules/npm/bin/node-gyp-bin:/home/ec2-user/speakEZ/main/speakEZ/node_modules/.bin:/home/ec2-user/.nvm/versions/node/v7.6.0/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/opt/aws/bin:/home/ec2-user/.local/bin:/home/ec2-user/bin
-10 verbose lifecycle speakEZ-0@0.0.0~start: CWD: /home/ec2-user/speakEZ/main/speakEZ
+9 verbose lifecycle speakEZ-0@0.0.0~start: PATH: /home/ubuntu/.nvm/versions/node/v7.7.4/lib/node_modules/npm/bin/node-gyp-bin:/home/ubuntu/workspace/gitspeakEZ/speakEZ/node_modules/.bin:/home/ubuntu/.nvm/versions/node/v7.7.4/bin:/usr/local/rvm/gems/ruby-2.4.0/bin:/usr/local/rvm/gems/ruby-2.4.0@global/bin:/usr/local/rvm/rubies/ruby-2.4.0/bin:/mnt/shared/bin:/home/ubuntu/workspace/node_modules/.bin:/home/ubuntu/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/mnt/shared/sbin:/opt/gitl:/opt/go/bin:/mnt/shared/c9/app.nw/bin:/usr/local/rvm/bin
+10 verbose lifecycle speakEZ-0@0.0.0~start: CWD: /home/ubuntu/workspace/gitspeakEZ/speakEZ
 11 silly lifecycle speakEZ-0@0.0.0~start: Args: [ '-c', 'node ./bin/www' ]
 12 silly lifecycle speakEZ-0@0.0.0~start: Returned: code: 1  signal: null
 13 info lifecycle speakEZ-0@0.0.0~start: Failed to exec start script
 14 verbose stack Error: speakEZ-0@0.0.0 start: `node ./bin/www`
 14 verbose stack Exit status 1
-14 verbose stack     at EventEmitter.<anonymous> (/home/ec2-user/.nvm/versions/node/v7.6.0/lib/node_modules/npm/lib/utils/lifecycle.js:279:16)
+14 verbose stack     at EventEmitter.<anonymous> (/home/ubuntu/.nvm/versions/node/v7.7.4/lib/node_modules/npm/lib/utils/lifecycle.js:279:16)
 14 verbose stack     at emitTwo (events.js:106:13)
-14 verbose stack     at EventEmitter.emit (events.js:192:7)
-14 verbose stack     at ChildProcess.<anonymous> (/home/ec2-user/.nvm/versions/node/v7.6.0/lib/node_modules/npm/lib/utils/spawn.js:40:14)
+14 verbose stack     at EventEmitter.emit (events.js:194:7)
+14 verbose stack     at ChildProcess.<anonymous> (/home/ubuntu/.nvm/versions/node/v7.7.4/lib/node_modules/npm/lib/utils/spawn.js:40:14)
 14 verbose stack     at emitTwo (events.js:106:13)
-14 verbose stack     at ChildProcess.emit (events.js:192:7)
-14 verbose stack     at maybeClose (internal/child_process.js:890:16)
+14 verbose stack     at ChildProcess.emit (events.js:194:7)
+14 verbose stack     at maybeClose (internal/child_process.js:899:16)
 14 verbose stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:226:5)
 15 verbose pkgid speakEZ-0@0.0.0
-16 verbose cwd /home/ec2-user/speakEZ/main/speakEZ
-17 error Linux 4.9.62-21.56.amzn1.x86_64
-18 error argv "/home/ec2-user/.nvm/versions/node/v7.6.0/bin/node" "/home/ec2-user/.nvm/versions/node/v7.6.0/bin/npm" "start"
-19 error node v7.6.0
+16 verbose cwd /home/ubuntu/workspace/gitspeakEZ/speakEZ
+17 error Linux 4.9.80-c9
+18 error argv "/home/ubuntu/.nvm/versions/node/v7.7.4/bin/node" "/home/ubuntu/.nvm/versions/node/v7.7.4/bin/npm" "start"
+19 error node v7.7.4
 20 error npm  v4.1.2
 21 error code ELIFECYCLE
 22 error speakEZ-0@0.0.0 start: `node ./bin/www`

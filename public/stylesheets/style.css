@@ -210,15 +210,6 @@ textarea{
 
 }
 
-.recordings h2 {
-  padding-bottom: 2em;
-}
-.recordings li {
-    display:inline-block;
-    padding-bottom: 1em;
-
-}
-
 .submission .submit-post {
   
   padding-top: 2.5em;
@@ -299,6 +290,14 @@ textarea{
   
 }
 
+.recordings h2 {
+  padding-bottom: 2em;
+}
+.recordings li {
+    display:inline-block;
+
+}
+
 
 .recordings,.recordings-list,.recording-item{
   position:relative;
@@ -314,6 +313,14 @@ textarea{
   padding-bottom: 0.5em;
 }
 
+.recording-item-sample {
+  display:block;
+  background-color: white;
+  border: #FF7619;  border-radius:.4rem;
+  padding-bottom: 0em;
+
+}
+
 
 .recording-item:nth-child(n+1) {
   margin-left:.5rem
@@ -325,7 +332,6 @@ textarea{
 .recording-item .recording-title, .recording-meta{
   position:relative;
   word-wrap: break-word;
-  padding: 1em;
   margin-bottom: 0em;
 
   
@@ -334,7 +340,6 @@ textarea{
 .recording-item .recording-description {
   position:relative;
   word-wrap: break-word;
-  padding: 1em;
 
 }
 

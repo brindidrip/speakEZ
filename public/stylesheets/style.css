@@ -59,8 +59,8 @@
 
 .header .img path {
   animation:7s a forwards;
-  fill:#9b4dca;
-  stroke:#9b4dca;
+  fill:#00000;
+  stroke:#00000;
   stroke-dasharray:38321;
   stroke-miterlimit:10;
   stroke-width:15px
@@ -101,7 +101,7 @@
   
   25% {
     fill-opacity:0;
-    stroke:#9b4dca
+    stroke:#00000;
     
   }
   
@@ -158,7 +158,7 @@
 }
 
 .navigation .img {
-  fill:#9b4dca;
+  fill:#00000;
   height:2rem;
   position:relative;
   top:.3rem
@@ -190,19 +190,18 @@
 }
 
 
-#projects_container {
-  color: black;
-  
-}
-
-#recordings_container{
-  color: black;
-}
 
 #login_container{
-  padding-top: 2.5em;
-  padding-bottom: 27em;
+  margin-bottom: 20.25em;
   
+}
+
+#index_container{
+  margin-bottom: 10em;
+}
+
+#registration_container{
+  margin-bottom: 0.15em;
 }
 
 textarea{
@@ -417,7 +416,7 @@ textarea{
 
 .registration_item {
   display:block;
-  margin: 4rem 0;
+  margin: 2rem 0;
   margin-left:2rem;
   padding-bottom: 1em;
 }
@@ -440,11 +439,19 @@ textarea{
 }
 
 .control-group {
-display: flex; /* 2. display flex to the rescue */
+  display: flex; /* 2. display flex to the rescue */
   flex-direction: row;
   width:500px;
 
 }
+
+#control-email {
+display: block;
+margin-bottom: 2.5rem; 
+padding-bottom: 1rem;
+
+}
+
 
 input[type='text']:focus, input[type='password']:focus, textarea {
 	-webkit-appearance: none;
@@ -461,6 +468,29 @@ input[type='text']:focus, input[type='password']:focus, textarea {
 }
 
 select:focus{border-color:#141414;outline:0}
+
+select:focus{background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="14" viewBox="0 0 29 14" width="29"><path fill="#000000" d="M9.37727 3.625l5.08154 6.93523L19.54036 3.625"/></svg>')}
+
+input[type='email']:focus,input[type='number']:focus,input[type='password']:focus,input[type='search']:focus,input[type='tel']:focus,input[type='text']:focus,input[type='url']:focus,textarea:focus,select:focus{
+  border-color:#00000;
+  outline:0
+  
+}
+
+input[type='email'],input[type='number'],input[type='password'],input[type='search'],input[type='tel'],input[type='text'],input[type='url'],textarea,select{
+  -webkit-appearance:none;
+  -moz-appearance:none;
+  appearance:none;
+  background-color:transparent;
+  border:0.1rem solid #d1d1d1;
+  border-color: #00000;
+  border-radius:.4rem;
+  box-shadow:none;
+  box-sizing:inherit;
+  height:3.8rem;
+  padding:.6rem 1.0rem;
+  width:100%}
+
 
 
 .registration-item-dropdown{
@@ -583,7 +613,7 @@ select:focus{border-color:#141414;outline:0}
 
 .popover {
   background:#fff;
-  border:.1rem solid #d1d1d1;
+  border:.1rem solid #ffe2cf;
   border-radius:.4rem;
   display:none;
   filter:drop-shadow(0 0 .6rem rgba(0,0,0,.1));
@@ -616,13 +646,13 @@ select:focus{border-color:#141414;outline:0}
 }
 
 .popover:after {
-  border-bottom-color:#fff;
+  border-bottom-color:#ffe2cf;
   transform:translate(-50%,-100%)
   
 }
 
 .popover:before {
-  border-bottom-color:#d1d1d1;
+  border-bottom-color:#ffe2cf;
   transform:translate(-50%,-102%)
   
 }
@@ -653,8 +683,9 @@ select:focus{border-color:#141414;outline:0}
 }
 
 .popover .popover-link {
-  border-bottom:.1rem solid #d1d1d1;
-  color:#606c76;
+  border-bottom:.1rem solid #ffe2cf;
+  background-color: #482a15;
+  color:white;
   display:block;
   font-size:1.2rem;
   padding:.8rem 2rem;
@@ -666,7 +697,7 @@ select:focus{border-color:#141414;outline:0}
 
 .popover .popover-link:hover {
   background:#FF7619;
-  border-bottom-color:#FF7619;
+  border-bottom-color:#ffe2cf;
   color:#fff
   
 }
@@ -688,6 +719,7 @@ select:focus{border-color:#141414;outline:0}
 .registration .button {
   margin-bottom:4rem;
   margin-top:2rem;
+  margin-left: 28rem;
   background-color: rgba(255, 118, 25, 0.65);
   border: #FF7619;
 }

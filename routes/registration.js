@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var bodyParser = require('body-parser');
+var filter = require('content-filter')
 
 var bcrypt = require('bcrypt');
 var saltRounds = 10;
@@ -12,6 +13,9 @@ var ObjectId = require('mongodb').ObjectID;
 var url = 'mongodb://35.227.19.224:27017/admin'
     
 router.use(bodyParser.json());
+router.use(filter({bodyBlackList:['test'], dispatchToErrorHandler: true} )) 
+
+
 
 var insertUser = function(db, req, hash, callback) {
    db.collection('userDB').insertOne( {
@@ -44,6 +48,12 @@ var insertUserSession = function(db, req, callback) {
   
 };
   
+var sanitizeReg = function(req){
+    // Sanitize username
+    
+    
+    
+}
 
 /* GET registration page. */
 router.get('/', function(req, res, next) {
@@ -62,10 +72,10 @@ MongoClient.connect(url, function(err, db) {
       assert.equal(true, result);
 
     });
-    
 
 bcrypt.genSalt(saltRounds, function(err, salt) {
     bcrypt.hash(req.body.password, salt, function(err, hash) {
+        if(sanitizeReg(req)){
         insertUser(db, req, hash, function(){
             insertUserSession(db,req,function() {
                 db.close();
@@ -75,14 +85,11 @@ bcrypt.genSalt(saltRounds, function(err, salt) {
        
             
         })
-         
+        }         
         })
     });
     
-    
-   
 });
-
 
 });
 module.exports = router;

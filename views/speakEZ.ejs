@@ -144,39 +144,13 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="/javascripts/recorder.js"></script>
+<script src="/javascripts/globalScripts.js"></script>
 
 
 <script>
 
-  var currentBlob = new FormData();
+var currentBlob = new FormData();
 
-
-$(document).ready(function(){
-  $('.navigation-link').on('click',function(ev){
-    ev.preventDefault();
-        
-    var aID = $(this).attr('href');
-    var theID = aID.split("#")[1];
-
-    if( $('#popover-grid').css('display') == 'block' && theID === 'popover-support' ) {
-      $('#popover-grid').toggle( "popover" );
-            }
-
-    if( $('#popover-support').css('display') == 'block' && theID === 'popover-grid') {
-      $('#popover-support').toggle( "popover" );
-            }
-
-    $("#"+theID).toggle( "popover popover-open" );
-
-    ev.stopImmediatePropagation();
-
-
-    return;
-    });
-});
-
- 
-  
   $("#button1").click(function(e) {
     e.preventDefault();
     $.ajax({
@@ -192,80 +166,74 @@ $(document).ready(function(){
           } catch(e) {
             alert(e);
                   }
+            // if successful POST then use recorder library to immediately output            
+            // an audio element containing recorded wav
+            //
             recorder.exportWAV(function(result) {
             var url = URL.createObjectURL(result);
-            
+    
+            // create an append an html element to represent the blobs token
+            //
             var token = document.createElement('h1');
             token.setAttribute("id", "tokenBlobTxt");
             
             var txtNode = document.createTextNode("speakEZ://" + myObj);
-            
             token.append(txtNode);
-            
+                    
             var tokenDiv = document.getElementById("tokenBlob");
-            
             tokenDiv.append(token);
+                    
             
-          
-      
+            // create an append an html element to represent an audio element and info about recording
+            //
+            var li = document.createElement('li');
+            li.setAttribute("class", "recording-item");
+              
+            var h4 = document.createElement('h4');
+            h4.setAttribute("class", "recording-title");
+            h4.innerHTML = "recording";
+              
+            var h5 = document.createElement('h5');
+            h5.setAttribute("class", "recording-meta");
+            h5.innerHTML = "Meta Data";
+              
+            var h6 = document.createElement('h6');
+            h6.setAttribute("class", "recording-description");
+            h6.innerHTML = "Short Description";
+        
+        
+            var au = document.createElement('audio');
+            var hf = document.createElement('a');
+        
+        
+            au.controls = true;
+            au.src = url;
+            hf.href = url;
+            hf.download = new Date().toISOString() + '.wav';
+            hf.innerHTML = hf.download;
+        
+            // pack all elements into a list item and then append list item to recordings list
+            //
+            li.appendChild(h4);
+            li.appendChild(h5);
+            li.appendChild(h6);
+            li.appendChild(au);
+            au.appendChild(hf);
             
-      var li = document.createElement('li');
-      li.setAttribute("class", "recording-item");
-      
-      var h4 = document.createElement('h4');
-      h4.setAttribute("class", "recording-title");
-      h4.innerHTML = "recording";
-      
-      var h5 = document.createElement('h5');
-      h5.setAttribute("class", "recording-meta");
-      h5.innerHTML = "Meta Data";
-      
-      var h6 = document.createElement('h6');
-      h6.setAttribute("class", "recording-description");
-      h6.innerHTML = "Short Description";
+            recordingslist.appendChild(li);
 
-
-      var au = document.createElement('audio');
-      var hf = document.createElement('a');
-
-
-      au.controls = true;
-      au.src = url;
-      hf.href = url;
-      hf.download = new Date().toISOString() + '.wav';
-      hf.innerHTML = hf.download;
-      li.appendChild(h4);
-      li.appendChild(h5);
-      li.appendChild(h6);
-      li.appendChild(au);
-      au.appendChild(hf);
-      recordingslist.appendChild(li);
-
-          
             });
         },
+        
+        
+        // if result is an error then provide 'error' followed by the result produced in an elert
+        //
         error: function(result) {
             alert('error');
             alert(result);
         }
     });
 });
-
-
-  /*
-  $(document).click(function(evt){    
-      if( $('#popover-grid').css('display') == 'block') {
-        $('#popover-grid').toggle( "popover" );
-            }
-
-      else( $('#popover-support').css('display') == 'block') {
-        $('#popover-support').toggle( "popover" );
-            }
-            
-      return;
-
-});
-  */
   
  // https://github.com/mattdiamond/Recorderjs/blob/master/examples/example_simple_exportwav.html
     

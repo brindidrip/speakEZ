@@ -125,7 +125,7 @@ AuthenticateUser(req.session.loginID, req.session.username, function(boolVal){
 router.post('/DB', type, function(req,res,next){
   
  //var newPath =  _utils.DetermineFileName(req.file.originalname, __dirname + '/public/uploads/');
-console.log("req.file.path:" + req.file.encoding);
+//console.log("req.file.path:" + req.file.encoding);
 // Connect to DB
 MongoClient.connect(url, function(err, db) {
   assert.equal(null, err);
@@ -133,12 +133,11 @@ MongoClient.connect(url, function(err, db) {
     db.authenticate('domenico', 'default', function(err, result) {
       assert.equal(true, result);
       
-      //var newImg = fs.readFileSync(req.file.path);
 
-      var ab = fs.readFileSync(req.file.path);
-      
-       var buf = new Buffer(ab.byteLength);
+    var ab = fs.readFileSync(req.file.path);
+    var buf = new Buffer(ab.byteLength);
     var view = new Uint8Array(ab);
+    
     for (var i = 0; i < buf.length; ++i) {
         buf[i] = view[i];
     }
@@ -150,7 +149,7 @@ MongoClient.connect(url, function(err, db) {
         
         //Remove file from local directory once its in database.
         // Use unlinkSync since its an async db insertion func call
-        //fs.unlinkSync(delFile);
+        fs.unlinkSync(delFile);
         
         
         var sendBack = {"blob" : buf, "blobToken" : req.file.filename};

@@ -61,7 +61,8 @@
 
                     </li>
                 </ul>
-
+</section>
+          </nav>
 
                 <section class="container" id="login_container">
                     <div class="login">
@@ -155,33 +156,9 @@
     </main>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="/javascripts/recorder.js"></script>
+    <script src="/javascripts/globalScripts.js"></script>
 
-    <script>
-        $(document).ready(function() {
 
-            $('.navigation-link').on('click', function(ev) {
-                ev.preventDefault();
-
-                var aID = $(this).attr('href');
-                var theID = aID.split("#")[1];
-
-                if ($('#popover-grid').css('display') == 'block' && theID === 'popover-support') {
-                    $('#popover-grid').toggle("popover");
-                }
-
-                if ($('#popover-support').css('display') == 'block' && theID === 'popover-grid') {
-                    $('#popover-support').toggle("popover");
-                }
-
-                $("#" + theID).toggle("popover popover-open");
-
-                ev.stopImmediatePropagation();
-
-                return;
-            });
-        });
-    </script>
 </body>
 
 </html>

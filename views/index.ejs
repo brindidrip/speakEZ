@@ -31,17 +31,17 @@
                
           <ul class="navigation-list float-right">
             <li class="navigation-item" id="navigation-item">
-              <a class="navigation-link" href="#popover-grid" data-popover="">Login</a>
+              <a class="navigation-link" href="#popover-grid" data-popover="">Account</a>
               <div class="popover" id="popover-grid">
           
           <ul class="popover-list">
             
-              
-            <li class="popover-item">
-              <a class="popover-link" href="/registration" title="Blog">Create an account</a>
-              </li>
               <li class="popover-item">
-              <a class="popover-link" href="/login" title="Blog">Login</a>
+              <a class="popover-link" href="/login" title="Login">Login</a>
+              </li>
+              
+              <li class="popover-item">
+              <a class="popover-link" href="/registration" title="Create an account">Register</a>
               </li>
               
           </ul>
@@ -113,7 +113,7 @@
   
 
 
-  <section class="container" id="why">
+  <section class="container" id="index_container">
     <h3 class="title">Summary of how it works</h3>
     
   </section>
@@ -241,6 +241,7 @@ $("#saveButton").click(function(e) {
             var bf = toArrayBuffer(result.blob.data);
             var storedBlob = new Blob([bf], {type: 'audio/wav'});
 
+            var unqBlobToken = result.blobToken;
             // Debugging Purposes:
             // Use a file reader to read blob. 
             
@@ -260,7 +261,7 @@ $("#saveButton").click(function(e) {
             // If successful POST, then use recorder library to append a text      
             // node containing a unique blobToken
             var txtNode = document.getElementById("tokenBlobTxt");
-            txtNode.innerHTML = "speakEZ://" + myObj;
+            txtNode.innerHTML = "speakEZ://" + unqBlobToken;
             
             // Create a blobURL
             var url = URL.createObjectURL(storedBlob);

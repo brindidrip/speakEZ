@@ -124,12 +124,12 @@ Collections
 -------------------------
 
 recordingsDB
----
+----
 
 When a user tries to record a WAV, the generated BLOB gets stored in the collection document, along with their username and a unique token to represent the BLOB. NOTE: Each document holds a maximum of 16MB. 
 
 sessionDB
----
+----
 
 This collection holds documents, where each document has a unique sessionID for a specific user. This collection is used
 for authentication purposes. 
@@ -156,11 +156,18 @@ All passwords are hashed for security using bcrypt.
         console.log("Inserted a user_document into the userDB collection.");
         callback();
       });
+
+bcrypt      
+=================================================================================
+The purpose of the salt is to defeat rainbow table attacks and to resist brute-force attacks in the event that
+someone has gained access to your database. bcrypt in particular uses a key setup phase that is derived from Blowfish.
+
+https://codahale.com/how-to-safely-store-a-password/
+
+
 =================================================================================
 
 
 
 BUGS
 =================================================================================
-- Functionality is limtied when the application is hosted on s-cord0 domain. A js module is not being recognized from some reason, preventing
-any recordings to be generated. This issue does not exist when hosting the website locally. 

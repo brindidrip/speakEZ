@@ -493,9 +493,9 @@ input[type='email'],input[type='number'],input[type='password'],input[type='sear
 
 
 
-.registration-item-dropdown{
+.registration_item_dropdown{
   
-  width:300px;
+  width:380px;
 }
 
 .registration_item .registration-description {

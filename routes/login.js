@@ -59,19 +59,20 @@ MongoClient.connect(url, function(err, db) {
         // If success redirect to homepage
         
          if(res){
-           console.log("Compare success");
+           console.log("Successful compare");
            // Generate a sessionID for the user
+           
           // Login Success
           // Set session username
          bcrypt.genSalt(saltRounds, function(err, salt) {
             bcrypt.hash(user, salt, function(err, hash) {
-          // Set hidden sessionID
+          // update user's doc with the new sessionID
             updateDoc(user,hash);
 
-              console.log("Setting session ids: " + hash + " and " + user);
+              console.log("Setting session id: " + hash + " for " + user);
               req.session.loginID = hash;
               req.session.username = user;
-              console.log("Set session: " + req.session.loginID + "  " + req.session.username)
+              console.log("Set session: " + req.session.loginID + " for " + req.session.username)
               
 
               console.log("Updating session id for user: " + req.session.username);

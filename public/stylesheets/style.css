@@ -204,6 +204,14 @@
   margin-bottom: 0.15em;
 }
 
+#recording_container{
+  height:60rem;
+}
+
+#home_recording{
+  background-color: #2118127d;
+}
+
 textarea{
   height: 15em;
 

@@ -27,10 +27,15 @@ var insertBlob = function(db, blob, user, filename, fp, callback) {
    db.collection('recordingsDB').insertOne({
       "username" : user,
       "blobToken" : filename,
-      "blob" : Buffer(blob, 'base64')
+      "blob" : blob
   }, function(err, result) {
     assert.equal(err, null);
-    console.log("Inserted a new blob into the recordingsDB collection.");
+      console.log("Inserted the following into recordingsDB:" +
+      "\nusername: " + user +
+      "\nblobToken: " + filename +
+     // "\nblob: " + blob +
+      "\n\nSuccessfully inserted a new blob into the recordingsDB collection.");
+    
     callback(fp);
   });
   
@@ -140,8 +145,19 @@ MongoClient.connect(url, function(err, db) {
     
     for (var i = 0; i < buf.length; ++i) {
         buf[i] = view[i];
+        
     }
     
+    
+    //TODO
+    // We need to store a unique blobToken for each recording
+    // Use bcrypt with a unique plaintext password
+    // plaintext password could be the user_id concat with the current date of execution
+    // or could be the users account_id witht he current date of execution
+    // Each unique salted hash will be the entity used to link the blobData together. 
+    
+    // An idea: Once given a blobToken by the user instead of linearly comparing each blobToken for a match,
+    // we can do index hashing for that specific field and do a constant time look up?
  
       //var encImg = newImg.toString('base64');
       //console.log(encImg);

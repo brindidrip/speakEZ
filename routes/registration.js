@@ -91,7 +91,7 @@ bcrypt.genSalt(saltRounds, function(err, salt) {
         //insertUserDebug(db,req,hash, function(){
         //    res.redirect("/registration");
         //    })
-      if(sanitizeReg(req)){
+//      if(sanitizeReg(req)){
         insertUser(db, req, hash, function(){
             insertUserSession(db,req,function() {
                 db.close();
@@ -101,7 +101,7 @@ bcrypt.genSalt(saltRounds, function(err, salt) {
        
             
         });
-        }
+  //      }
        
         })
     });

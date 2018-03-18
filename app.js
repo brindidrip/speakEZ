@@ -19,7 +19,6 @@ var ObjectId = require('mongodb').ObjectID;
 const mongodb = require('mongodb');
 
 
-
 var url = 'mongodb://domenico:default@35.227.19.224:27017/admin'
 var app = express();
 
@@ -111,7 +110,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('errojjjjjjjjjr');
+  res.render('error');
 });
 
 module.exports = app;

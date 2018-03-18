@@ -683,7 +683,7 @@ input[type='email'],input[type='number'],input[type='password'],input[type='sear
 }
 
 .popover .popover-link {
-  border-bottom:.1rem solid #ffe2cf;
+  /*border-bottom:.1rem solid #ffe2cf;*/
   background-color: #482a15;
   color:white;
   display:block;

@@ -1,6 +1,4 @@
 # speakEZ
-Final Project
-netid: dmarti70
 
 Idea (tl;dr)
 =================================================================================
@@ -157,7 +155,7 @@ All passwords are hashed for security using bcrypt.
         callback();
       });
 
-bcrypt      
+bcrypt     
 =================================================================================
 The purpose of the salt is to defeat rainbow table attacks and to resist brute-force attacks in the event that
 someone has gained access to your database. bcrypt in particular uses a key setup phase that is derived from Blowfish.

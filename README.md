@@ -1,6 +1,4 @@
 # speakEZ
-Final Project
-netid: dmarti70
 
 Idea (tl;dr)
 =================================================================================
@@ -164,6 +162,10 @@ someone has gained access to your database. bcrypt in particular uses a key setu
 
 https://codahale.com/how-to-safely-store-a-password/
 
+
+How does node.bcrypt.js compare hashed and plaintext passwords without the salt?
+
+https://stackoverflow.com/questions/13023361/how-does-node-bcrypt-js-compare-hashed-and-plaintext-passwords-without-the-salt
 
 =================================================================================
 

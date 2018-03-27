@@ -168,10 +168,9 @@ AuthenticateUser(req.session.loginID, req.session.username, function(boolVal){
 router.get("/:speakEZtoken", function(req,res,next){
    
   fetchRecording(req.params.speakEZtoken, function(result){
-       console.log(result.blob);
+       res.send(result.blob);
        
   });
-    
     
     
     

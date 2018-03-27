@@ -415,6 +415,13 @@ textarea{
   
 }
 
+.registration h2{
+  margin-bottom: 4rem;
+}
+
+.registrationlist {
+  margin-left: 1em;
+}
 
 .registration,.registrationlist,.registration_item{
   list-style:none;
@@ -424,9 +431,9 @@ textarea{
 
 .registration_item {
   display:block;
-  margin: 2rem 0;
+  margin: 1rem 0;
   margin-left:2rem;
-  padding-bottom: 1em;
+  padding-bottom: 0.3em;
 }
 
 
@@ -450,6 +457,7 @@ textarea{
   display: flex; /* 2. display flex to the rescue */
   flex-direction: row;
   width:500px;
+  margin-bottom: 1.3rem;
 
 }
 
@@ -547,7 +555,7 @@ input[type='email'],input[type='number'],input[type='password'],input[type='sear
 
 .login_item {
   display:block;
-  margin: 4rem 0;
+  margin: 2rem 0;
   margin-left:2rem;
   padding-bottom: 1em;
 }

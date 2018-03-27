@@ -140,7 +140,8 @@ MongoClient.connect(url, function(err, db) {
 
 
 router.get('/', function(req, res, next) {
-
+console.log("We otu here");
+/*
 AuthenticateUser(req.session.loginID, req.session.username, function(boolVal){
 
    if(boolVal){
@@ -158,17 +159,18 @@ AuthenticateUser(req.session.loginID, req.session.username, function(boolVal){
    
 
 });
+*/
 });
 
 
 // Unfinished API
 
-router.post("/:speakEZtoken", function(req,res,next){
+router.get("/:speakEZtoken", function(req,res,next){
    
-   fetchRecording(req.params.speakEZtoken, function(result){
+  fetchRecording(req.params.speakEZtoken, function(result){
+       console.log(result.blob);
        
-       
-   });
+  });
     
     
     

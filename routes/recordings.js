@@ -51,7 +51,6 @@ MongoClient.connect(url, function(err, db) {
 }
 
     
-
 function fetchRecordings(username, callback){
     MongoClient.connect(url, function(err, db) {
   assert.equal(null, err);
@@ -179,7 +178,7 @@ router.get("/:speakEZtoken", function(req,res,next){
    
   fetchRecording(req.params.speakEZtoken, function(result){
        
-       var bf = toArrayBuffer(result.blob.data);
+       var bf = toArrayBuffer(result.blob);
        var storedBlob = new Blob([bf], {type: 'audio/wav'});
 
        // Create a blobURL

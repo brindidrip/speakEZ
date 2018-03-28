@@ -29,14 +29,33 @@ function getCurrentTabUrl(callback) {
 
 }
 
+function toArrayBuffer(buf) {
+    var ab = new ArrayBuffer(buf.length);
+    var view = new Uint8Array(ab);
+    for (var i = 0; i < buf.length; ++i) {
+        view[i] = buf[i];
+    }
+    return ab;
+}
+
+
 function playWAV(blob) {
   // JS to append audio DOM element that has a playable blobURL as source...
   //var script = 0;
 
-  chrome.tabs.executeScript({
-    code: script
-  });
+  var bf = toArrayBuffer(blob);
+  var storedBlob = new Blob([bf], {type: 'audio/wav'});
+
+  // Create a blobURL
+  var url = URL.createObjectURL(storedBlob);
+
+  console.log(url);
+//  chrome.tabs.executeScript({
+ //   code: script
+ // });
 }
+
+
 
 
 function retrieveWAV(speakEZtoken, callback) {
@@ -44,7 +63,7 @@ function retrieveWAV(speakEZtoken, callback) {
   var xhr = new XMLHttpRequest();
   xhr.open("GET", 'https://s-cord0.com/recordings/' + "09e7c4de9aa7ccf48b2d5ea0657ceb0b", true);
   xhr.onload = function (){
-      console.log(this.response)
+      playWAV(this.response);
       
   }
   xhr.send();

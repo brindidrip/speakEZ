@@ -138,6 +138,16 @@ MongoClient.connect(url, function(err, db) {
 });
 }
 
+function toArrayBuffer(buf) {
+    var ab = new ArrayBuffer(buf.length);
+    var view = new Uint8Array(ab);
+    for (var i = 0; i < buf.length; ++i) {
+        view[i] = buf[i];
+    }
+    return ab;
+}
+
+
 
 router.get('/', function(req, res, next) {
 console.log("We otu here");
@@ -168,7 +178,14 @@ AuthenticateUser(req.session.loginID, req.session.username, function(boolVal){
 router.get("/:speakEZtoken", function(req,res,next){
    
   fetchRecording(req.params.speakEZtoken, function(result){
-       res.send(result.blob);
+       
+       var bf = toArrayBuffer(result.blob.data);
+       var storedBlob = new Blob([bf], {type: 'audio/wav'});
+
+       // Create a blobURL
+       var url = URL.createObjectURL(storedBlob);
+
+       res.send(url);
        
   });
     

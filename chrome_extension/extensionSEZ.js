@@ -1,3 +1,15 @@
+function fetchBlob(){
+var xhr = new XMLHttpRequest();
+xhr.onreadystatechange = function(){
+  alert("Presse ")
+  if (this.readyState == 4 ){
+    alert("Ok");
+  }
+}
+
+xhr.open("GET", "https://s-cord0.com/recordings/09e7c4de9aa7ccf48b2d5ea0657ceb0b", true);
+xhr.send();
+}
 
 function getCurrentTabUrl(callback) {
   // Query filter to be passed to chrome.tabs.query - see
@@ -28,13 +40,18 @@ function playWAV(blob) {
 
 
 function retrieveWAV(speakEZtoken, callback) {
-    
+   alert("here we go") 
   var xhr = new XMLHttpRequest();
-  xhr.open("POST", 'www.s-cord0.com/recordings/' + speakEZtoken, true);
+  xhr.open("GET", 'https://s-cord0.com/recordings/' + "09e7c4de9aa7ccf48b2d5ea0657ceb0b", true);
   xhr.onload = function (){
-      playWAV(this)
+      console.log(this.response)
       
   }
   xhr.send();
 
 }
+
+document.addEventListener("DOMContentLoaded", function(event) {
+    var b = document.getElementById('button2');
+    b.addEventListener('click', retrieveWAV, false);
+});

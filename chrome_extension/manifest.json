@@ -11,7 +11,7 @@
   },
   "permissions": [
     "http://www.google.com/",
-    "www.s-cord0.com/*",
+    "https://s-cord0.com/*",
     "activeTab",
     "storage"
   ]

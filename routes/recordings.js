@@ -18,7 +18,7 @@ var ObjectId = require('mongodb').ObjectID;
 
 var fs = require('fs');
 
-var url = 'mongodb://domenico:default@35.227.19.224:27017/admin'
+var url = 'mongodb://domenico:default@35.185.126.172:27017/admin'
 
 
 router.use(bodyParser.json());

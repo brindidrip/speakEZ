@@ -100,12 +100,28 @@
       </ul>
     </div>
     
-  <div id ="tokenBlob">
-        <h1 id="tokenBlobTxt"></h1>
+
+      <div id="idShareMediaBox" style="display:none;" >
+        <div class="standardBox">
+          <div class="shareSubHeading">Sharing options</div>
+          
+          <input type="text" id="idShareMediaLink" class="shareVocarooLinkBox" title="For sharing..." onclick="this.select();" readonly value="">
+          
+          <input type="button" class="shareSmallButton" value="Embed" onclick="javascript:toggle_visibility('idShareMediaEmbedCodeContainer');">
+          
+          <input type="button" class="shareSmallButton" value="Email" onclick="javascript:sendEmailPopup();">
+          <div class="shareHorizontalSeparator"></div>
+            <div id ="tokenBlob">
+        <p id="tokenBlobTxt"></p>
         
         
       </div>
+          
+          <div class="shareHorizontalSeparator"></div>
 
+          <p style="font-size:smaller;"> Download as... </p>
+        </div>
+      </div>
 
     </section>
  
@@ -230,6 +246,7 @@ $("#saveButton").click(function(e) {
                 
             // If successful POST, then use recorder library to append a text      
             // node containing a unique blobToken
+            
             var txtNode = document.getElementById("tokenBlobTxt");
             txtNode.innerHTML = "speakEZ://" + unqBlobToken;
             
@@ -240,6 +257,13 @@ $("#saveButton").click(function(e) {
             var parent = document.getElementById("recordingslist");
             var child = document.getElementById("recording-item-sample")
             parent.removeChild(child);
+            
+            // Sharebox
+            $("#idShareMediaBox").css("display", "");
+            $("#idShareMediaLink").val("https://www.s-cord0.com/" + unqBlobToken);
+
+            
+
 
         },
         
@@ -260,7 +284,9 @@ $("#saveButton").click(function(e) {
   }
 
   function startRecording(button) {
-    // Reset text node.
+    // Reset text node & share box
+    $("#idShareMediaBox").css("display", "none");
+
     var txtNode = document.getElementById("tokenBlobTxt");
     txtNode.innerHTML = "";
     
@@ -294,6 +320,7 @@ $("#saveButton").click(function(e) {
         currentBlob = data;
   
         //console.log(new Blob([currentBlob.get('upl')], {type: 'audio/wav'}));
+
 
         // li to hold audio player
         var li = document.createElement('li');

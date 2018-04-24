@@ -326,6 +326,14 @@ textarea{
   border: #FF7619;  border-radius:.4rem;
   padding-bottom: 0em;
 
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+	-moz-background-clip: padding; -webkit-background-clip: padding-box; background-clip: padding-box;
+	
+	-webkit-box-shadow: 1px 1px 2px 1px black;
+	-moz-box-shadow: 1px 1px 2px 1px black;
+	box-shadow: 1px 1px 2px 1px black;
 }
 
 
@@ -380,6 +388,10 @@ textarea{
   position:relative;
   text-decoration:none
   
+}
+
+.share-list{
+  margin-bottom: 0rem;
 }
 
 .share-item {
@@ -483,9 +495,9 @@ textarea{
 	border-radius: 6px;
 	-moz-background-clip: padding; -webkit-background-clip: padding-box; background-clip: padding-box;
 	
-	-webkit-box-shadow: 1px 1px 2px 1px #f8ddcb;
-	-moz-box-shadow: 1px 1px 2px 1px #f8ddcb;
-	box-shadow: 1px 1px 2px 1px #f8ddcb;
+	-webkit-box-shadow: 1px 1px 2px 1px black;
+	-moz-box-shadow: 1px 1px 2px 1px black;
+	box-shadow: 1px 1px 2px 1px black;
 }
 
 .shareSubHeading
@@ -533,6 +545,56 @@ input[type='button'].shareSmallButton:hover
 }
 
 /* End of share box */ 
+
+
+/* Record info box */
+
+.recordInfoBox
+{
+	text-align:left;
+	background-color:white;
+	margin-top:10px;
+	margin-bottom:50px;
+	margin-left:auto;
+	margin-right:auto;
+	width:680px;
+	
+	padding-left:10px;
+	padding-right:10px;
+	padding-top:5px;
+	padding-bottom:5px;
+	
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+	-moz-background-clip: padding; -webkit-background-clip: padding-box; background-clip: padding-box;
+	
+	-webkit-box-shadow: 1px 1px 2px 1px black;
+	-moz-box-shadow: 1px 1px 2px 1px black;
+	box-shadow: 1px 1px 2px 1px black;
+}
+
+.recordSubHeading
+{
+	margin-top:0.5em;
+	margin-bottom:0.5em;
+	color:black;
+}
+
+
+.recordHorizontalSeparator
+{
+	height:1px;
+	width:100%;
+	
+	margin-top:10px;
+	margin-bottom:10px;
+	
+	background-color:black;
+}
+
+
+/* End of record info box */ 
 
 #control-email {
 display: block;
@@ -818,6 +880,7 @@ input[type='email'],input[type='number'],input[type='password'],input[type='sear
   
 }
 
+
 .footer a {
     color:#141414;
  
@@ -826,9 +889,9 @@ input[type='email'],input[type='number'],input[type='password'],input[type='sear
 .footer .container {
   color:#FF7619;
   border-top:0;
-  padding-top:4rem;
+  margin-top: 22rem;
   position:relative;
-  text-align:center
-  
+  text-align:center;
+
 }
 

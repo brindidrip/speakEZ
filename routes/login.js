@@ -96,6 +96,7 @@ MongoClient.connect(url, function(err, db) {
 
 /* GET login page. */
 router.get('/', function(req, res, next) {
+  console.log("Logged in now")
 
   res.render('login', { title: 'speakEZ'});
 });
@@ -122,7 +123,7 @@ console.log("Attempting to compare pass and username: " + username + ":" + passw
       if(boolVal){
          req.session.loginID = sessionHash;
         req.session.username = username;
-        res.redirect('/speakEZ/' + username) 
+        res.redirect('/recordings/home/' + username) 
       }
       else{
           res.redirect('/login/incorrect');

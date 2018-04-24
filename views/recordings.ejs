@@ -88,7 +88,7 @@
       %>
       
       <section class="container" id="recordings_container">
-        <h3 class="title">Recordings</h3>
+        <h3 class="title">Recent Recordings</h3>
         <div class="recordings">
           <ul class="recordings-list" id="recordingslist">
             <% if(blobArray != undefined || blobArray.length > 0){ %>
@@ -154,25 +154,49 @@
 </footer>
 </main>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="/javascripts/recorder.js"></script>
-<script>
-$(document).ready(function(){
-$('.navigation-link').on('click',function(ev){
-ev.preventDefault();
+    <script src="/javascripts/recorder.js"></script>
+    <script src="/javascripts/customAudio.js"></script>
+    <script src="/javascripts/globalScripts.js"></script>
 
-var aID = $(this).attr('href');
-var theID = aID.split("#")[1];
-if( $('#popover-grid').css('display') == 'block' && theID === 'popover-support' ) {
-$('#popover-grid').toggle( "popover" );
+
+
+<script>
+
+var currentBlob = new FormData();
+
+  function toArrayBuffer(buf) {
+    var ab = new ArrayBuffer(buf.length);
+    var view = new Uint8Array(ab);
+    for (var i = 0; i < buf.length; ++i) {
+        view[i] = buf[i];
+    }
+    return ab;
 }
-if( $('#popover-support').css('display') == 'block' && theID === 'popover-grid') {
-$('#popover-support').toggle( "popover" );
-}
-$("#"+theID).toggle( "popover popover-open" );
-ev.stopImmediatePropagation();
-return;
-});
-});
+
+
+// Store buffer from response in a buffer array and then into a Blob
+            var bf = toArrayBuffer(result.blob.data);
+            var storedBlob = new Blob([bf], {type: 'audio/wav'});
+
+            
+            var txtNode = document.getElementById("tokenBlobTxt");
+            txtNode.innerHTML = "speakEZ://" + unqBlobToken;
+            
+            // Create a blobURL
+            var url = URL.createObjectURL(storedBlob);
+            
+            // Replaces existing token
+            var parent = document.getElementById("recordingslist");
+            var child = document.getElementById("recording-item-sample")
+            parent.removeChild(child);
+            
+            // Sharebox
+            $("#idShareMediaBox").css("display", "");
+            $("#idShareMediaLink").val("https://www.s-cord0.com/" + unqBlobToken);
+
+
+
+
 </script>
 
 </body>

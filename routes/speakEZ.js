@@ -105,25 +105,11 @@ function toBuffer(ab) {
 
 /* GET home page. */
 router.get('/', auth, function(req, res, next) {
+  console.log("logged in")
 
   res.render('speakEZ', { title: 'Google+'});
 });
 
-router.get('/:uniqueID', function(req, res, next) {
-
-AuthenticateUser(req.session.loginID, req.session.username, function(boolVal){
-
-   if(boolVal){
-      res.render('speakEZ', { title: 'Google+'});
-   }
-   else{
-     res.render('/login', { title: 'Google+'});
-   }
-   
-});
-
-
-});
 
 
 // Store blob data into DB

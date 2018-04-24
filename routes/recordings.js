@@ -140,7 +140,7 @@ MongoClient.connect(url, function(err, db) {
 
 router.get('/', function(req, res, next) {
 console.log("We otu here");
-/*
+
 AuthenticateUser(req.session.loginID, req.session.username, function(boolVal){
 
    if(boolVal){
@@ -158,9 +158,25 @@ AuthenticateUser(req.session.loginID, req.session.username, function(boolVal){
    
 
 });
-*/
 });
 
+
+router.get('/home/:uniqueID', function(req, res, next) {
+
+AuthenticateUser(req.session.loginID, req.session.username, function(boolVal){
+
+   if(boolVal){
+     console.log("Now logged in")
+      res.render('speakEZ', { title: 'Google+'});
+   }
+   else{
+     res.render('/login', { title: 'Google+'});
+   }
+   
+});
+
+
+});
 
 // Unfinished API
 

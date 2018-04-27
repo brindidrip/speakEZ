@@ -4,17 +4,19 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimal-ui">
     
-    <meta name="application-name" content="speakEZ - A voice embedding tool">
+    <meta name="application-name" content="speakEZ - A voice embedding tool.">
     <meta name="author" content="Domenico Martinelli">
     
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.3.0/milligram.min.css">
+	  <link href="/stylesheets/milligram.min.css" rel="stylesheet">
     <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel='stylesheet' href='/stylesheets/customAudio.css' />
+    
     <link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/google/code-prettify/master/loader/prettify.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.css">
+
     <title>speakEZ - A way to easily embed your voice across the internet.</title>
-    
-    
+  
   </head>
   
   <body>
@@ -72,8 +74,10 @@
           
         </section>
       </header>
+
+
       <%
-      
+      /*
       var audio_context;
       var recorder;
       var blobURL = createDownloadLink(blobArray[1].blob);
@@ -85,33 +89,57 @@
       
       });
       }
+      */
+      
+      console.log(blobArray.length)
       %>
       
       <section class="container" id="recordings_container">
-        <h3 class="title">Recent Recordings</h3>
-        <div class="recordings">
-          <ul class="recordings-list" id="recordingslist">
-            <% if(blobArray != undefined || blobArray.length > 0){ %>
+        <h3 class="title">Recordings</h3>
+        <div class="recordings-grid-container">
+
+            <%if(blobArray != undefined || blobArray.length > 0){ %>
             <% for(var i = 0; i<blobArray.length; i++) {%>
-            <%=createDownloadLink(blobArray[i].blob);%>
-            <li class="recording-item">
-              <h4>Recording: <%=blobArray[i].blobToken%> </h4>
-              <h5> Recording Meta</h5>
-              <h6> Recording Description</h6>
-              <audio controls="true">
-                <source src="<%=blobURL%>" type="audio/wav">
-              </audio>
+            <div class="recording-grid-item<%=i%>">
+              <h5>blobToken:</h5>
+              <p> <%=blobArray[i].blobToken%></p>
+              <h6>Recording Description:</h6>
+              <p>Some description limited by 140 chars.</p>
+
+             <div class="recordings">
+        <ul class="recordingslist" id="recordingslist">
+            <li class="recording-item-sample" id="recording-item-sample">
+                
+                        <audio id="music" >
+          
+        </audio>
+        
+        <div id="audioplayer-grid">
+            <button class="play" id="pButton"></button>
+            <div id="timeline-grid">
+                <div id="playhead">
+                    
+                </div>
+                </div>
+                </div>
+        
             </li>
+        
+      </ul>
+    </div>
+             
+             
+            </div>
             <% }
             }
             else {
             %>
             <p>No recordings yet.</p>
             <% } %>
-          </ul>
         </div>
       </section>
       
+
       
       <footer class="footer">
         <section class="container">
@@ -158,46 +186,20 @@
     <script src="/javascripts/customAudio.js"></script>
     <script src="/javascripts/globalScripts.js"></script>
 
+      <script>
+var blobURLArr = [];
 
-
-<script>
-
-var currentBlob = new FormData();
-
-  function toArrayBuffer(buf) {
-    var ab = new ArrayBuffer(buf.length);
-    var view = new Uint8Array(ab);
-    for (var i = 0; i < buf.length; ++i) {
-        view[i] = buf[i];
-    }
-    return ab;
+for(var j = 0; j<blobArray.length; j++){
+  var blob = blobBuffArray[j];
+  var storedBlob = new Blob([blob], {type: 'audio/wav'});
+  
+  // Create a blobURL
+  var url = URL.createObjectURL(storedBlob);
+  blobURLArr.push(url);
 }
 
-
-// Store buffer from response in a buffer array and then into a Blob
-            var bf = toArrayBuffer(result.blob.data);
-            var storedBlob = new Blob([bf], {type: 'audio/wav'});
-
-            
-            var txtNode = document.getElementById("tokenBlobTxt");
-            txtNode.innerHTML = "speakEZ://" + unqBlobToken;
-            
-            // Create a blobURL
-            var url = URL.createObjectURL(storedBlob);
-            
-            // Replaces existing token
-            var parent = document.getElementById("recordingslist");
-            var child = document.getElementById("recording-item-sample")
-            parent.removeChild(child);
-            
-            // Sharebox
-            $("#idShareMediaBox").css("display", "");
-            $("#idShareMediaLink").val("https://www.s-cord0.com/" + unqBlobToken);
-
-
-
+console.log(blobURLArr[1])
 
 </script>
-
 </body>
 </html>

@@ -1,5 +1,10 @@
-var music = document.getElementById('music'); // id for audio element
-var duration = music.duration; // Duration of audio clip, calculated here for embedding purposes
+var music = document.getElementById('music'); // id for audio element\
+var duration = 0;
+
+if (music != null){
+    var duration = music.duration;
+    // Duration of audio clip, calculated here for embedding purposes
+}
 
 // Added CB feature to support non preloaded recordings
 var setDurationCB = function(data) {

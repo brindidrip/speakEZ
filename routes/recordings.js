@@ -80,8 +80,8 @@ function fetchRecordings(username, callback){
             }
             else{
               
-              var ab = toArrayBuffer(result.blob);
-              
+              //var ab = toArrayBuffer(result.blob);
+              var ab = result.blob;
               //below will be on frontend to load blob
               //var storedBlob = new Blob([ab], {type: 'audio/wav'});
             

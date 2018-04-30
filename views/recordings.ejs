@@ -11,9 +11,47 @@
     <link rel='stylesheet' href='/stylesheets/style.css' />
     <link rel='stylesheet' href='/stylesheets/customAudio.css' />
     
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <script src="/javascripts/recorder.js"></script>
+    <script src="/javascripts/customAudio.js"></script>
+    <script src="/javascripts/globalScripts.js"></script>
+ 
+<script type="text/javascript">
+
+var storedBlobArr = [];
+
+   function toArrayBuffer(buf) {
+    var ab = new ArrayBuffer(buf.length);
+    var view = new Uint8Array(ab);
+    for (var i = 0; i < buf.length; ++i) {
+        view[i] = buf[i];
+    }
+    return ab;
+}
+
+
+  function loadBlob(index){
+    var musicID = "music" + index;
+    console.log("new id: " + musicID);
+    
+    
+    var x = document.getElementById(musicID);
+    
+    console.log("current source of the element " + x.src)
+
+       url = URL.createObjectURL(storedBlobArr[index]);
+       console.log(url);
+    x.src = "https://www.sample-videos.com/audio/mp3/crowd-cheering.mp3";
+
+  }
+</script>
+    
     <link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/google/code-prettify/master/loader/prettify.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.css">
+    
+   
 
     <title>speakEZ - A way to easily embed your voice across the internet.</title>
   
@@ -74,10 +112,9 @@
           
         </section>
       </header>
-
-
       <%
       /*
+      
       var audio_context;
       var recorder;
       var blobURL = createDownloadLink(blobArray[1].blob);
@@ -91,6 +128,9 @@
       }
       */
       
+      var url = 0;
+      
+      
       console.log(blobArray.length)
       %>
       
@@ -99,23 +139,35 @@
         <div class="recordings-grid-container">
 
             <%if(blobArray != undefined || blobArray.length > 0){ %>
-            <% for(var i = 0; i<blobArray.length; i++) {%>
+            <% for(var i = 0; i<3; i++) {%>
             <div class="recording-grid-item<%=i%>">
               <h5>blobToken:</h5>
               <p> <%=blobArray[i].blobToken%></p>
               <h6>Recording Description:</h6>
               <p>Some description limited by 140 chars.</p>
+              <script>
+              
+              var ab = toArrayBuffer('<%-blobBuffArray[i]%>');
 
+            var storedBlob = new Blob([ab], {type: 'audio/wav'});
+            
+            storedBlobArr.push(storedBlob);
+    
+              
+          </script>
+            
+              
+              <p> <%=url%></p>
              <div class="recordings">
         <ul class="recordingslist" id="recordingslist">
             <li class="recording-item-sample" id="recording-item-sample">
                 
-                        <audio id="music" >
+                        <audio id="music<%=i%>" name="music" src="<%=url%>">
           
         </audio>
         
         <div id="audioplayer-grid">
-            <button class="play" id="pButton"></button>
+            <button class="play" id="pButton" value="<%=i%>" onclick="loadBlob(this.value), play(this.value)"></button>
             <div id="timeline-grid">
                 <div id="playhead">
                     
@@ -181,25 +233,8 @@
 </section>
 </footer>
 </main>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="/javascripts/recorder.js"></script>
-    <script src="/javascripts/customAudio.js"></script>
-    <script src="/javascripts/globalScripts.js"></script>
 
-      <script>
-var blobURLArr = [];
 
-for(var j = 0; j<blobArray.length; j++){
-  var blob = blobBuffArray[j];
-  var storedBlob = new Blob([blob], {type: 'audio/wav'});
-  
-  // Create a blobURL
-  var url = URL.createObjectURL(storedBlob);
-  blobURLArr.push(url);
-}
 
-console.log(blobURLArr[1])
-
-</script>
 </body>
 </html>

@@ -297,6 +297,27 @@ textarea{
   
 }
 
+/** Users recordings container **/
+.recordings-grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(280px, 1fr));
+  grid-gap: 10px;
+  padding: 10px;
+  
+}
+
+.recordings-grid-container > div {
+  background-color: rgb(255, 226, 207);
+  text-align: center;
+  padding: 20px 0;
+  font-size: 10px;
+}
+
+.recording-grid-item0 {
+  grid-column-start: 1;
+  
+}
+
 .recordings h2 {
   padding-bottom: 2em;
 }
@@ -326,6 +347,14 @@ textarea{
   border: #FF7619;  border-radius:.4rem;
   padding-bottom: 0em;
 
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+	-moz-background-clip: padding; -webkit-background-clip: padding-box; background-clip: padding-box;
+	
+	-webkit-box-shadow: 1px 1px 2px 1px black;
+	-moz-box-shadow: 1px 1px 2px 1px black;
+	box-shadow: 1px 1px 2px 1px black;
 }
 
 
@@ -380,6 +409,10 @@ textarea{
   position:relative;
   text-decoration:none
   
+}
+
+.share-list{
+  margin-bottom: 0rem;
 }
 
 .share-item {
@@ -460,6 +493,129 @@ textarea{
   margin-bottom: 1.3rem;
 
 }
+
+/* Share box */
+
+.standardBox
+{
+	text-align:left;
+	background-color:#49290f;
+	margin-top:10px;
+	margin-bottom:10px;
+	margin-left:auto;
+	margin-right:auto;
+	width:680px;
+	
+	padding-left:10px;
+	padding-right:10px;
+	padding-top:5px;
+	padding-bottom:5px;
+	
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+	-moz-background-clip: padding; -webkit-background-clip: padding-box; background-clip: padding-box;
+	
+	-webkit-box-shadow: 1px 1px 2px 1px black;
+	-moz-box-shadow: 1px 1px 2px 1px black;
+	box-shadow: 1px 1px 2px 1px black;
+}
+
+.shareSubHeading
+{
+	margin-top:0.5em;
+	margin-bottom:0.5em;
+}
+
+input[type='text'].shareVocarooLinkBox, input[type='text']:focus.shareVocarooLinkBox
+{
+	padding-left:7px;
+	padding-top:0.5em;
+	padding-bottom:0.5em;
+	
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+	-moz-background-clip: padding; -webkit-background-clip: padding-box; background-clip: padding-box;
+	
+	width:400px;
+	
+	margin-left:7px;
+	margin-right:7px;
+	
+	font-size:10pt;
+	
+	border:none;
+	background-color:white;
+}
+
+.shareHorizontalSeparator
+{
+	height:1px;
+	width:100%;
+	
+	margin-top:10px;
+	margin-bottom:10px;
+	
+	background-color:#f8ddcb;
+}
+
+input[type='button'].shareSmallButton:hover
+{
+  background-color: #FF7619;
+}
+
+/* End of share box */ 
+
+
+/* Record info box */
+
+.recordInfoBox
+{
+	text-align:left;
+	background-color:white;
+	margin-top:10px;
+	margin-bottom:50px;
+	margin-left:auto;
+	margin-right:auto;
+	width:680px;
+	
+	padding-left:10px;
+	padding-right:10px;
+	padding-top:5px;
+	padding-bottom:5px;
+	
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+	-moz-background-clip: padding; -webkit-background-clip: padding-box; background-clip: padding-box;
+	
+	-webkit-box-shadow: 1px 1px 2px 1px black;
+	-moz-box-shadow: 1px 1px 2px 1px black;
+	box-shadow: 1px 1px 2px 1px black;
+}
+
+.recordSubHeading
+{
+	margin-top:0.5em;
+	margin-bottom:0.5em;
+	color:black;
+}
+
+
+.recordHorizontalSeparator
+{
+	height:1px;
+	width:100%;
+	
+	margin-top:10px;
+	margin-bottom:10px;
+	
+	background-color:black;
+}
+
+
+/* End of record info box */ 
 
 #control-email {
 display: block;
@@ -745,6 +901,7 @@ input[type='email'],input[type='number'],input[type='password'],input[type='sear
   
 }
 
+
 .footer a {
     color:#141414;
  
@@ -753,8 +910,9 @@ input[type='email'],input[type='number'],input[type='password'],input[type='sear
 .footer .container {
   color:#FF7619;
   border-top:0;
-  padding-top:4rem;
+  margin-top: 22rem;
   position:relative;
-  text-align:center
-  
+  text-align:center;
+
 }
+

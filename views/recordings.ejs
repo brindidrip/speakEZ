@@ -4,17 +4,57 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimal-ui">
     
-    <meta name="application-name" content="speakEZ - A voice embedding tool">
+    <meta name="application-name" content="speakEZ - A voice embedding tool.">
     <meta name="author" content="Domenico Martinelli">
     
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.3.0/milligram.min.css">
+	  <link href="/stylesheets/milligram.min.css" rel="stylesheet">
     <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel='stylesheet' href='/stylesheets/customAudio.css' />
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <script src="/javascripts/recorder.js"></script>
+    <script src="/javascripts/customAudio.js"></script>
+    <script src="/javascripts/globalScripts.js"></script>
+ 
+<script type="text/javascript">
+
+var storedBlobArr = [];
+
+   function toArrayBuffer(buf) {
+    var ab = new ArrayBuffer(buf.length);
+    var view = new Uint8Array(ab);
+    for (var i = 0; i < buf.length; ++i) {
+        view[i] = buf[i];
+    }
+    return ab;
+}
+
+
+  function loadBlob(index){
+    var musicID = "music" + index;
+    console.log("new id: " + musicID);
+    
+    
+    var x = document.getElementById(musicID);
+    
+    console.log("current source of the element " + x.src)
+
+       url = URL.createObjectURL(storedBlobArr[index]);
+       console.log(url);
+    x.src = "https://www.sample-videos.com/audio/mp3/crowd-cheering.mp3";
+
+  }
+</script>
+    
     <link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/google/code-prettify/master/loader/prettify.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.css">
+    
+   
+
     <title>speakEZ - A way to easily embed your voice across the internet.</title>
-    
-    
+  
   </head>
   
   <body>
@@ -73,6 +113,7 @@
         </section>
       </header>
       <%
+      /*
       
       var audio_context;
       var recorder;
@@ -85,33 +126,72 @@
       
       });
       }
+      */
+      
+      var url = 0;
+      
+      
+      console.log(blobArray.length)
       %>
       
       <section class="container" id="recordings_container">
         <h3 class="title">Recordings</h3>
-        <div class="recordings">
-          <ul class="recordings-list" id="recordingslist">
-            <% if(blobArray != undefined || blobArray.length > 0){ %>
-            <% for(var i = 0; i<blobArray.length; i++) {%>
-            <%=createDownloadLink(blobArray[i].blob);%>
-            <li class="recording-item">
-              <h4>Recording: <%=blobArray[i].blobToken%> </h4>
-              <h5> Recording Meta</h5>
-              <h6> Recording Description</h6>
-              <audio controls="true">
-                <source src="<%=blobURL%>" type="audio/wav">
-              </audio>
+        <div class="recordings-grid-container">
+
+            <%if(blobArray != undefined || blobArray.length > 0){ %>
+            <% for(var i = 0; i<3; i++) {%>
+            <div class="recording-grid-item<%=i%>">
+              <h5>blobToken:</h5>
+              <p> <%=blobArray[i].blobToken%></p>
+              <h6>Recording Description:</h6>
+              <p>Some description limited by 140 chars.</p>
+              <script>
+              
+              var ab = toArrayBuffer('<%-blobBuffArray[i]%>');
+
+            var storedBlob = new Blob([ab], {type: 'audio/wav'});
+            
+            storedBlobArr.push(storedBlob);
+    
+              
+          </script>
+            
+              
+              <p> <%=url%></p>
+             <div class="recordings">
+        <ul class="recordingslist" id="recordingslist">
+            <li class="recording-item-sample" id="recording-item-sample">
+                
+                        <audio id="music<%=i%>" name="music" src="<%=url%>">
+          
+        </audio>
+        
+        <div id="audioplayer-grid">
+            <button class="play" id="pButton" value="<%=i%>" onclick="loadBlob(this.value), play(this.value)"></button>
+            <div id="timeline-grid">
+                <div id="playhead">
+                    
+                </div>
+                </div>
+                </div>
+        
             </li>
+        
+      </ul>
+    </div>
+             
+             
+            </div>
             <% }
             }
             else {
             %>
             <p>No recordings yet.</p>
             <% } %>
-          </ul>
         </div>
       </section>
       
+
       
       <footer class="footer">
         <section class="container">
@@ -153,27 +233,8 @@
 </section>
 </footer>
 </main>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="/javascripts/recorder.js"></script>
-<script>
-$(document).ready(function(){
-$('.navigation-link').on('click',function(ev){
-ev.preventDefault();
 
-var aID = $(this).attr('href');
-var theID = aID.split("#")[1];
-if( $('#popover-grid').css('display') == 'block' && theID === 'popover-support' ) {
-$('#popover-grid').toggle( "popover" );
-}
-if( $('#popover-support').css('display') == 'block' && theID === 'popover-grid') {
-$('#popover-support').toggle( "popover" );
-}
-$("#"+theID).toggle( "popover popover-open" );
-ev.stopImmediatePropagation();
-return;
-});
-});
-</script>
+
 
 </body>
 </html>

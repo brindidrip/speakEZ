@@ -25,6 +25,15 @@ router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true,limit: '50mb' }));
 
 
+function toArrayBuffer(buf) {
+              var ab = new ArrayBuffer(buf.length);
+              var view = new Uint8Array(ab);
+              for (var i = 0; i < buf.length; ++i) {
+                  view[i] = buf[i];
+              }
+              return ab;
+}
+          
 function fetchRecording(spEZtoken, callback) {
 
 // Connect to DB
@@ -63,20 +72,28 @@ function fetchRecordings(username, callback){
           if (findErr) throw findErr;
 
     var blobArray = [];
+    var blobBufferArray = [];
     result.forEach(function(result){
 
             if(result.blobToken == undefined){
                 
             }
             else{
-                 blobArray.push(result);
+              
+              //var ab = toArrayBuffer(result.blob);
+              var ab = result.blob;
+              //below will be on frontend to load blob
+              //var storedBlob = new Blob([ab], {type: 'audio/wav'});
+            
+              blobArray.push(result);
+              blobBufferArray.push(ab);
                  //console.log("Length:" + blobArray.length);
             }
           }, function(err) {
     
     console.log(blobArray.length);
     db.close();
-    callback(blobArray,username);});
+    callback(blobArray,blobBufferArray,username);});
     
 
     });
@@ -140,15 +157,14 @@ MongoClient.connect(url, function(err, db) {
 
 router.get('/', function(req, res, next) {
 console.log("We otu here");
-/*
+
 AuthenticateUser(req.session.loginID, req.session.username, function(boolVal){
 
    if(boolVal){
-      fetchRecordings(req.session.username, function(blobArr,username ){
+      fetchRecordings(req.session.username, function(blobArr,blobBuffArray,username){
 
-            
             //console.log(resultQuery);          
-            res.render('recordings', { title: 'speakEZ', blobArray: blobArr});
+            res.render('recordings', { title: 'speakEZ', blobArray: blobArr, blobBuffArray: blobBuffArray});
 
       }); 
    }
@@ -158,9 +174,25 @@ AuthenticateUser(req.session.loginID, req.session.username, function(boolVal){
    
 
 });
-*/
 });
 
+
+router.get('/home/:uniqueID', function(req, res, next) {
+
+AuthenticateUser(req.session.loginID, req.session.username, function(boolVal){
+
+   if(boolVal){
+     console.log("Now logged in")
+      res.render('speakEZ', { title: 'Google+'});
+   }
+   else{
+     res.render('/login', { title: 'Google+'});
+   }
+   
+});
+
+
+});
 
 // Unfinished API
 

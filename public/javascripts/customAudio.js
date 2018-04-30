@@ -1,9 +1,15 @@
-var music = document.getElementById('music'); // id for audio element
-var duration = music.duration; // Duration of audio clip, calculated here for embedding purposes
+var music = document.getElementById("music0");
+
+var duration = 0;
+
+if (music != null){
+    var duration = music.duration;
+    // Duration of audio clip, calculated here for embedding purposes
+}
 
 // Added CB feature to support non preloaded recordings
-var setDurationCB = function(data) {
-duration = document.getElementById('music').duration;
+var setDurationCB = function(index) {
+duration = document.getElementById('music' + index).duration;
   
   // timeline width adjusted for playhead
 timelineWidth = timeline.offsetWidth - playhead.offsetWidth;
@@ -17,8 +23,8 @@ timeline.addEventListener("click", function(event) {
 music.addEventListener("timeupdate", timeUpdate, false);
 };
 
-var durationCB = function(cb) {
-  cb('passing this as a parameter to setDurationCB');
+var durationCB = function(cb, index) {
+  cb(index);
 };
 
 
@@ -105,13 +111,27 @@ function timeUpdate() {
 }
 
 //Play and Pause
-function play() {
+function play(index) {
+    music = document.getElementsByName("music");
+    console.log("jhere is the index " + index);
     
+    console.log("ehre is te h length: " + music.length);
+    music = music[index];
+    
+    var duration = music.duration;
+
+    
+    
+
+
     //CB when we know recording is available
-   durationCB(setDurationCB);
+   durationCB(setDurationCB, index);
 
     // start music
     if (music.paused) {
+        
+        
+        
         music.play();
         // remove play, add pause
         pButton.className = "";

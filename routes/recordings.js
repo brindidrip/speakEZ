@@ -82,11 +82,13 @@ function fetchRecordings(username, callback){
               
               //var ab = toArrayBuffer(result.blob);
               var ab = result.blob;
+
+              //console.log(ab);
               //below will be on frontend to load blob
               //var storedBlob = new Blob([ab], {type: 'audio/wav'});
             
               blobArray.push(result);
-              blobBufferArray.push(ab);
+              blobBufferArray.push(ab.buffer);
                  //console.log("Length:" + blobArray.length);
             }
           }, function(err) {

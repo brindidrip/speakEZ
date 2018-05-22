@@ -3,13 +3,16 @@ var music = document.getElementById("music0");
 var duration = 0;
 
 if (music != null){
-    var duration = music.duration;
+    duration = music.duration;
     // Duration of audio clip, calculated here for embedding purposes
 }
 
 // Added CB feature to support non preloaded recordings
-var setDurationCB = function(index) {
-duration = document.getElementById('music' + index).duration;
+var setDurationCB = function(index, duration) {
+    music = document.getElementById("music0");
+
+    console.log("What is music here?" + music);
+    console.log("What about the duration of the music?" + music.duration);
   
   // timeline width adjusted for playhead
 timelineWidth = timeline.offsetWidth - playhead.offsetWidth;
@@ -23,8 +26,8 @@ timeline.addEventListener("click", function(event) {
 music.addEventListener("timeupdate", timeUpdate, false);
 };
 
-var durationCB = function(cb, index) {
-  cb(index);
+var durationCB = function(cb, index, duration) {
+  cb(index, duration);
 };
 
 
@@ -116,16 +119,12 @@ function play(index) {
     console.log("jhere is the index " + index);
     
     console.log("ehre is te h length: " + music.length);
-    music = music[index];
-    
-    var duration = music.duration;
-
-    
+    music = music[index];  
     
 
 
     //CB when we know recording is available
-   durationCB(setDurationCB, index);
+   durationCB(setDurationCB, index, duration);
 
     // start music
     if (music.paused) {

@@ -43,7 +43,7 @@ var storedBlobArr = [];
        url = URL.createObjectURL(storedBlobArr[index]);
        console.log(url);
     x.src = "https://www.sample-videos.com/audio/mp3/crowd-cheering.mp3";
-
+    x.setAttribute("preload", "metadata");
   }
 </script>
     

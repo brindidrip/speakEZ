@@ -27,25 +27,18 @@ function toArrayBuffer(buf) {
 }
 
 
-function playWAV(blobBuff) {
-  // JS to append audio DOM element that has a playable blobURL as source...
-  //var script = 0;
-  //console.log(blobBuff.data);
-  var bf = toArrayBuffer(blobBuff);
-  //console.log(blobBuff);
-  var storedBlob = new Blob([bf], {type: 'audio/wav'});
+function playWAV(blob) {
+  var url = window.URL.createObjectURL(blob);
+  //console.log(blob);
+  
+  var audioNode = new Audio();        // create the audio object
+  audioNode.src = url; // assign the audio file to its src
+  audioNode.crossOrigin="anonymous";
+  
+  var audioProm = audioNode.play();
 
-  console.log(storedBlob)
-  // Create a blobURL
-  var url = URL.createObjectURL(storedBlob);
-
-  var myAudio = new Audio();        // create the audio object
-  myAudio.src = url; // assign the audio file to its src
-  myAudio.crossOrigin="anonymous";
-  var ape = myAudio.play();
-
-  if (ape !== undefined) {
-  ape.then(function() {
+  if (audioProm !== undefined) {
+  audioProm.then(function() {
     // Automatic playback started!
   }).catch(function(error) {
     console.log("error: " + error + "\n " + url);
@@ -53,6 +46,7 @@ function playWAV(blobBuff) {
     // Show a UI element to let the user manually start playback.
   });
 }
+
 //  chrome.tabs.executeScript({
  //   code: script
  // });
@@ -61,19 +55,29 @@ function playWAV(blobBuff) {
 
 
 
-function retrieveWAV(speakEZtoken, callback) {
-  alert("here we go") 
+function retrieveWAV() {
+  alert("here we go")
+
+  var userToken = document.getElementById('blobTokenInput').value;
+
   var xhr = new XMLHttpRequest();
-  xhr.open("GET", 'http://0.0.0.0:8080/recordings/' + "e3b6685f21a9fde0db449fd874aa7f35", true);
+  xhr.responseType = 'blob';
+
+  xhr.open("GET", 'https://s-cord0.com/recordings/' + userToken, true);
   xhr.onload = function (){
-    //alert(this.response)
+    if(this.status != 200){
+      console.log("Error. Response status: " + this.status);
+    }
+    else{
     playWAV(this.response);
+      }
   }
   xhr.send();
 
 }
 
 document.addEventListener("DOMContentLoaded", function(event) {
+
     var b = document.getElementById('button2');
     b.addEventListener('click', retrieveWAV, false);
 });

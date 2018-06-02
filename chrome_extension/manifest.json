@@ -10,8 +10,10 @@
     "default_popup": "popup.html"
   },
   "permissions": [
-    "http://www.google.com/",
+    "https://www.google.com/",
     "https://s-cord0.com/*",
+    "<all_urls>",
+    "http://0.0.0.0:8080/recordings/*",
     "activeTab",
     "storage"
   ]

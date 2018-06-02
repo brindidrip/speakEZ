@@ -784,8 +784,8 @@ input[type='email'],input[type='number'],input[type='password'],input[type='sear
 }
 
 .popover {
-  background:#fff;
-  border:.1rem solid #ffe2cf;
+  background:#482a15;
+  border:.1rem solid #482a15;
   border-radius:.4rem;
   display:none;
   filter:drop-shadow(0 0 .6rem rgba(0,0,0,.1));
@@ -818,13 +818,13 @@ input[type='email'],input[type='number'],input[type='password'],input[type='sear
 }
 
 .popover:after {
-  border-bottom-color:#ffe2cf;
+  border-bottom-color:#482a15;
   transform:translate(-50%,-100%)
   
 }
 
 .popover:before {
-  border-bottom-color:#ffe2cf;
+  border-bottom-color:#482a15;
   transform:translate(-50%,-102%)
   
 }
@@ -855,11 +855,11 @@ input[type='email'],input[type='number'],input[type='password'],input[type='sear
 }
 
 .popover .popover-link {
-  /*border-bottom:.1rem solid #ffe2cf;*/
+  border-bottom:.1rem solid #ffe2cf29;
   background-color: #482a15;
   color:white;
   display:block;
-  font-size:1.2rem;
+  font-size:1.3rem;
   padding:.8rem 2rem;
   position:relative;
   text-align:center;

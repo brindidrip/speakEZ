@@ -1,15 +1,3 @@
-function fetchBlob(){
-var xhr = new XMLHttpRequest();
-xhr.onreadystatechange = function(){
-  alert("Presse ")
-  if (this.readyState == 4 ){
-    alert("Ok");
-  }
-}
-
-xhr.open("GET", "https://s-cord0.com/recordings/09e7c4de9aa7ccf48b2d5ea0657ceb0b", true);
-xhr.send();
-}
 
 function getCurrentTabUrl(callback) {
   // Query filter to be passed to chrome.tabs.query - see
@@ -39,17 +27,32 @@ function toArrayBuffer(buf) {
 }
 
 
-function playWAV(blob) {
+function playWAV(blobBuff) {
   // JS to append audio DOM element that has a playable blobURL as source...
   //var script = 0;
-
-  var bf = toArrayBuffer(blob);
+  //console.log(blobBuff.data);
+  var bf = toArrayBuffer(blobBuff);
+  //console.log(blobBuff);
   var storedBlob = new Blob([bf], {type: 'audio/wav'});
 
+  console.log(storedBlob)
   // Create a blobURL
   var url = URL.createObjectURL(storedBlob);
 
-  console.log(url);
+  var myAudio = new Audio();        // create the audio object
+  myAudio.src = url; // assign the audio file to its src
+  myAudio.crossOrigin="anonymous";
+  var ape = myAudio.play();
+
+  if (ape !== undefined) {
+  ape.then(function() {
+    // Automatic playback started!
+  }).catch(function(error) {
+    console.log("error: " + error + "\n " + url);
+    // Automatic playback failed.
+    // Show a UI element to let the user manually start playback.
+  });
+}
 //  chrome.tabs.executeScript({
  //   code: script
  // });
@@ -59,12 +62,12 @@ function playWAV(blob) {
 
 
 function retrieveWAV(speakEZtoken, callback) {
-   alert("here we go") 
+  alert("here we go") 
   var xhr = new XMLHttpRequest();
-  xhr.open("GET", 'https://s-cord0.com/recordings/' + "09e7c4de9aa7ccf48b2d5ea0657ceb0b", true);
+  xhr.open("GET", 'http://0.0.0.0:8080/recordings/' + "e3b6685f21a9fde0db449fd874aa7f35", true);
   xhr.onload = function (){
-      playWAV(this.response);
-      
+    //alert(this.response)
+    playWAV(this.response);
   }
   xhr.send();
 

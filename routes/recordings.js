@@ -4,6 +4,7 @@ var blobutil = require('blob-util');
 let multer = require('multer');
 var upload = multer({ dest: __dirname + '/temp_uploads/' });
 var type = upload.single('upl');
+var cors = require('cors')
 
 const mongodb = require('mongodb');
 
@@ -24,6 +25,8 @@ var url = 'mongodb://domenico:default@35.185.126.172:27017/admin'
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true,limit: '50mb' }));
 
+router.use(cors());
+
 
 function toArrayBuffer(buf) {
               var ab = new ArrayBuffer(buf.length);
@@ -35,71 +38,74 @@ function toArrayBuffer(buf) {
 }
           
 function fetchRecording(spEZtoken, callback) {
-
-// Connect to DB
-MongoClient.connect(url, function(err, db) {
-  assert.equal(null, err);
-  
-  // Authenticate
+  // Connect to DB
+  MongoClient.connect(url, function(err, db) {
+    assert.equal(null, err);
+    
+    // Authenticate
     db.authenticate('domenico', 'default', function(err, result) {
       assert.equal(true, result);
-      
-    db.collection('recordingsDB').findOne({'blobToken': spEZtoken}, function (findErr, result) {
-          if (findErr) throw findErr;
+        
+      db.collection('recordingsDB').findOne({'blobToken': spEZtoken}, function (findErr, result) {
+        var blobBuffer = 0;
+        if (findErr) throw findErr;
 
-    db.close();
-    
-    callback(result);
-        
-        
-})
-        
-    });
+        if(result.blobToken == undefined){
+          console.log("blobToken issue");
+        }
+            
+        else{
+          console.log("converting buffer to ArrayBuffer");
+          blobBuffer = result;
+        }
+      //console.log("sending back blobBuffer:" + blobBuffer);
+      db.close();
+      callback(blobBuffer.blob.buffer);    
+    })          
+  });
 });
-
 }
 
     
 function fetchRecordings(username, callback){
-    MongoClient.connect(url, function(err, db) {
-    assert.equal(null, err);
+  MongoClient.connect(url, function(err, db) {
+  assert.equal(null, err);
   
-    // Authenticate
-    db.authenticate('domenico', 'default', function(err, result) {
-      assert.equal(true, result);
+  // Authenticate
+  db.authenticate('domenico', 'default', function(err, result) {
+    assert.equal(true, result);
       
     db.collection('recordingsDB').find({'username': username}, function (findErr, result) {
-          if (findErr) throw findErr;
-
-    var blobArray = [];
-    var blobBufferArray = [];
-    result.forEach(function(result){
-
-    if(result.blobToken == undefined){
-                
-            }
-            else{
-              
-              //console.log(result.blob.buffer);
-              var ab = toArrayBuffer(result.blob.buffer);
-              console.log(ab)
-
-
-
-
-              //console.log(ab);
-              //below will be on frontend to load blob
-              //var storedBlob = new Blob([ab], {type: 'audio/wav'});
-            
-              blobArray.push(result);
-              blobBufferArray.push(result.blob.buffer);
-                 //console.log("Length:" + blobArray.length);
-            }
-          }, function(err) {
     
-    console.log(blobArray.length);
-    db.close();
-    callback(blobArray,blobBufferArray,username);});
+      if (findErr) throw findErr;
+
+      var blobArray = [];
+      var blobBufferArray = [];
+      result.forEach(function(result){
+
+      if(result.blobToken == undefined){
+                  
+              }
+      
+      else{
+        //console.log(result.blob.buffer);
+        //var ab = toArrayBuffer(result.blob.buffer);
+        //console.log(ab)
+
+        //console.log(ab);
+        //below will be on frontend to load blob
+        //var storedBlob = new Blob([ab], {type: 'audio/wav'});
+
+        blobArray.push(result);
+        blobBufferArray.push(result.blob.buffer);
+        //console.log("Length:" + blobArray.length);
+
+              }
+            }, function(err) {
+      
+      console.log(blobArray.length);
+      db.close();
+      callback(blobArray,blobBufferArray,username);});
     
 
     });
@@ -205,7 +211,7 @@ AuthenticateUser(req.session.loginID, req.session.username, function(boolVal){
 router.get("/:speakEZtoken", function(req,res,next){
    
   fetchRecording(req.params.speakEZtoken, function(result){
-       res.send(result.blob);
+       res.send(result);
   });
     
     

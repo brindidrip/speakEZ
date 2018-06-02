@@ -62,9 +62,9 @@ MongoClient.connect(url, function(err, db) {
     
 function fetchRecordings(username, callback){
     MongoClient.connect(url, function(err, db) {
-  assert.equal(null, err);
+    assert.equal(null, err);
   
-  // Authenticate
+    // Authenticate
     db.authenticate('domenico', 'default', function(err, result) {
       assert.equal(true, result);
       
@@ -75,20 +75,24 @@ function fetchRecordings(username, callback){
     var blobBufferArray = [];
     result.forEach(function(result){
 
-            if(result.blobToken == undefined){
+    if(result.blobToken == undefined){
                 
             }
             else{
               
-              //var ab = toArrayBuffer(result.blob);
-              var ab = result.blob;
+              //console.log(result.blob.buffer);
+              var ab = toArrayBuffer(result.blob.buffer);
+              console.log(ab)
+
+
+
 
               //console.log(ab);
               //below will be on frontend to load blob
               //var storedBlob = new Blob([ab], {type: 'audio/wav'});
             
               blobArray.push(result);
-              blobBufferArray.push(ab.buffer);
+              blobBufferArray.push(result.blob.buffer);
                  //console.log("Length:" + blobArray.length);
             }
           }, function(err) {
@@ -158,14 +162,14 @@ MongoClient.connect(url, function(err, db) {
 
 
 router.get('/', function(req, res, next) {
-console.log("We otu here");
+console.log("Accessing route to load user recordings. ");
 
 AuthenticateUser(req.session.loginID, req.session.username, function(boolVal){
 
    if(boolVal){
       fetchRecordings(req.session.username, function(blobArr,blobBuffArray,username){
 
-            //console.log(resultQuery);          
+
             res.render('recordings', { title: 'speakEZ', blobArray: blobArr, blobBuffArray: blobBuffArray});
 
       }); 

@@ -96,7 +96,7 @@ MongoClient.connect(url, function(err, db) {
 
 /* GET login page. */
 router.get('/', function(req, res, next) {
-  console.log("Logged in now")
+  console.log("At log in")
 
   res.render('login', { title: 'speakEZ'});
 });

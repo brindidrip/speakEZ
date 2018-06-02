@@ -20,6 +20,7 @@
 <script type="text/javascript">
 
 var storedBlobArr = [];
+var url = 0;
 
    function toArrayBuffer(buf) {
     var ab = new ArrayBuffer(buf.length);
@@ -30,21 +31,17 @@ var storedBlobArr = [];
     return ab;
 }
 
-
   function loadBlob(index){
-    var musicID = "music" + index;
-    console.log("new id: " + musicID);
-    
-    
-    var x = document.getElementById(musicID);
-    
-    console.log("current source of the element " + x.src)
+    var musicID = "music" + index;    
 
-       url = URL.createObjectURL(storedBlobArr[index]);
-       console.log(url);
-    x.src = "https://www.sample-videos.com/audio/mp3/crowd-cheering.mp3";
-    x.setAttribute("preload", "metadata");
+    $("#"+musicID).attr("src",storedBlobArr[index]);
+    $("#"+musicID).attr("preload","metadata");
+
+
+       
   }
+
+
 </script>
     
     <link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/google/code-prettify/master/loader/prettify.css">
@@ -113,25 +110,10 @@ var storedBlobArr = [];
         </section>
       </header>
       <%
-      /*
-      
-      var audio_context;
-      var recorder;
-      var blobURL = createDownloadLink(blobArray[1].blob);
-      function createDownloadLink(blob) {
-      
-      recorder && recorder.exportWAV(function(blob) {
-      var url = URL.createObjectURL(blob);
-      blobURL = url;
-      
-      });
-      }
-      */
+
       
       var url = 0;
-      
-      
-      console.log(blobArray.length)
+
       %>
       
       <section class="container" id="recordings_container">
@@ -145,13 +127,25 @@ var storedBlobArr = [];
               <p> <%=blobArray[i].blobToken%></p>
               <h6>Recording Description:</h6>
               <p>Some description limited by 140 chars.</p>
-              <script>
-              
-              var ab = toArrayBuffer('<%-blobBuffArray[i]%>');
 
+
+              <script>
+
+            // pass object over ejs
+            var abs = <%- JSON.stringify(blobBuffArray[i])%>;
+
+            //console.log(Object.getOwnPropertyNames(abs));
+
+            // convert from binary buffer to arraybuffer 
+            var ab = toArrayBuffer(abs.data);
+
+            // create blob from arraybuffer
             var storedBlob = new Blob([ab], {type: 'audio/wav'});
-            
-            storedBlobArr.push(storedBlob);
+
+
+            // store all blobs in array for dynamic loading
+            var url = URL.createObjectURL(storedBlob);
+            storedBlobArr.push(url);
     
               
           </script>
@@ -169,7 +163,7 @@ var storedBlobArr = [];
         <div id="audioplayer-grid">
             <button class="play" id="pButton" value="<%=i%>" onclick="loadBlob(this.value), play(this.value)"></button>
             <div id="timeline-grid">
-                <div id="playhead">
+                <div id="playhead<%=i%>" class="playhead">
                     
                 </div>
                 </div>

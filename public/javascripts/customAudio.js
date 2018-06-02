@@ -1,113 +1,141 @@
-var music = document.getElementById("music0");
+var music = [];
+var duration = [];
+var timelineWidth = [];
+var playhead = [];
+var initMusicArr = [];
+var timeline = [];
+var audioDiv = [];
+var pButton = null;
+var currIndex = null;
 
-var duration = 0;
+var initMusic = function(index){
+    currIndex = index;
+    initMusicArr[index] = true;
 
-if (music != null){
-    duration = music.duration;
-    // Duration of audio clip, calculated here for embedding purposes
-}
+    music[index] = document.getElementById("music" + index);
 
-// Added CB feature to support non preloaded recordings
-var setDurationCB = function(index, duration) {
-    music = document.getElementById("music0");
+    document.getElementById("music"+ index).onloadedmetadata = function(evt)
+        {
 
-    console.log("What is music here?" + music);
-    console.log("What about the duration of the music?" + music.duration);
-  
-  // timeline width adjusted for playhead
-timelineWidth = timeline.offsetWidth - playhead.offsetWidth;
+        if (music[index] != null){
+            duration[index] = music[index].duration;
 
-timeline.addEventListener("click", function(event) {
-    moveplayhead(event);
-    music.currentTime = duration * clickPercent(event);
-}, false);
+            }
 
-// timeupdate event listener
-music.addEventListener("timeupdate", timeUpdate, false);
+        // timeupdate event listener
+        music[index].addEventListener("timeupdate", timeUpdate, false);
+        music[index].param = index;
+
+        //console.log("audio dur = " + this.duration);
+
+
+    }
+    // create a custom audio player 
+    audioDiv[index] = document.createElement('div');
+    audioDiv[index].setAttribute("id", "audioplayer" + index);
+        
+    pButton = document.createElement('button');
+    pButton.setAttribute("class", "play");
+    pButton.setAttribute("id", "pButton");
+    //pButton.setAttribute('onclick','play();'); // for FF
+    //pButton.onclick = function() {play();}; // for IE
+
+    timeline[index] = document.createElement('div');
+    timeline[index].setAttribute("id", "timeline" + index);
+
+    playhead[index] = document.getElementById('playhead' + index);
+
+    // timeline width adjusted for playhead
+    timelineWidth[index] = 200 - playhead[index].offsetWidth;
+
+
+    // play button event listenter
+    pButton.addEventListener("click", playEL);
+    pButton.param = index;
+
+    
+    // makes playhead draggable
+    playhead[index].addEventListener('mousedown', mouseDown, false);
+    playhead[index].param = index;
+    window.addEventListener('mouseup', mouseUp, false);
+        
+
+    timeline[index].addEventListener("click", function(event) {
+        moveplayhead(event,index);
+        music[index].currentTime = duration[index] * clickPercent(event);
+            }, false);
+
 };
 
-var durationCB = function(cb, index, duration) {
-  cb(index, duration);
-};
-
-
-// create a custom audio player 
-        var audioDiv = document.createElement('div');
-        audioDiv.setAttribute("id", "audioplayer");
-        
-        var pButton = document.createElement('button');
-        pButton.setAttribute("class", "play");
-        pButton.setAttribute("id", "pButton");
-        //pButton.setAttribute('onclick','play();'); // for FF
-      //pButton.onclick = function() {play();}; // for IE
-        
-        var timeline = document.createElement('div');
-        timeline.setAttribute("id", "timeline");
-        
-        var playhead = document.createElement('div');
-        playhead.setAttribute("id", "playhead");
-        
-
-// timeline width adjusted for playhead
-var timelineWidth = timeline.offsetWidth - playhead.offsetWidth;
-
-// play button event listenter
-pButton.addEventListener("click", play);
 
 // returns click as decimal (.77) of the total timelineWidth
 function clickPercent(event) {
-    console.log(timelineWidth);
-    return (event.clientX - getPosition(timeline)) / timelineWidth;
+    return (event.clientX - getPosition(timeline[currIndex])) / timelineWidth[currIndex];
 }
 
-// makes playhead draggable
-playhead.addEventListener('mousedown', mouseDown, false);
-window.addEventListener('mouseup', mouseUp, false);
 
 // Boolean value so that audio position is updated only when the playhead is released
 var onplayhead = false;
 
 // mouseDown EventListener
-function mouseDown() {
+function mouseDown(evt) {
     onplayhead = true;
+    var index = evt.target.param;
     window.addEventListener('mousemove', moveplayhead, true);
-    music.removeEventListener('timeupdate', timeUpdate, false);
+
+    if(music[index] != null){
+    music[index].removeEventListener('timeupdate', timeUpdate, false);
+            }
 }
 
 // mouseUp EventListener
 // getting input from all mouse clicks
 function mouseUp(event) {
+    var index = event.target.param;
+
     if (onplayhead == true) {
-        moveplayhead(event);
+        moveplayhead(event,index);
         window.removeEventListener('mousemove', moveplayhead, true);
         // change current time
-        music.currentTime = duration * clickPercent(event);
-        music.addEventListener('timeupdate', timeUpdate, false);
+
+        if(music[currIndex] != null){
+        music[currIndex].currentTime = duration[currIndex] * clickPercent(event);
+        music[currIndex].addEventListener('timeupdate', timeUpdate, false);
+            }
     }
     onplayhead = false;
 }
+
 // mousemove EventListener
 // Moves playhead as user drags
-function moveplayhead(event) {
-    var newMargLeft = event.clientX - getPosition(timeline);
+function moveplayhead(event,index) {
 
-    if (newMargLeft >= 0 && newMargLeft <= timelineWidth) {
-        playhead.style.marginLeft = newMargLeft + "px";
+    //console.log(getPosition(timeline[currIndex]));
+
+    var newMargLeft = event.clientX - getPosition(timeline[currIndex]);
+
+    if (newMargLeft >= 0 && newMargLeft <= timelineWidth[index]) {
+        playhead[index].style.marginLeft = newMargLeft + "px";
     }
     if (newMargLeft < 0) {
-        playhead.style.marginLeft = "0px";
+        playhead[index].style.marginLeft = "0px";
     }
-    if (newMargLeft > timelineWidth) {
-        playhead.style.marginLeft = timelineWidth + "px";
+    if (newMargLeft > timelineWidth[index]) {
+        playhead[index].style.marginLeft = timelineWidth + "px";
     }
 }
 
 // timeUpdate
 // Synchronizes playhead position with current point in audio
-function timeUpdate() {
-    var playPercent = timelineWidth * (music.currentTime / duration);
-    playhead.style.marginLeft = playPercent + "px";
-    if (music.currentTime == duration) {
+function timeUpdate(evt) {
+    //console.log("timeupdate evt triggered");
+    var index = evt.target.param;
+
+    //console.log(timelineWidth[index]);
+    
+    var playPercent = timelineWidth[index] * (music[index].currentTime / duration[index]);
+    playhead[index].style.marginLeft = playPercent + "px";
+    if (music[index].currentTime == duration[index]) {
         pButton.className = "";
         pButton.className = "play";
     }
@@ -115,28 +143,41 @@ function timeUpdate() {
 
 //Play and Pause
 function play(index) {
-    music = document.getElementsByName("music");
-    console.log("jhere is the index " + index);
-    
-    console.log("ehre is te h length: " + music.length);
-    music = music[index];  
-    
+    //console.log(initMusicArr[index]);
 
-
-    //CB when we know recording is available
-   durationCB(setDurationCB, index, duration);
+    if (initMusicArr[index] != true){ 
+        //console.log("initing " + index);
+        initMusic(index);
+    }
+    //console.log("Is music paused?: " + pButton.className);
+  
 
     // start music
-    if (music.paused) {
-        
-        
-        
-        music.play();
+    if (pButton.className == "play" && music[index] != null) {        
+        music[index].play();
         // remove play, add pause
         pButton.className = "";
         pButton.className = "pause";
     } else { // pause music
-        music.pause();
+        music[index].pause();
+        // remove pause, add play
+        pButton.className = "";
+        pButton.className = "play";
+    }
+}
+
+function playEL(evt){
+    //console.log("playEL event");
+    var index = evt.target.param;
+
+    // start music
+    if (pButton.className == "play" && music[index] != null) {        
+        music[index].play();
+        // remove play, add pause
+        pButton.className = "";
+        pButton.className = "pause";
+    } else { // pause music
+        music[index].pause();
         // remove pause, add play
         pButton.className = "";
         pButton.className = "play";

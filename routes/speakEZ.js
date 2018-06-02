@@ -155,8 +155,10 @@ MongoClient.connect(url, function(err, db) {
         
         
         var sendBack = {"blob" : buf, "blobToken" : req.file.filename};
-        db.close();
+        
         console.log(buf);
+
+        db.close();
         res.send(sendBack);
       });
       

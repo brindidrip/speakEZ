@@ -3,135 +3,116 @@ var router = express.Router();
 var bodyParser = require('body-parser');
 const mongodb = require('mongodb');
 
-
 var bcrypt = require('bcrypt');
 var saltRounds = 10;
-    
-var MongoClient = require('mongodb').MongoClient;
+
+var dataRT = require('../public/javascripts/modules/dataRetrieval.js');
+
 var assert = require('assert');
 var ObjectId = require('mongodb').ObjectID;
-
-var url = 'mongodb://domenico:default@35.185.126.172:27017/admin'
-
     
 router.use(bodyParser.json());
 
+function updateSessionID(user, sessionPass, callback){
+  dataRT.MongoClient.connect(dataRT.url, function(err, db) {
+    assert.equal(null, err);
+    console.log("login.js, fn(updateSessionID): connected to db.");
 
-function updateDoc(user, sessionPass){
-    // Connect to DB
-MongoClient.connect(url, function(err, db) {
-  assert.equal(null, err);
-  
-  // Authenticate
+    //Authenticate
     db.authenticate('domenico', 'default', function(err, result) {
       assert.equal(true, result);
-        db.collection('sessionDB').updateOne({'username': user}, {$set: {current_sessionID: sessionPass}});
-          db.close();
+      console.log("login.js, fn(updateSessionID): authenticated to db.\n");
 
+      db.collection('sessionDB').updateOne({'username': user}, {$set: {current_sessionID: sessionPass}});
+      db.close();
+      callback();
     });
-});
-
+  });
 }
 
 function comparePass(user, password, req, res, callback) {
-   var infoUser = 0;
-    // Connect to DB
-MongoClient.connect(url, function(err, db) {
-  assert.equal(null, err);
-  
-  // Authenticate
+  var infoUser = null;
+
+  dataRT.MongoClient.connect(dataRT.url, function(err, db) {
+    assert.equal(null, err);
+    console.log("login.js, fn(comparePass): connected to db.");
+
     db.authenticate('domenico', 'default', function(err, result) {
       assert.equal(true, result);
+      console.log("login.js, fn(comparePass): authenticated to db. \n");
       
-    db.collection('userDB').findOne({'username': user}, function (findErr, result) {
-          if (findErr) throw findErr;
+      db.collection('userDB').findOne({'username': user}, function (findErr, result) {
+        if (findErr) throw findErr;
 
-    infoUser = result;
-    console.log(result.username);
-    db.close();
-  
+        infoUser = result;
+        db.close();
 
+        console.log("login.js, fn(comparePass): Comparing stored password with entered pass using bcrypt." + 
+          "Comparing entered password: " + password + " and stored user password: " + infoUser.hashedPass + "\n");
 
-    console.log("Now trying to compare password with bcrypt");
-    //Load hash from your password DB.
-    console.log("We are comparing:" + password + " and " + infoUser.hashedPass);
-    bcrypt.compare(password, infoUser.hashedPass, function(err, res) {
-        console.log("Inside bcrypt compare func");
-        // If success redirect to homepage
-        
-         if(res){
-           console.log("Successful compare");
-           // Generate a sessionID for the user
-           
-          // Login Success
-          // Set session username
-         bcrypt.genSalt(saltRounds, function(err, salt) {
-            bcrypt.hash(user, salt, function(err, hash) {
-          // update user's doc with the new sessionID
-            updateDoc(user,hash);
+        bcrypt.compare(password, infoUser.hashedPass, function(err, res) {
+          console.log("login.js, fn(comparePass): Inside bcrypt.\n");        
 
-              console.log("Setting session id: " + hash + " for " + user);
-              req.session.loginID = hash;
-              req.session.username = user;
-              console.log("Set session: " + req.session.loginID + " for " + req.session.username)
-              
+          if(res){
+            console.log("login.js, fn(comparePass): Successful compare");
+            // Generate a sessionID for the user
+            // Set session username
 
-              console.log("Updating session id for user: " + req.session.username);
-                callback(hash, true);
+            bcrypt.genSalt(saltRounds, function(err, salt) {
+              bcrypt.hash(user, salt, function(err, hash) {
+                //update user's doc with the new sessionID
+                updateSessionID(user,hash,function(){
+                  console.log("login.js, fn(comparePass): Setting sessionID: " + hash + " for user: " + user);
+                  req.session.loginID = hash;
+                  req.session.username = user;
+                  console.log("login.js, fn(comparePass): Set sessionID: " + req.session.loginID + " for user: " + req.session.username)
+
+                  console.log("login.js, fn(comparePass): Updating session id for user: " + req.session.username + "\n");
+                  callback(hash, true);
+                });
               });
             });
-         }
-         else{
-                      console.log("Compare failed");
-                      callback(0, false)  
-                    
-         }
-
+          }
+          else{
+            console.log("login.js, fn(comparePass): Compare failed: " + res);
+            callback(null, false);
+          }
+        });
+      });
     });
-    });
-    });
-});}
-
-
+  });
+}
 
 /* GET login page. */
 router.get('/', function(req, res, next) {
   console.log("At login")
-
-  res.render('login', { title: 'speakEZ'});
+  res.render('login', { title: 'speakEZ', error: ''});
 });
 
 /* GET login fail page. */
 router.get('/incorrect', function(req, res, next) {
-
   res.render('login_fail', { title: 'speakEZ'});
 });
 
-
-
-
 router.post('/', function(req,res,next){
+  var username = req.body.username;
+  var password = req.body.password;
 
-var username = req.body.username;
-var password = req.body.password;
-
-console.log("Attempting to compare pass and username: " + username + ":" + password);
-
-//xim(username)
-// Either redirects to failure or success
+  console.log("login.js, router.post('/'): Attempting to compare pass and username: " + username + ":" + password);
+  
   comparePass(username, password, req, res, function(sessionHash, boolVal){
-      if(boolVal){
-         req.session.loginID = sessionHash;
-        req.session.username = username;
-        res.redirect('/recordings/home/' + username) 
-      }
-      else{
-          res.redirect('/login/incorrect');
-      }
+    if(boolVal){
+      console.log("login.js, router.post('/'): Compare successful. New sessionID: " + sessionHash);
+
+      req.session.loginID = sessionHash;
+      req.session.username = username;
+      res.redirect('/recordings/home/' + username) 
+    }
+    else{
+      console.log("login.js, router.post('/'): Compare failure.");
+      res.redirect('/login/incorrect');
+    }
   })
-
-
 });
-
 
 module.exports = router;

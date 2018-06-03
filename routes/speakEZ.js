@@ -133,8 +133,7 @@ MongoClient.connect(url, function(err, db) {
         buf[i] = view[i];
         
     }
-    
-    
+        
     //TODO
     // We need to store a unique blobToken for each recording
     // Use bcrypt with a unique plaintext password

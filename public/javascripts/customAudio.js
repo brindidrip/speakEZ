@@ -1,3 +1,4 @@
+//customeAudio.js
 var music = [];
 var duration = [];
 var timelineWidth = [];

@@ -11,6 +11,8 @@ var speakEZ = require('./routes/speakEZ');
 var registration = require('./routes/registration');
 var login = require('./routes/login');
 var recordings = require('./routes/recordings');
+var MemcachedStore = require('connect-memcached')(session);
+
 
 var MongoClient = require('mongodb').MongoClient
   , assert = require('assert');
@@ -35,6 +37,17 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+/* 
+app.use(session({
+      secret  : '2C44-4D44-WppQ38S',
+      key     : 'test',
+      proxy   : 'true',
+      store   : new MemcachedStore({
+        hosts: ['speakez.oflo5p.cfg.use2.cache.amazonaws.com:11211']
+    })
+})); */
+
 app.use(session({
     secret: '2C44-4D44-WppQ38S',
     resave: true,

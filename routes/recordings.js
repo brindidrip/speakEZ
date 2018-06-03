@@ -29,6 +29,10 @@ router.use(cors());
 router.get('/', function(req, res, next) {
   //console.log("Accessing route to load user recordings. ");
   //Authenticate users session
+  if(req.session.username == undefined){
+    res.redirect('/');
+  }
+  else{
   persist.AuthenticateUser(req.session.loginID, req.session.username, function(boolVal){
     if(boolVal){
       dataRT.fetchRecordings(req.session.username, function(blobArr,blobBuffArray,username){
@@ -39,21 +43,9 @@ router.get('/', function(req, res, next) {
       res.render('login', { title: 'speakEZ'});
     }
   });
+}
 });
 
-router.get('/home/:uniqueID', function(req, res, next) {
-  persist.AuthenticateUser(req.session.loginID, req.session.username, function(boolVal){
-    if(boolVal){
-      //console.log("Now logged in");
-      res.render('speakEZ', { title: 'Google+'});
-    }
-    else{
-      //TODO 
-      // consider changing to redirect because rendering with this router will keep the /home/admin url
-      res.render('login', { error: 'Session expired. Please re-login.'});
-    } 
-  });
-});
 
 router.get("/:speakEZtoken", function(req,res,next){
   dataRT.fetchRecording(req.params.speakEZtoken, function(result){

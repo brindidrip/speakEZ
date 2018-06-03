@@ -785,7 +785,7 @@ input[type='email'],input[type='number'],input[type='password'],input[type='sear
 
 .popover {
   background:#482a15;
-  border:.1rem solid #482a15;
+  border:.1rem solid #5d493b;
   border-radius:.4rem;
   display:none;
   filter:drop-shadow(0 0 .6rem rgba(0,0,0,.1));

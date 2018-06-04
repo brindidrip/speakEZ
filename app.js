@@ -4,15 +4,15 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+
 var session = require('express-session');
+var RedisStore = require('connect-redis')(session);
 
 var index = require('./routes/index');
 var speakEZ = require('./routes/speakEZ');
 var registration = require('./routes/registration');
 var login = require('./routes/login');
 var recordings = require('./routes/recordings');
-var MemcachedStore = require('connect-memcached')(session);
-
 
 var MongoClient = require('mongodb').MongoClient
   , assert = require('assert');
@@ -38,21 +38,20 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-/* 
-app.use(session({
-      secret  : '2C44-4D44-WppQ38S',
-      key     : 'test',
-      proxy   : 'true',
-      store   : new MemcachedStore({
-        hosts: ['speakez.oflo5p.cfg.use2.cache.amazonaws.com:11211']
-    })
-})); */
 
+app.use(session({
+  store: new RedisStore({port:6379, host: '18.221.123.37'}),
+  secret: "2C44-4D44-WppQ38S",
+  resave: false,
+  saveUninitialized: true }));
+
+/*
 app.use(session({
     secret: '2C44-4D44-WppQ38S',
     resave: true,
     saveUninitialized: true
 }));
+*/
 
 app.use(express.static(path.join(__dirname, 'public')));
 

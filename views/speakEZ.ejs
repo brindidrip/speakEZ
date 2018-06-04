@@ -4,18 +4,19 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimal-ui">
     
-    <meta name="application-name" content="speakEZ - A voice embedding tool">
-   fre <meta name="author" content="Domenico Martinelli">
+    <meta name="application-name" content="speakEZ - A voice embedding tool.">
+    <meta name="author" content="Domenico Martinelli">
     
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.3.0/milligram.min.css">
+    <link href="/stylesheets/milligram.min.css" rel="stylesheet">
     <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel='stylesheet' href='/stylesheets/customAudio.css' />
+    
     <link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/google/code-prettify/master/loader/prettify.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.css">
 
     <title>speakEZ - A way to easily embed your voice across the internet.</title>
   
-    
   </head>
   
     <body>
@@ -23,14 +24,14 @@
    <main class="wrapper">
      <nav class="navigation">
        <section class="container">
-         <a class="navigationvigation-title" href="/home">
-           <img class ="img" src="/images/logo.png" alt="Logo" width="25" height="25">
+         <a class="navigation-title" href="/">
+           <img class ="img" src="images/logo.png" alt="Logo" width="25" height="25">
 
                <h1 class="title">speakEZ</h1>
                </a>
                
-  <ul class="navigation-list float-right">
-            <li class="navigation-item">
+          <ul class="navigation-list float-right">
+            <li class="navigation-item" id="navigation-item">
               <a class="navigation-link" href="#popover-grid" data-popover="">Account</a>
               <div class="popover" id="popover-grid">
           
@@ -45,7 +46,7 @@
               </li>
 
               <li class="popover-item">
-              <a class="popover-link" href="/" title="Logout">Logout</a>
+              <a class="popover-link" href="/logout" title="Logout">Logout</a>
               </li>
               
           </ul>
@@ -56,11 +57,19 @@
         <a class="navigation-link" href="#popover-support" data-popover="">Contact</a>
         <div class="popover" id="popover-support">
           <ul class="popover-list">
+
+            <li class="popover-item">
+              <a class="popover-link" target="blank" href="/about" title="About">About</a>
+              </li>
+
+            <li class="popover-item">
+              <a class="popover-link" target="blank" href="/help" title="Help">Help</a>
+              </li>
+
             <li class="popover-item">
               <a class="popover-link" target="blank" href="https://github.com/DomMartinelli" title="On Github">On Github</a>
               </li>
           
-                
               <li class="popover-item">
                 <a class="popover-link" target="blank" href="https://opensource.org/licenses/MIT" title="License">License</a>
                 </li>
@@ -78,19 +87,46 @@
        <h1 class="title">speakEZ</h1>
          <p class="description"> A way to easily embed your voice across the internet. <br><i><small>An on-going process</small></i></p>
 
-
-
       <button class="button" onclick="startRecording(this);">record</button>
       <button class="button" onclick="stopRecording(this);" disabled>stop</button>
+        
+      <button id="saveButton" class="button" >Save</button>
+      
+      <div class="recordings">
+        <ul class="recordingslist" id="recordingslist">
+        <audio id="music">
+          
+        </audio>
+        
+      </ul>
+    </div>
+    
 
-      
-      <button id="button1" class="button">Save</button>
-      
-      <div id ="tokenBlob">
-        <h1 id="tokenBlobTxt"></h1>
+      <div id="idShareMediaBox" style="display:none;" >
+        <div class="standardBox">
+          <div class="shareSubHeading">Sharing options</div>
+          
+          <input type="text" id="idShareMediaLink" class="shareVocarooLinkBox" title="For sharing..." onclick="this.select();" readonly value="">
+          
+          <input type="button" class="shareSmallButton" value="Embed" onclick="javascript:toggle_visibility('idShareMediaEmbedCodeContainer');">
+          
+          <input type="button" class="shareSmallButton" value="Email" onclick="javascript:sendEmailPopup();">
+          <div class="shareHorizontalSeparator"></div>
+            <div id ="tokenBlob">
+        <p id="tokenBlobTxt"></p>
+        
         
       </div>
+          
+          <div class="shareHorizontalSeparator"></div>
+
+          <p style="font-size:smaller;"> Download as... </p>
+        </div>
+      </div>
+
     </section>
+ 
+    
   </header>
 
 
@@ -140,190 +176,19 @@
         </ul>
       </div>
       <p>Licensed under the
-        <a href="https://github.com/milligram/milligram#license" title="MIT License" target="_blank"> MIT License.</a>
+        <a href="https://github.com/DomMartinelli#license" title="MIT License" target="_blank"> MIT License.</a>
       </p>
     </section>
   </footer>
 </main>
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="/javascripts/recorder.js"></script>
-<script src="/javascripts/globalScripts.js"></script>
-
+    <script src="/javascripts/recorder.js"></script>
+    <script src="/javascripts/playAudio.js"></script>
+    <script src="/javascripts/globalScripts.js"></script>
 
 <script>
-
 var currentBlob = new FormData();
 
-  $("#button1").click(function(e) {
-    e.preventDefault();
-    $.ajax({
-        type: "POST",
-        url: "/speakEZ/DB",
-        dataType: 'json',
-        data: currentBlob,
-        contentType: false,
-        processData: false,
-        success: function(result) {
-          try {
-            var myObj = JSON.stringify(result.blobToken);
-          } catch(e) {
-            alert(e);
-                  }
-            // if successful POST then use recorder library to immediately output            
-            // an audio element containing recorded wav
-            //
-            recorder.exportWAV(function(result) {
-            var url = URL.createObjectURL(result);
-    
-            // create an append an html element to represent the blobs token
-            //
-            var token = document.createElement('h1');
-            token.setAttribute("id", "tokenBlobTxt");
-            
-            var txtNode = document.createTextNode("speakEZ://" + myObj);
-            token.append(txtNode);
-                    
-            var tokenDiv = document.getElementById("tokenBlob");
-            tokenDiv.append(token);
-                    
-            
-            // create an append an html element to represent an audio element and info about recording
-            //
-            var li = document.createElement('li');
-            li.setAttribute("class", "recording-item");
-              
-            var h4 = document.createElement('h4');
-            h4.setAttribute("class", "recording-title");
-            h4.innerHTML = "recording";
-              
-            var h5 = document.createElement('h5');
-            h5.setAttribute("class", "recording-meta");
-            h5.innerHTML = "Meta Data";
-              
-            var h6 = document.createElement('h6');
-            h6.setAttribute("class", "recording-description");
-            h6.innerHTML = "Short Description";
-        
-        
-            var au = document.createElement('audio');
-            var hf = document.createElement('a');
-        
-        
-            au.controls = true;
-            au.src = url;
-            hf.href = url;
-            hf.download = new Date().toISOString() + '.wav';
-            hf.innerHTML = hf.download;
-        
-            // pack all elements into a list item and then append list item to recordings list
-            //
-            li.appendChild(h4);
-            li.appendChild(h5);
-            li.appendChild(h6);
-            li.appendChild(au);
-            au.appendChild(hf);
-            
-            recordingslist.appendChild(li);
-
-            });
-        },
-        
-        
-        // if result is an error then provide 'error' followed by the result produced in an elert
-        //
-        error: function(result) {
-            alert('error');
-            alert(result);
-        }
-    });
-});
-  
- // https://github.com/mattdiamond/Recorderjs/blob/master/examples/example_simple_exportwav.html
-    
-  var audio_context;
-  var recorder;
-
-
-  function startUserMedia(stream) {
-    var input = audio_context.createMediaStreamSource(stream);
-    console.log('Media stream created.');
-    console.log('Stream:' + stream);
-
-    recorder = new Recorder(input);
-    console.log('Recorder initialised.');
-  }
-
-  function startRecording(button) {
-    recorder && recorder.record();
-    button.disabled = true;
-    button.nextElementSibling.disabled = false;
-    console.log('Recording...');
-  }
-
-  function stopRecording(button) {
-    recorder && recorder.stop();
-    button.disabled = true;
-    button.previousElementSibling.disabled = false;
-    console.log('Stopped recording.');
-    
-    // create WAV download link using audio data blob
-    createDownloadLink();
-    
-    recorder.clear();
-    
-  }
- 
-
-  function createDownloadLink() {
-    
-    recorder && recorder.exportWAV(function(blob) {
-      var url = URL.createObjectURL(blob);
-      
-      var data = new FormData();
-      //localStorage.myfile = myBlob;
-      data.append('upl', blob);
-      
-      currentBlob = data;
-    //  reader.readAsText(blob);
-
-    //  localStorage.setItem("imgData", blob);
-
-
-      var li = document.createElement('li');
-      li.setAttribute("class", "recording-item");
-      
-      var h4 = document.createElement('h4');
-      h4.setAttribute("class", "recording-title");
-      h4.innerHTML = "recording";
-      
-      var h5 = document.createElement('h5');
-      h5.setAttribute("class", "recording-meta");
-      h5.innerHTML = "Meta Data";
-      
-      var h6 = document.createElement('h6');
-      h6.setAttribute("class", "recording-description");
-      h6.innerHTML = "Short Description";
-
-
-      var au = document.createElement('audio');
-      var hf = document.createElement('a');
-
-
-      au.controls = true;
-      au.src = url;
-      hf.href = url;
-      hf.download = new Date().toISOString() + '.wav';
-      hf.innerHTML = hf.download;
-      li.appendChild(h4);
-      li.appendChild(h5);
-      li.appendChild(h6);
-      li.appendChild(au);
-      au.appendChild(hf);
-      recordingslist.appendChild(li);
-   
-    });
-  }
 
   window.onload = function init() {
     try {

@@ -65,6 +65,7 @@ function comparePass(user, password, req, res, callback) {
                   //console.log("login.js, fn(comparePass): Setting sessionID: " + hash + " for user: " + user);
                   req.session.loginID = hash;
                   req.session.username = user;
+                  req.session.logged = true;
                   //console.log("login.js, fn(comparePass): Set sessionID: " + req.session.loginID + " for user: " + req.session.username)
 
                   //console.log("login.js, fn(comparePass): Updating session id for user: " + req.session.username + "\n");
@@ -75,6 +76,7 @@ function comparePass(user, password, req, res, callback) {
           }
           else{
             //console.log("login.js, fn(comparePass): Compare failed: " + res);
+            req.session.logged = false;
             callback(null, false);
           }
         });

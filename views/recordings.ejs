@@ -36,8 +36,6 @@ var url = 0;
 
     $("#"+musicID).attr("src",storedBlobArr[index]);
     $("#"+musicID).attr("preload","metadata");
-
-
        
   }
 
@@ -121,7 +119,7 @@ var url = 0;
         <div class="recordings-grid-container">
 
             <%if(blobArray != undefined || blobArray.length > 0){ %>
-            <% for(var i = 0; i<3; i++) {%>
+            <% for(var i = 0; i < blobArray.length; i++) {%>
             <div class="recording-grid-item<%=i%>">
               <h5>blobToken:</h5>
               <p> <%=blobArray[i].blobToken%></p>

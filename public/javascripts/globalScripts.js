@@ -183,6 +183,8 @@ function startUserMedia(stream) {
         //console.log(new Blob([currentBlob.get('upl')], {type: 'audio/wav'}));
 
         // li to hold audio player
+        var recordingslist = document.getElementById("recordingslist");
+
         var li = document.createElement('li');
         li.setAttribute("class", "recording-item-sample");
         li.setAttribute("id", "recording-item-sample");

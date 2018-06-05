@@ -8,10 +8,15 @@
     <meta name="author" content="Domenico Martinelli">
     
 	  <link href="/stylesheets/milligram.min.css" rel="stylesheet">
-    <link rel='stylesheet' href='/stylesheets/style.css' />
     <link rel='stylesheet' href='/stylesheets/customAudio.css' />
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+
+
     
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+
 
     <script src="/javascripts/recorder.js"></script>
     <script src="/javascripts/customAudio.js"></script>
@@ -39,14 +44,11 @@ var url = 0;
        
   }
 
-
 </script>
     
     <link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/google/code-prettify/master/loader/prettify.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.css">
-    
-   
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.css">   
 
     <title>speakEZ - A way to easily embed your voice across the internet.</title>
   
@@ -62,37 +64,50 @@ var url = 0;
           </a>
           
           <ul class="navigation-list float-right">
-            <li class="navigation-item">
+            <li class="navigation-item" id="navigation-item">
               <a class="navigation-link" href="#popover-grid" data-popover="">Account</a>
               <div class="popover" id="popover-grid">
+          
+          <ul class="popover-list">
+              
+            <li class="popover-item">
+              <a class="popover-link" href="/recordings" title="Recordings">Recordings</a>
+              </li>
+
+              <li class="popover-item">
+              <a class="popover-link" href="/" title="Settings">Settings</a>
+              </li>
+
+              <li class="popover-item">
+              <a class="popover-link" href="/logout" title="Logout">Logout</a>
+              </li>
+              
+          </ul>
+        </div>
+      </li>
+      
+      <li class="navigation-item">
+        <a class="navigation-link" href="#popover-support" data-popover="">Contact</a>
+        <div class="popover" id="popover-support">
+          <ul class="popover-list">
+
+            <li class="popover-item">
+              <a class="popover-link" target="blank" href="/about" title="About">About</a>
+              </li>
+
+            <li class="popover-item">
+              <a class="popover-link" target="blank" href="/help" title="Help">Help</a>
+              </li>
+
+            <li class="popover-item">
+              <a class="popover-link" target="blank" href="https://github.com/DomMartinelli" title="On Github">On Github</a>
+              </li>
+          
+              <li class="popover-item">
+                <a class="popover-link" target="blank" href="https://opensource.org/licenses/MIT" title="License">License</a>
+                </li>
                 
-                <ul class="popover-list">
-                  
-                  
-                  <li class="popover-item">
-                    <a class="popover-link" href="/recordings" title="Recordings">Recordings</a>
-                  </li>
-                  <li class="popover-item">
-                    <a class="popover-link" href="/" title="Logout">Logout</a>
-                  </li>
-                  
-                </ul>
-              </div>
-            </li>
-            
-            <li class="navigation-item">
-              <a class="navigation-link" href="#popover-support" data-popover="">Contact</a>
-              <div class="popover" id="popover-support">
-                <ul class="popover-list">
-                  <li class="popover-item">
-                    <a class="popover-link" target="blank" href="https://github.com/DomMartinelli" title="On Github">On Github</a>
-                  </li>
-                  
-                  
-                  <li class="popover-item">
-                    <a class="popover-link" target="blank" href="https://opensource.org/licenses/MIT" title="License">License</a>
-                  </li>
-                </ul>
+            </ul>
               </div>
               
             </li>
@@ -144,17 +159,15 @@ var url = 0;
             // store all blobs in array for dynamic loading
             var url = URL.createObjectURL(storedBlob);
             storedBlobArr.push(url);
-    
-              
-          </script>
             
-              
+          </script>          
               <p> <%=url%></p>
              <div class="recordings">
         <ul class="recordingslist" id="recordingslist">
+
             <li class="recording-item-sample" id="recording-item-sample">
                 
-                        <audio id="music<%=i%>" name="music" src="<%=url%>">
+                        <audio id="music<%=i%>" name="music" src="">
           
         </audio>
         
@@ -166,10 +179,15 @@ var url = 0;
                 </div>
                 </div>
                 </div>
-        
             </li>
-        
       </ul>
+
+                               <span id="recording-controls">
+                                <img class ="img" id="download<%=i%>" src="/images/download.png" alt="download" width="25" height="25">
+                                <img class ="img" id="delete<%=i%>" src="/images/trash.png" alt="delete" width="25" height="25">
+                                <div id="dialog-confirm"></div>
+                               </span> 
+
     </div>
              
              
@@ -183,7 +201,6 @@ var url = 0;
         </div>
       </section>
       
-
       
       <footer class="footer">
         <section class="container">
@@ -222,10 +239,61 @@ var url = 0;
 <p>Licensed under the
 <a href="https://opensource.org/licenses/MIT" title="MIT License" target="_blank"> MIT License.</a>
 </p>
+
 </section>
 </footer>
 </main>
+<script>
 
+function confirmDialogue(target,dialogue) {
+    $("#dialog-confirm").html(dialogue);
+
+    $("#dialog-confirm").dialog({
+        resizable: false,
+        modal: true,
+        title: "Delete a recording",
+        height: 135,
+        width: 250,
+        buttons: {
+            "Yes": function () {
+                $(this).dialog('close');
+                callback(true,target);
+            },
+                "No": function () {
+                $(this).dialog('close');
+                callback(false,target);
+            }
+        }
+    });
+}
+
+function callback(confirm,target) {
+  if(confirm){
+    // Delete from database
+    $(target).fadeOut(1500);
+  }
+  else{
+    // do nothing
+  }
+    
+}
+
+$("[id^='download']").click(function(e) {
+  e.preventDefault();
+
+});
+
+$("[id^='delete']").click(function(e) {
+  e.preventDefault();
+
+  var index = e.target.id.split("delete")[1];
+  var recording = ".recording-grid-item" + index;
+
+  confirmDialogue(recording, "Are you sure you want to delete this recording? This decision cannot be reversed.");
+
+});
+
+</script>
 
 
 </body>

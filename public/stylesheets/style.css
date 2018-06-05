@@ -113,6 +113,23 @@
   
 }
 
+/* jquery ui confirmation box */
+
+.ui-widget {
+    font-family:Gotham Rounded A,Gotham Rounded B,Helvetica Neue,Arial,sans-serif;
+    font-size: 0.6em;
+}
+
+.ui-widget-header {
+    border: 1px solid #aaaaaa;
+    /* background: #de0000 url(images/ui-bg_highlight-soft_75_cccccc_1x100.png) 50% 50% repeat-x; */
+    background: white;
+    background-color: #434343;
+    color: #df8138;
+    font-weight: bold;
+}
+
+
 .navigation {
   background:#141414;
   border-bottom:.1rem solid #ffe2cf;
@@ -377,6 +394,10 @@ textarea{
   position:relative;
   word-wrap: break-word;
 
+}
+
+#recording-controls{
+  margin-left: 25rem
 }
 
 .recording-expand {

@@ -67,9 +67,8 @@ function comparePass(user, password, req, res, callback) {
                   req.session.username = user;
                   req.session.logged = true;
                   //console.log("login.js, fn(comparePass): Set sessionID: " + req.session.loginID + " for user: " + req.session.username)
-
                   //console.log("login.js, fn(comparePass): Updating session id for user: " + req.session.username + "\n");
-                  callback(hash, true);
+                  callback(hash, infoUser, true);
                 });
               });
             });
@@ -102,12 +101,15 @@ router.post('/', function(req,res,next){
 
   //console.log("login.js, router.post('/'): Attempting to compare pass and username: " + username + ":" + password);
   
-  comparePass(username, password, req, res, function(sessionHash, boolVal){
+  comparePass(username, password, req, res, function(sessionHash, info, boolVal){
     if(boolVal){
-      //console.log("login.js, router.post('/'): Compare successful. New sessionID: " + sessionHash);
+      //console.log("login.js, router.post('/'): Compare successful. infoUser: " + Object.getOwnPropertyNames(info));
 
       req.session.loginID = sessionHash;
       req.session.username = username;
+      req.session.biodata = info['bio-data'];
+      req.session.email = info.emailAddress;
+
       res.redirect('/home'); 
     }
     else{

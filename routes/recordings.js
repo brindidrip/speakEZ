@@ -19,7 +19,7 @@ router.get('/', function(req, res, next) {
     // Make sure they have the fresh sessionID in DB before serving personal recordings
     persist.AuthenticateUser(req.session.loginID, req.session.username, function(boolVal){
       if(boolVal){
-        dataRT.fetchRecordings(req.session.username, function(blobArr,blobBuffArray,username){
+        dataRT.fetchRecordings(req.session.username, false, function(blobArr,blobBuffArray,username){
           res.render('recordings', { title: 'speakEZ', blobArray: blobArr, blobBuffArray: blobBuffArray});
         }); 
       }

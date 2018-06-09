@@ -113,6 +113,31 @@
   
 }
 
+.pull-right{
+    float: right!important;
+      }
+
+.pull-left{
+  float:left
+}
+
+.section-title{
+  display: block;
+}
+
+.section-title> h3{
+  display:inline-block;
+} 
+
+.section-title> a{
+  line-height:16px;
+  margin-top:14px
+}
+
+.profile-section{
+  margin-bottom:80px;
+
+}
 /* jquery ui confirmation box */
 
 .ui-widget {
@@ -931,7 +956,6 @@ input[type='email'],input[type='number'],input[type='password'],input[type='sear
 .footer .container {
   color:#FF7619;
   border-top:0;
-  margin-top: 22rem;
   position:relative;
   text-align:center;
 

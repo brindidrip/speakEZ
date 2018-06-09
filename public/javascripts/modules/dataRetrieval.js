@@ -28,7 +28,7 @@ exports.fetchRecording = function(spEZtoken, callback) {
 };
 
     
-exports.fetchRecordings = function(username, callback){
+exports.fetchRecordings = function(username, reverse, callback){
 	exports.MongoClient.connect(exports.url, function(err, db) {
 		assert.equal(null, err);
   
@@ -60,7 +60,12 @@ exports.fetchRecordings = function(username, callback){
             }, function(err) {
             console.log(err);
             db.close();
-            callback(blobArray,blobBufferArray,username);
+            if (reverse){
+            	callback(blobArray.reverse(),blobBufferArray.reverse(),username);
+            }
+            else{
+            	callback(blobArray,blobBufferArray,username);
+            }
         	});
     	});
 	});

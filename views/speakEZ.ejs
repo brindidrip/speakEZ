@@ -8,14 +8,46 @@
     <meta name="author" content="Domenico Martinelli">
     
     <link href="/stylesheets/milligram.min.css" rel="stylesheet">
-    <link rel='stylesheet' href='/stylesheets/style.css' />
     <link rel='stylesheet' href='/stylesheets/customAudio.css' />
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+
+    <script src="/javascripts/recorder.js"></script>
+    <script src="/javascripts/customAudio.js"></script>
+    <script src="/javascripts/globalScripts.js"></script>
     
     <link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/google/code-prettify/master/loader/prettify.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.css">
 
     <title>speakEZ - A way to easily embed your voice across the internet.</title>
+
+    <script type="text/javascript">
+
+var storedBlobArr = [];
+var url = 0;
+
+   function toArrayBuffer(buf) {
+    var ab = new ArrayBuffer(buf.length);
+    var view = new Uint8Array(ab);
+    for (var i = 0; i < buf.length; ++i) {
+        view[i] = buf[i];
+    }
+    return ab;
+}
+
+  function loadBlob(index){
+    var musicID = "music" + index;    
+
+    $("#"+musicID).attr("src",storedBlobArr[index]);
+    $("#"+musicID).attr("preload","metadata");
+       
+  }
+
+</script>
   
   </head>
   
@@ -131,9 +163,150 @@
 
 
 <section class="container" id="profile_container">
-    <h3 class="title">Profile</h3>
-      <div class="profile">
+    <div class="section-title">
+      <h3 class="title">Recent Recordings</h3>
 
+    <a href="/recordings" class="pull-right">More...</a>
+    </div>
+      <div class="profile-section">
+        <%
+
+      
+      var url = 0;
+
+      %>
+
+      <div class="recordings-grid-container">
+
+
+            <%console.log(blobArray.length);
+            if(blobArray != null && blobArray.length > 0){ %>
+            <% for(var i = 0; i < 2; i++) {%>
+            <div class="recording-grid-item<%=i%>">
+              <h5>blobToken:</h5>
+              <p> <%=blobArray[i].blobToken%></p>
+              <h6>Recording Description:</h6>
+              <p>Some description limited by 140 chars.</p>
+
+         <script>
+            // pass object over ejs
+            var abs = <%- JSON.stringify(blobBuffArray[i])%>;
+            //console.log(Object.getOwnPropertyNames(abs));
+            // convert from binary buffer to arraybuffer 
+            var ab = toArrayBuffer(abs.data);
+            // create blob from arraybuffer
+            var storedBlob = new Blob([ab], {type: 'audio/wav'});
+            // store all blobs in array for dynamic loading
+            var url = URL.createObjectURL(storedBlob);
+            storedBlobArr.push(url);
+          </script>
+
+          <p> <%=url%></p>
+             <div class="recordings">
+        <ul class="recordingslist" id="recordingslist">
+
+            <li class="recording-item-sample" id="recording-item-sample">
+                
+                        <audio id="music<%=i%>" name="music" src="">
+          
+        </audio>
+
+                <div id="audioplayer-grid">
+            <button class="play" id="pButton" value="<%=i%>" onclick="loadBlob(this.value), play(this.value)"></button>
+            <div id="timeline-grid">
+                <div id="playhead<%=i%>" class="playhead">
+                    
+                </div>
+                </div>
+                </div>
+            </li>
+      </ul>
+
+                               <span id="recording-controls">
+                                <img class ="img" id="download<%=i%>" src="/images/download.png" alt="download" width="25" height="25">
+                                <img class ="img" id="delete<%=i%>" src="/images/trash.png" alt="delete" width="25" height="25">
+                                <div id="dialog-confirm"></div>
+                               </span> 
+
+    </div>
+             
+             
+            </div>
+
+
+            <% }
+            }
+            else {
+            %>
+            <p>No recordings yet.</p>
+            <% } %>
+        </div> 
+
+    </div>
+
+    <div class="section-title">
+      <h3 class="title">Profile</h3>
+
+    <a href="/" class="pull-right">Edit Account Info</a>
+  </div>
+      <div class="profile-section">
+        <table class="table">
+          <tbody>
+            <tr>
+              <td class="col-md-4 item-name">Your Name</td>
+              <td class="col-md-">
+                <span><%=session.biodata.fullName%>&nbsp;</span></td>
+            </tr>
+            <tr>
+              <td class="col-md-4 item-name">Username</td>
+              <td class="col-md-">
+                <span><%= session.username%></span></td>
+            </tr>
+            <tr>
+              <td class="col-md-4 item-name">Password</td>
+              <td class="col-md-">
+                <span>******&nbsp;</span></td>
+            </tr>
+            <tr>
+              <td class="col-md-4 item-name">Email</td>
+              <td class="col-md-8">
+                <span><%=session.email%></span>
+              </td>
+            </tr>
+            <tr>
+              <td class="col-md-4 item-name">Membership</td>
+              <td class="col-md-">
+                <span><%=session.biodata.membership%>
+                  <span class="pull-right">
+                    </span>
+                  </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+    </div>
+
+    <div class="section-title">
+      <h3 class="title">Usage</h3>
+  </div>
+      <div class="profile-section">
+        <table class="table">
+          <tbody>
+            <tr>
+              <td class="col-md-4 item-name">User since</td>
+              <td class="col-md-8">
+                <span>some date</span></td>
+            </tr>
+            <tr>
+              <td class="col-md-4 item-name">Recordings</td>
+              <td class="col-md-8">
+                <span><%= blobArray.length%> blobArray.length </span>
+              </td>
+            </tr>
+           
+          </tbody>
+        </table>
 
     </div>
 
@@ -179,36 +352,60 @@
         <a href="https://github.com/DomMartinelli#license" title="MIT License" target="_blank"> MIT License.</a>
       </p>
     </section>
-  </footer>
+ </footer>
 </main>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="/javascripts/recorder.js"></script>
-    <script src="/javascripts/playAudio.js"></script>
-    <script src="/javascripts/globalScripts.js"></script>
-
 <script>
-var currentBlob = new FormData();
 
+function confirmDialogue(target,dialogue) {
+    $("#dialog-confirm").html(dialogue);
 
-  window.onload = function init() {
-    try {
-      // webkit shim
-      window.AudioContext = window.AudioContext || window.webkitAudioContext;
-      navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia;
-      window.URL = window.URL || window.webkitURL;
-      
-      audio_context = new AudioContext;
-      console.log('Audio context set up.');
-      console.log('navigator.getUserMedia ' + (navigator.getUserMedia ? 'available.' : 'not present!'));
-    } catch (e) {
-      alert('No web audio support in this browser!');
-    }
-    
-    navigator.getUserMedia({audio: true}, startUserMedia, function(e) {
-      console.log('No live audio input: ' + e);
+    $("#dialog-confirm").dialog({
+        resizable: false,
+        modal: true,
+        title: "Delete a recording",
+        height: 135,
+        width: 250,
+        buttons: {
+            "Yes": function () {
+                $(this).dialog('close');
+                callback(true,target);
+            },
+                "No": function () {
+                $(this).dialog('close');
+                callback(false,target);
+            }
+        }
     });
-  };
+}
+
+function callback(confirm,target) {
+  if(confirm){
+    // Delete from database
+    $(target).fadeOut(1500);
+  }
+  else{
+    // do nothing
+  }
+    
+}
+
+$("[id^='download']").click(function(e) {
+  e.preventDefault();
+
+});
+
+$("[id^='delete']").click(function(e) {
+  e.preventDefault();
+
+  var index = e.target.id.split("delete")[1];
+  var recording = ".recording-grid-item" + index;
+
+  confirmDialogue(recording, "Are you sure you want to delete this recording? This decision cannot be reversed.");
+
+});
 
 </script>
-  </body>
+
+
+</body>
 </html>

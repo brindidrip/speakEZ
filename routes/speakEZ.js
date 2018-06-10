@@ -113,9 +113,9 @@ router.get('/', auth, function(req, res, next) {
 });
 
 
-router.post('/delete', type, function(req,res,next){
-  console.log(req.body.str);
-  //dataRT.deleteRecording()
+router.post('/delete',  function(req,res,next){
+  dataRT.deleteRecording(req.body.speakEZtoken);
+  res.send("Success");
 });
 
 // Store blob data into DB

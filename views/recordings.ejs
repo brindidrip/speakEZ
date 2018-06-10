@@ -272,14 +272,13 @@ function callback(confirm,target) {
     // Delete from database
     $(target).fadeOut(1500);
 
-    var ape = $(target);
-
-    console.log(ape)
+    var token = $(target)[0].attributes[1].nodeValue;
+    var ape = "eooeadlp2d"
 
     $.ajax({
     type: "POST",
     url: "/speakEZ/delete",
-    data: "speakEZtoken",
+    data: {"speakEZtoken" : token},
     success: function(result) {
       try {
         alert("um, success");
@@ -311,6 +310,7 @@ $("[id^='download']").click(function(e) {
 $("[id^='delete']").click(function(e) {
   e.preventDefault();
 
+  var token = e.target.value;
   var index = e.target.id.split("delete")[1];
   var recording = ".recording-grid-item" + index;
 

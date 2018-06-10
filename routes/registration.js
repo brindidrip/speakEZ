@@ -31,11 +31,13 @@ var insertUserDebug = function(db, req, hash, callback){
 }
 
 var insertUser = function(db, req, hash, callback) {
+  var today = new Date();
    db.collection('userDB').insertOne( {
       "bio-data" : {
          "fullName" : req.body.firstName + " " + req.body.lastName, 
          "country" : req.body.country,
          "birthdate" :  req.body.dobMonth + req.body.dobDay + req.body.dobYear,
+         "creation" : today.getMonth() + '-' + today.getDate() + '-' + today.getFullYear(),
          "membership" : false
       },
       "username" : req.body.user_reg,

@@ -24,30 +24,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.css">
 
     <title>speakEZ - A way to easily embed your voice across the internet.</title>
-
-    <script type="text/javascript">
-
-var storedBlobArr = [];
-var url = 0;
-
-   function toArrayBuffer(buf) {
-    var ab = new ArrayBuffer(buf.length);
-    var view = new Uint8Array(ab);
-    for (var i = 0; i < buf.length; ++i) {
-        view[i] = buf[i];
-    }
-    return ab;
-}
-
-  function loadBlob(index){
-    var musicID = "music" + index;    
-
-    $("#"+musicID).attr("src",storedBlobArr[index]);
-    $("#"+musicID).attr("preload","metadata");
-       
-  }
-
-</script>
   
   </head>
   
@@ -57,7 +33,7 @@ var url = 0;
      <nav class="navigation">
        <section class="container">
          <a class="navigation-title" href="/">
-           <img class ="img" src="images/logo.png" alt="Logo" width="25" height="25">
+           <img class ="img" src="/images/logo.png" alt="Logo" width="25" height="25">
 
                <h1 class="title">speakEZ</h1>
                </a>
@@ -74,7 +50,7 @@ var url = 0;
               </li>
 
               <li class="popover-item">
-              <a class="popover-link" href="/home/settings" title="Settings">Settings</a>
+              <a class="popover-link" href="/" title="Settings">Settings</a>
               </li>
 
               <li class="popover-item">
@@ -113,206 +89,69 @@ var url = 0;
   </ul>
             </section>
           </nav>
-          
-  <header class="header" id="home">
-    <section class="container">
-       <h1 class="title">speakEZ</h1>
-         <p class="description"> A way to easily embed your voice across the internet. <br><i><small>An on-going process</small></i></p>
 
-      <button class="button" onclick="startRecording(this);">record</button>
-      <button class="button" onclick="stopRecording(this);" disabled>stop</button>
-        
-      <button id="saveButton" class="button" >Save</button>
-      
-      <div class="recordings">
-        <ul class="recordingslist" id="recordingslist">
-        <audio id="music">
-          
-        </audio>
-        
-      </ul>
-    </div>
-    
+    <header class="header" id="home">
 
-      <div id="idShareMediaBox" style="display:none;" >
-        <div class="standardBox">
-          <div class="shareSubHeading">Sharing options</div>
-          
-          <input type="text" id="idShareMediaLink" class="shareVocarooLinkBox" title="For sharing..." onclick="this.select();" readonly value="">
-          
-          <input type="button" class="shareSmallButton" value="Embed" onclick="javascript:toggle_visibility('idShareMediaEmbedCodeContainer');">
-          
-          <input type="button" class="shareSmallButton" value="Email" onclick="javascript:sendEmailPopup();">
-          <div class="shareHorizontalSeparator"></div>
-            <div id ="tokenBlob">
-        <p id="tokenBlobTxt"></p>
-        
-        
-      </div>
-          
-          <div class="shareHorizontalSeparator"></div>
-
-          <p style="font-size:smaller;"> Download as... </p>
-        </div>
-      </div>
-
-    </section>
- 
     
   </header>
 
 
-<section class="container" id="profile_container">
+<section class="container" id="edit_profile_container">
     <div class="section-title">
-      <h3 class="title">Recent Recordings</h3>
+      <h3 class="title">Account Settings</h3>
 
-    <a href="/recordings" class="pull-right">More...</a>
-    </div>
-      <div class="profile-section">
-        <%
-
-      
-      var url = 0;
-
-      %>
-
-      <div class="recordings-grid-container">
-
-
-            <%console.log(blobArray.length);
-            if(blobArray != null && blobArray.length > 0){ %>
-            <% for(var i = 0; i < 2; i++) {%>
-            <div class="recording-grid-item<%=i%>">
-              <h5>blobToken:</h5>
-              <p> <%=blobArray[i].blobToken%></p>
-              <h6>Recording Description:</h6>
-              <p>Some description limited by 140 chars.</p>
-
-         <script>
-            // pass object over ejs
-            var abs = <%- JSON.stringify(blobBuffArray[i])%>;
-            //console.log(Object.getOwnPropertyNames(abs));
-            // convert from binary buffer to arraybuffer 
-            var ab = toArrayBuffer(abs.data);
-            // create blob from arraybuffer
-            var storedBlob = new Blob([ab], {type: 'audio/wav'});
-            // store all blobs in array for dynamic loading
-            var url = URL.createObjectURL(storedBlob);
-            storedBlobArr.push(url);
-          </script>
-
-          <p> <%=url%></p>
-             <div class="recordings">
-        <ul class="recordingslist" id="recordingslist">
-
-            <li class="recording-item-sample" id="recording-item-sample">
-                
-                        <audio id="music<%=i%>" name="music" src="">
-          
-        </audio>
-
-                <div id="audioplayer-grid">
-            <button class="play" id="pButton" value="<%=i%>" onclick="loadBlob(this.value), play(this.value)"></button>
-            <div id="timeline-grid">
-                <div id="playhead<%=i%>" class="playhead">
-                    
-                </div>
-                </div>
-                </div>
-            </li>
-      </ul>
-
-                               <span id="recording-controls">
-                                <img class ="img" id="download<%=i%>" src="/images/download.png" alt="download" width="25" height="25">
-                                <img class ="img" id="delete<%=i%>" src="/images/trash.png" alt="delete" width="25" height="25">
-                                <div id="dialog-confirm"></div>
-                               </span> 
-
-    </div>
-             
-             
-            </div>
-
-
-            <% }
-            }
-            else {
-            %>
-            <p>No recordings yet.</p>
-            <% } %>
-        </div> 
-
-    </div>
-
-    <div class="section-title">
-      <h3 class="title">Profile</h3>
-
-    <a href="/home/settings" id="edit_account" class="pull-right">Edit Account Info</a>
   </div>
       <div class="profile-section">
+        <form action="/registration" method="post">
+
         <table class="table">
           <tbody>
             <tr>
-              <td class="col-md-4 item-name">Your Name</td>
+              <td class="col-md-4 item-name">Name</td>
               <td class="col-md-">
-                <span><%=session.biodata.fullName%>&nbsp;</span></td>
+                <input class="edit-content" maxlength="30" name="user_reg" type="text"
+                    value="" placeholder="<%=session.biodata.fullName%>" ></td>
+
             </tr>
             <tr>
               <td class="col-md-4 item-name">Username</td>
               <td class="col-md-">
-                <span><%= session.username%></span></td>
-            </tr>
-            <tr>
-              <td class="col-md-4 item-name">Password</td>
-              <td class="col-md-">
-                <span>********&nbsp;</span></td>
+                  <input class="edit-content" maxlength="12" name="user_reg" type="text"
+                    value="" placeholder="<%=session.username%>" ></td>
             </tr>
             <tr>
               <td class="col-md-4 item-name">Email</td>
               <td class="col-md-8">
-                <span><%=session.email%></span>
+                <input autocomplete="off" class="edit-content" maxlength="32" name="emailAddress" placeholder="<%=session.email%>" spellcheck="false" type="email" value=""></td>
               </td>
             </tr>
+
             <tr>
-              <td class="col-md-4 item-name">Membership</td>
+              <td class="col-md-4 item-name">New Password</td>
               <td class="col-md-">
-                <span><%=session.biodata.membership%>
-                  <span class="pull-right">
-                    </span>
-                  </span>
-              </td>
+                <input autocomplete="off" class="edit-content" maxlength="16"
+                  name="password" placeholder="" required="true" spellcheck="false" type="password" value=""> </td>
+                </td>
             </tr>
-          </tbody>
-        </table>
-
-    </div>
-
-    <div class="section-title">
-      <h3 class="title">Usage</h3>
-  </div>
-      <div class="profile-section">
-        <table class="table">
-          <tbody>
+            
             <tr>
-              <td class="col-md-4 item-name">User since</td>
-              <td class="col-md-8">
-                <span><%=session.biodata.creation%></span></td>
-            </tr>
-            <tr>
-              <td class="col-md-4 item-name">Recordings</td>
-              <td class="col-md-8">
-                <span><%= blobArray.length%> </span>
-              </td>
+              <td class="col-md-4 item-name">Current Password</td>
+              <td class="col-md-">
+                <input autocomplete="off" class="edit-content" maxlength="16"
+                  name="password" placeholder="" required="true" spellcheck="false" type="password" value=""> </td>
+               </td>
             </tr>
            
           </tbody>
         </table>
 
-    </div>
+    </div>  
 
-    
+          <button class="button" onclick="startRecording(this);">Save changes</button>
+        </form>
   </section>
   
+
   
   <footer class="footer">
     <section class="container">
@@ -388,6 +227,11 @@ function callback(confirm,target) {
   }
     
 }
+$("[id^='edit_account']").click(function(e) {
+  e.preventDefault();
+  alert("fuck");
+
+});
 
 $("[id^='download']").click(function(e) {
   e.preventDefault();

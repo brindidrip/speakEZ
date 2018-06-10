@@ -135,7 +135,7 @@ var url = 0;
 
             <%if(blobArray != undefined || blobArray.length > 0){ %>
             <% for(var i = 0; i < blobArray.length; i++) {%>
-            <div class="recording-grid-item<%=i%>">
+            <div class="recording-grid-item<%=i%>" value="<%=blobArray[i].blobToken%>">
               <h5>blobToken:</h5>
               <p> <%=blobArray[i].blobToken%></p>
               <h6>Recording Description:</h6>
@@ -271,6 +271,31 @@ function callback(confirm,target) {
   if(confirm){
     // Delete from database
     $(target).fadeOut(1500);
+
+    var ape = $(target);
+
+    console.log(ape)
+
+    $.ajax({
+    type: "POST",
+    url: "/speakEZ/delete",
+    data: "speakEZtoken",
+    success: function(result) {
+      try {
+        alert("um, success");
+
+       
+      }
+
+     
+      catch(e) {
+        alert(e);
+      }
+      
+    },
+    error: function(result) {
+      alert('error: ' + result);
+    }});
   }
   else{
     // do nothing

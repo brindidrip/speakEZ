@@ -4,6 +4,22 @@ var assert = require('assert');
 exports.MongoClient = require('mongodb').MongoClient;
 exports.url = 'mongodb://domenico:default@35.185.126.172:27017/admin'
 
+exports.deleteRecording = function(spEZtoken){
+	exports.MongoClient.connect(exports.url, function(err,db){
+		assert.equal(null,err);
+
+		db.authenticate('domenico', 'default', function(err,result){
+			assert.equal(true, result);
+
+			db.collection('recordingsDB').deleteOne({ "blobToken" : spEZtoken }, function(findErr,result){
+				if (findErr) throw findErr;
+
+				db.close();
+			});
+		});
+	});
+};
+
 exports.fetchRecording = function(spEZtoken, callback) {
 	// Connect to DB
 	exports.MongoClient.connect(exports.url, function(err, db) {

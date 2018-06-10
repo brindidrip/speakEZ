@@ -4,6 +4,8 @@ var blobutil = require('blob-util');
 let multer = require('multer');
 var upload = multer({ dest: __dirname + '/temp_uploads/' });
 var type = upload.single('upl');
+var dataRT = require('../public/javascripts/modules/dataRetrieval.js');
+
 
 const mongodb = require('mongodb');
 
@@ -111,6 +113,10 @@ router.get('/', auth, function(req, res, next) {
 });
 
 
+router.post('/delete', type, function(req,res,next){
+  console.log(req.body.str);
+  //dataRT.deleteRecording()
+});
 
 // Store blob data into DB
 router.post('/DB', type, function(req,res,next){

@@ -134,8 +134,43 @@
   margin-top:14px
 }
 
+.section-title> a{
+  line-height:16px;
+  margin-top:14px
+}
+
+#edit_profile_container{
+  padding-bottom: 38rem;
+}
+
+#edit-content{
+    border-radius: 2px;
+    border: 2px solid #e4dddc7d;
+    padding: 4px;
+}
+.edit-content{
+    border-radius: 2px;
+    border: 2px solid #e4dddc7d;
+    padding: 4px;
+}
+
 .profile-section{
   margin-bottom:80px;
+
+}
+
+.col-md-8 {
+    width: 46.66667%;
+}
+a {
+  color: #ff6d00;
+}
+td {
+  border-top: 1px solid #ddd;
+  border-bottom: 0;
+}
+td.item-name {
+  padding-left: 0;
 
 }
 /* jquery ui confirmation box */

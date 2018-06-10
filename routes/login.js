@@ -44,7 +44,11 @@ function comparePass(user, password, req, res, callback) {
       db.collection('userDB').findOne({'username': user}, function (findErr, result) {
         if (findErr) throw findErr;
 
-        infoUser = result;
+        if (result == null){
+          infoUser = 0;
+          infoUser.hashedPass = 0;}
+        else{
+          infoUser = result;}
         db.close();
 
         //console.log("login.js, fn(comparePass): Comparing stored password with entered pass using bcrypt." + 

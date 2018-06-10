@@ -5,7 +5,7 @@ let multer = require('multer');
 var upload = multer({ dest: __dirname + '/temp_uploads/' });
 var type = upload.single('upl');
 var dataRT = require('../public/javascripts/modules/dataRetrieval.js');
-
+var persist = require('../public/javascripts/modules/persistency.js');
 
 const mongodb = require('mongodb');
 
@@ -32,69 +32,19 @@ var insertBlob = function(db, blob, user, filename, fp, callback) {
       "blob" : blob
   }, function(err, result) {
     assert.equal(err, null);
+      /*
       console.log("Inserted the following into recordingsDB:" +
       "\nusername: " + user +
       "\nblobToken: " + filename +
      // "\nblob: " + blob +
       "\n\nSuccessfully inserted a new blob into the recordingsDB collection.");
+      */
     
     callback(fp);
   });
   
 };
 
-
-// Authentication and Authorization Middleware
-function auth(req, res, next) {
-  
-  console.log("Trying to authenticate user now");
-  console.log("authenticating: " + req.session.username + "with" + req.session.loginID );
-  var authenticationBoolean= AuthenticateUser(req.session.loginID, req.session.username);
-  
-  console.log("Authentication boolean: " + authenticationBoolean);
-  
-  if (authenticationBoolean === true){
-    console.log("Authentication Success!");
-    //return next();
-  } 
-  else{
-    console.log("Authentication failed!");
-    //return res.sendStatus(401);}
-  }
-};
-
-
-// Authentication helper
-function AuthenticateUser(sessionCookie, sessionUser, callback) {
-  var infoUser = 0;
-    // Connect to DB
-MongoClient.connect(url, function(err, db) {
-  assert.equal(null, err);
-  
-  // Authenticate
-    db.authenticate('domenico', 'default', function(err, result) {
-      assert.equal(true, result);
-      
-    db.collection('sessionDB').findOne({'username': sessionUser}, function (findErr, result) {
-          if (findErr) throw findErr;
-
-    infoUser = result;
-    db.close();
-     
-        console.log("Comparing:  " + sessionCookie + " with " + infoUser.current_sessionID);
-  if(infoUser.current_sessionID == sessionCookie){
-    console.log("We are in the right session");
-    callback(true);}
- else{
-    console.log("Could not authenticate session");
-    callback(false);
-    
-  }
-  
-});
-});
-});
-}
 
 function toBuffer(ab) {
     var buf = new Buffer(ab.byteLength);
@@ -105,11 +55,22 @@ function toBuffer(ab) {
     return buf;
 }
 
-/* GET home page. */
-router.get('/', auth, function(req, res, next) {
-  console.log("logged in")
 
-  res.render('speakEZ', { title: 'Google+'});
+router.post('/profile-change',  function(req,res,next){
+  // Authenticate password
+  persist.comparePass(req.session.username, req.body.current_password, req, res, function(info, boolVal){
+    if(boolVal){
+      // Sanitize user inputs
+      dataRT.updateProfile(req.session.username,req.body.email, function(email){
+        // update session variables
+        req.session.email = email;
+        res.redirect('/home');
+      });
+    }
+    else{
+      res.render('profile', { session: req.session, error: "Invalid password, try again."});
+    }
+});
 });
 
 
@@ -140,15 +101,15 @@ MongoClient.connect(url, function(err, db) {
         
     }
         
-    //TODO
-    // We need to store a unique blobToken for each recording
-    // Use bcrypt with a unique plaintext password
-    // plaintext password could be the user_id concat with the current date of execution
-    // or could be the users account_id witht he current date of execution
-    // Each unique salted hash will be the entity used to link the blobData together. 
-    
-    // An idea: Once given a blobToken by the user instead of linearly comparing each blobToken for a match,
-    // we can do index hashing for that specific field and do a constant time look up?
+      //TODO
+      // We need to store a unique blobToken for each recording
+      // Use bcrypt with a unique plaintext password
+      // plaintext password could be the user_id concat with the current date of execution
+      // or could be the users account_id witht he current date of execution
+      // Each unique salted hash will be the entity used to link the blobData together. 
+      
+      // An idea: Once given a blobToken by the user instead of linearly comparing each blobToken for a match,
+      // we can do index hashing for that specific field and do a constant time look up?
  
       //var encImg = newImg.toString('base64');
       //console.log(encImg);

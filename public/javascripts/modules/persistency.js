@@ -1,6 +1,55 @@
 //persistency.js
-var assert = require('assert');
 var dataRT = require('./dataRetrieval.js');
+
+var assert = require('assert');
+var bcrypt = require('bcrypt');
+var saltRounds = 10;
+
+
+exports.comparePass = function(user, password, req, res, callback) {
+  var infoUser = null;
+
+  dataRT.MongoClient.connect(dataRT.url, function(err, db) {
+    assert.equal(null, err);
+    //console.log("login.js, fn(comparePass): connected to db.");
+
+    db.authenticate('domenico', 'default', function(err, result) {
+      assert.equal(true, result);
+      //console.log("login.js, fn(comparePass): authenticated to db. \n");
+      
+      db.collection('userDB').findOne({'username': user}, function (findErr, result) {
+        if (findErr) throw findErr;
+
+        if (result == null){
+          infoUser = 0;
+          infoUser.hashedPass = 0;}
+        else{
+          infoUser = result;}
+        db.close();
+
+        //console.log("login.js, fn(comparePass): Comparing stored password with entered pass using bcrypt." + 
+        //  "Comparing entered password: " + password + " and stored user password: " + infoUser.hashedPass + "\n");
+
+        bcrypt.compare(password, infoUser.hashedPass, function(err, res) {
+          //console.log("login.js, fn(comparePass): Inside bcrypt.\n");        
+
+          if(res){
+            console.log("login.js, fn(comparePass): Successful compare");
+	       callback(infoUser, true);
+
+
+          }
+          else{
+            console.log("login.js, fn(comparePass): Compare failed: " + res);
+            req.session.logged = false;
+            callback(null, false);
+          }
+        });
+      });
+    });
+  });
+}
+
 
 exports.auth = function(req, res, next) {
 	////console.log("Trying to authenticate user now");

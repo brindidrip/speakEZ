@@ -4,6 +4,23 @@ var assert = require('assert');
 exports.MongoClient = require('mongodb').MongoClient;
 exports.url = 'mongodb://domenico:default@35.185.126.172:27017/admin'
 
+exports.updateProfile = function(user, email, callback){
+	exports.MongoClient.connect(exports.url, function(err,db){
+		assert.equal(null,err);
+
+		db.authenticate('domenico', 'default', function(err,result){
+			assert.equal(true, result);
+			// TODO
+			// should use hashed pass to find document
+      		db.collection('userDB').updateOne({'username': user}, {$set: {emailAddress: email}});
+
+				db.close();
+				callback(email);
+			});
+		});
+	//});
+}
+
 exports.deleteRecording = function(spEZtoken){
 	exports.MongoClient.connect(exports.url, function(err,db){
 		assert.equal(null,err);

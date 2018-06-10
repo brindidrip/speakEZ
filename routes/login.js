@@ -90,13 +90,7 @@ function comparePass(user, password, req, res, callback) {
 
 /* GET login page. */
 router.get('/', function(req, res, next) {
-  //console.log("At login")
   res.render('login', { title: 'speakEZ', error: ''});
-});
-
-/* GET login fail page. */
-router.get('/incorrect', function(req, res, next) {
-  res.render('login_fail', { title: 'speakEZ'});
 });
 
 router.post('/', function(req,res,next){
@@ -118,7 +112,7 @@ router.post('/', function(req,res,next){
     }
     else{
       //console.log("login.js, router.post('/'): Compare failure.");
-      res.redirect('/login/incorrect');
+      res.render('login', { title: 'speakEZ', error: 'Login failed, try again.'});
     }
   })
 });

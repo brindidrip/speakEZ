@@ -102,27 +102,27 @@
 
   </div>
       <div class="profile-section">
-        <form action="/registration" method="post">
+        <form action="/speakEZ/profile-change" method="post">
 
         <table class="table">
           <tbody>
             <tr>
               <td class="col-md-4 item-name">Name</td>
               <td class="col-md-">
-                <input class="edit-content" maxlength="30" name="user_reg" type="text"
+                <input class="edit-content" maxlength="30" name="name" type="text"
                     value="" placeholder="<%=session.biodata.fullName%>" ></td>
 
             </tr>
             <tr>
               <td class="col-md-4 item-name">Username</td>
               <td class="col-md-">
-                  <input class="edit-content" maxlength="12" name="user_reg" type="text"
+                  <input class="edit-content" maxlength="12" name="username" type="text"
                     value="" placeholder="<%=session.username%>" ></td>
             </tr>
             <tr>
               <td class="col-md-4 item-name">Email</td>
               <td class="col-md-8">
-                <input autocomplete="off" class="edit-content" maxlength="32" name="emailAddress" placeholder="<%=session.email%>" spellcheck="false" type="email" value=""></td>
+                <input autocomplete="off" class="edit-content" maxlength="32" name="email" placeholder="<%=session.email%>" spellcheck="false" type="email" value=""></td>
               </td>
             </tr>
 
@@ -130,15 +130,16 @@
               <td class="col-md-4 item-name">New Password</td>
               <td class="col-md-">
                 <input autocomplete="off" class="edit-content" maxlength="16"
-                  name="password" placeholder="" required="true" spellcheck="false" type="password" value=""> </td>
+                  name="new_password" placeholder="" spellcheck="false" type="password" value=""> </td>
                 </td>
             </tr>
-            
+
+         
             <tr>
               <td class="col-md-4 item-name">Current Password</td>
               <td class="col-md-">
                 <input autocomplete="off" class="edit-content" maxlength="16"
-                  name="password" placeholder="" required="true" spellcheck="false" type="password" value=""> </td>
+                  name="current_password" placeholder="" required="true" spellcheck="false" type="password" value=""> </td>
                </td>
             </tr>
            
@@ -147,7 +148,8 @@
 
     </div>  
 
-          <button class="button" onclick="startRecording(this);">Save changes</button>
+          <button class="button">Save changes</button>
+          <h6 style="color:red;"> <%=error%></h6>
         </form>
   </section>
   

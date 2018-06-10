@@ -22,16 +22,16 @@ router.get('/home', function(req, res, next) {
 	}
 	else{
     	// Make sure they have the fresh sessionID in DB before serving personal recordings
-    	persist.AuthenticateUser(req.session.loginID, req.session.username, function(boolVal){
-      		if(boolVal){
+    	// persist.AuthenticateUser(req.session.loginID, req.session.username, function(boolVal){
+      //		if(boolVal){
       			dataRT.fetchRecordings(req.session.username, true, function(blobArr,blobBuffArray,username){
           		res.render('speakEZ', { session: req.session, blobArray: blobArr, blobBuffArray: blobBuffArray});
         	}); 
-        	}
-        	else{
-        		res.render('login', { error: 'Session expired. Please re-login.'});
-        	}
-        });
+      //  	}
+      //  	else{
+      //  		res.render('login', { error: 'Session expired. Please re-login.'});
+      //  	}
+      //  });
     }
 });
 
@@ -44,7 +44,7 @@ router.get('/home/settings', function(req, res, next) {
     	persist.AuthenticateUser(req.session.loginID, req.session.username, function(boolVal){
       		if(boolVal){
       			dataRT.fetchRecordings(req.session.username, true, function(blobArr,blobBuffArray,username){
-          		res.render('profile', { session: req.session, blobArray: blobArr, blobBuffArray: blobBuffArray});
+          		res.render('profile', { session: req.session, error: "", blobArray: blobArr, blobBuffArray: blobBuffArray});
         	}); 
         	}
         	else{

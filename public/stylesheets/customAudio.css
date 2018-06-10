@@ -25,8 +25,8 @@
     outline:none;
 }
 
-.play{background: url('http://www.alexkatz.me/codepen/img/play.png') ;}
-.pause{background: url('http://www.alexkatz.me/codepen/img/pause.png') ;}
+.play{background: url('../images/play.png') ;}
+.pause{background: url('../images/pause.png') ;}
 
 #timeline{
     width: 400px;

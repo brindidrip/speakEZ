@@ -7,7 +7,8 @@ var persist = require('../public/javascripts/modules/persistency.js');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-	if(req.session.username == undefined && req.session.logged != true){
+
+	if(req.session == undefined || (req.session.username == undefined && req.session.logged != true)){
 		res.render('index', { title: "SpeakEZ"});
   	}
   	else{

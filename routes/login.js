@@ -55,7 +55,8 @@ function comparePass(user, password, req, res, callback) {
         //  "Comparing entered password: " + password + " and stored user password: " + infoUser.hashedPass + "\n");
 
         bcrypt.compare(password, infoUser.hashedPass, function(err, res) {
-          //console.log("login.js, fn(comparePass): Inside bcrypt.\n");        
+          //console.log("login.js, fn(comparePass): Inside bcrypt.\n");
+          console.log(req.session);        
 
           if(res){
             //console.log("login.js, fn(comparePass): Successful compare");

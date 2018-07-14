@@ -16,7 +16,7 @@
     <script src="https://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
 
     <script src="/javascripts/recorder.js"></script>
-    <script src="/javascripts/playAudio.js"></script>
+    <script src="/javascripts/customAudio.js"></script>
     <script src="/javascripts/globalScripts.js"></script>
     
     <link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/google/code-prettify/master/loader/prettify.css">
@@ -356,6 +356,8 @@ var url = 0;
 </main>
 <script>
 
+var currentBlob = new FormData();
+
 function confirmDialogue(target,dialogue) {
     $("#dialog-confirm").html(dialogue);
 
@@ -403,9 +405,6 @@ $("[id^='delete']").click(function(e) {
   confirmDialogue(recording, "Are you sure you want to delete this recording? This decision cannot be reversed.");
 
 });
-
-var currentBlob = new FormData();
-
 
   window.onload = function init() {
     try {

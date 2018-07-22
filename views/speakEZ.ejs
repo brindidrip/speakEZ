@@ -123,6 +123,9 @@ var url = 0;
       <button class="button" onclick="stopRecording(this);" disabled>stop</button>
         
       <button id="saveButton" class="button" >Save</button>
+
+      <h5 id="no-audio-error" style="color:red;"></h6>
+
       
       <div class="recordings">
         <ul class="recordingslist" id="recordingslist">
@@ -212,7 +215,7 @@ var url = 0;
         </audio>
 
                 <div id="audioplayer-grid">
-            <button class="play" id="pButton" value="<%=i%>" onclick="loadBlob(this.value), play(this.value)"></button>
+            <button class="play" id="pButton" value="<%=i%>" download onclick="loadBlob(this.value), play(this.value)"></button>
             <div id="timeline-grid">
                 <div id="playhead<%=i%>" class="playhead">
                     
@@ -384,6 +387,30 @@ function callback(confirm,target) {
   if(confirm){
     // Delete from database
     $(target).fadeOut(1500);
+
+    var token = $(target)[0].attributes[1].nodeValue;
+    var ape = "eooeadlp2d"
+
+    $.ajax({
+    type: "POST",
+    url: "/speakEZ/delete",
+    data: {"speakEZtoken" : token},
+    success: function(result) {
+      try {
+        alert("um, success");
+
+       
+      }
+
+     
+      catch(e) {
+        alert(e);
+      }
+      
+    },
+    error: function(result) {
+      alert('error: ' + result);
+    }});
   }
   else{
     // do nothing
@@ -394,11 +421,29 @@ function callback(confirm,target) {
 $("[id^='download']").click(function(e) {
   e.preventDefault();
 
+    var index = e.target.id.split("download")[1];
+    
+    //create a temporary a element
+    var link = document.createElement("a");
+
+    $("#music"+ index).attr("src",storedBlobArr[index]);
+
+    //set audio div src
+    link.href = $("#music"+ index)[0].currentSrc;
+
+    link.setAttribute("download", storedBlobTokens[index] + ".wav");
+    document.body.appendChild(link);
+    link.click();
+
+    document.body.removeChild(link);
+    delete link;
+
 });
 
 $("[id^='delete']").click(function(e) {
   e.preventDefault();
 
+  var token = e.target.value;
   var index = e.target.id.split("delete")[1];
   var recording = ".recording-grid-item" + index;
 
@@ -422,6 +467,10 @@ $("[id^='delete']").click(function(e) {
     
     navigator.getUserMedia({audio: true}, startUserMedia, function(e) {
       console.log('No live audio input: ' + e);
+      var noinput = document.getElementById('no-audio-error');
+      noinput.innerHTML = "No microphone detected!";
+
+
     });
   };
 

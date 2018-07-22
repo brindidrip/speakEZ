@@ -40,7 +40,7 @@ app.use(cookieParser());
 
 
 app.use(session({
-  store: new RedisStore({port:6379, host: '18.222.28.66'}),
+  store: new RedisStore({port:6379, host: '18.191.224.167'}),
   secret: "2C44-4D44-WppQ38S",
   resave: false,
   saveUninitialized: true }));

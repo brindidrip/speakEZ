@@ -90,6 +90,9 @@
       <button class="button" onclick="stopRecording(this);" disabled>stop</button>
         
       <button id="saveButton" class="button" >Save</button>
+
+      <h5 id="no-audio-error" style="color:red;"></h6>
+
       
       <div class="recordings">
         <ul class="recordingslist" id="recordingslist">
@@ -230,6 +233,9 @@ var currentBlob = new FormData();
     
     navigator.getUserMedia({audio: true}, startUserMedia, function(e) {
       console.log('No live audio input: ' + e);
+      var noinput = document.getElementById('no-audio-error');
+      noinput.innerHTML = "No microphone detected!";
+
     });
   };
 

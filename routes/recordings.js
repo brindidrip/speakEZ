@@ -41,7 +41,16 @@ router.get('/', function(req, res, next) {
 //  }
 //});
 
-// API call /recordings/blobToken
+// Individual recording page
+router.get('/a/:speakEZtoken', function(req, res, next) {
+  // check if blobID is password protected
+  // if so, then bcryt compare
+  dataRT.fetchRecording(req.params.speakEZtoken, function(result){
+    res.render('recording', {blobBuff: result}); // with the result
+  });
+});
+
+// API call /recordings/blobToken to be used with chrome extension
 router.get("/:speakEZtoken", function(req,res,next){
   dataRT.fetchRecording(req.params.speakEZtoken, function(result){
     res.send(result);

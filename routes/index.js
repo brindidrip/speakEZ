@@ -65,12 +65,4 @@ router.get('/logout', function(req, res, next) {
 });
 
 
-router.get('/recording/:blobID', function(req, res, next) {
-	// check if blobID is password protected
-	// if so, then bcryt compare
-	dataRT.fetchRecording(req.params.blobID, function(result){
-		res.render('recording') // with the result
-	});
-});
-
 module.exports = router;

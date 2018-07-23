@@ -16,6 +16,38 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.css">
 
     <title>speakEZ - A way to easily embed your voice across the internet.</title>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <script src="/javascripts/recorder.js"></script>
+    <script src="/javascripts/customAudio.js"></script>
+    <script src="/javascripts/globalScripts.js"></script>
+
+    <script type="text/javascript">
+
+var storedBlobArr = [];
+var url = 0;
+
+   function toArrayBuffer(buf) {
+    var ab = new ArrayBuffer(buf.length);
+    var view = new Uint8Array(ab);
+    for (var i = 0; i < buf.length; ++i) {
+        view[i] = buf[i];
+    }
+    return ab;
+}
+
+  function loadBlob(index){
+    var musicID = "music" + index;    
+
+    $("#"+musicID).attr("src",storedBlobArr[index]);
+    $("#"+musicID).attr("preload","metadata");
+       
+  }
+
+
+</script>
   
   </head>
   
@@ -84,32 +116,45 @@
   <header class="header" id="home_recording">
     <section class="container" id="recording_container">
         
-         
-         
-       
+                
+                          <script>
+                            // pass object over ejs
+                            var abs = <%- JSON.stringify(blobBuff)%>;
 
-        
-      <div class="recordings">
+                            // convert from binary buffer to arraybuffer 
+                            var ab = toArrayBuffer(abs.data);
+
+                            // create blob from arraybuffer
+                            var storedBlob = new Blob([ab], {type: 'audio/wav'});
+
+                            // store all blobs in array for dynamic loading
+                            var url = URL.createObjectURL(storedBlob);
+                            storedBlobArr.push(url);
+
+                          </script>
+             <div class="recordings">
         <ul class="recordingslist" id="recordingslist">
+
             <li class="recording-item-sample" id="recording-item-sample">
                 
-                        <audio id="music">
+                        <audio id="music0" name="music" src="">
           
         </audio>
         
-        <div id="audioplayer">
-            <button class="play" id="pButton"></button>
-            <div id="timeline">
-                <div id="playhead">
+        <div id="audioplayer-grid">
+            <button class="play" id="pButton" value="0" onclick="loadBlob(this.value), play(this.value)"></button>
+            <div id="timeline-grid">
+                <div id="playhead0" class="playhead">
                     
                 </div>
                 </div>
                 </div>
-        
             </li>
-        
       </ul>
+
+
     </div>
+             
 
  <div class="recordInfoBox">
           <div class="recordSubHeading">Record information</div>
@@ -170,10 +215,5 @@
     </section>
   </footer>
 </main>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="/javascripts/recorder.js"></script>
-    <script src="/javascripts/customAudio.js"></script>
-    <script src="/javascripts/globalScripts.js"></script>
-
   </body>
 </html>

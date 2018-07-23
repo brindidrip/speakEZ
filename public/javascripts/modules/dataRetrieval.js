@@ -54,7 +54,7 @@ exports.fetchRecording = function(spEZtoken, callback) {
         			}
 
 				db.close();
-				callback(result.blob);    
+				callback(result.blob.buffer);    
 			})          
 		});
 	});
@@ -93,6 +93,8 @@ exports.fetchRecordings = function(username, reverse, callback){
             }, function(err) {
             console.log(err);
             db.close();
+
+            // fetch recordings from oldest to newest
             if (reverse){
             	callback(blobArray.reverse(),blobBufferArray.reverse(),username);
             }

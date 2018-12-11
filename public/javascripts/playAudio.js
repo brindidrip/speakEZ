@@ -1,137 +1,139 @@
-var music = document.getElementById('music'); // id for audio element\
-var duration = 0;
+var music_main = document.getElementById('music_main'); // id for audio element\
+var duration_main = 0;
 
-if (music != null){
-    var duration = music.duration;
+if (music_main != null){
+    var duration_main = music_main.duration;
     // Duration of audio clip, calculated here for embedding purposes
 }
 
 // Added CB feature to support non preloaded recordings
-var setDurationCB = function(data) {
-duration = document.getElementById('music').duration;
+var setDurationCB_main = function(data) {
+duration_main = document.getElementById('music_main').duration;
   
   // timeline width adjusted for playhead
-timelineWidth = timeline.offsetWidth - playhead.offsetWidth;
+timelineWidth_main = timeline_main.offsetWidth - playhead_main.offsetWidth;
 
-timeline.addEventListener("click", function(event) {
-    moveplayhead(event);
-    music.currentTime = duration * clickPercent(event);
+timeline_main.addEventListener("click", function(event) {
+    moveplayhead_main(event);
+    music_main.currentTime = duration_main * clickPercent_main(event);
 }, false);
 
+console.log(music_main);
 // timeupdate event listener
-music.addEventListener("timeupdate", timeUpdate, false);
+music_main.addEventListener("timeupdate", timeUpdate_main, false);
 };
 
-var durationCB = function(cb) {
+var durationCB_main = function(cb) {
   cb('passing this as a parameter to setDurationCB');
 };
 
 
 // create a custom audio player 
-        var audioDiv = document.createElement('div');
-        audioDiv.setAttribute("id", "audioplayer");
+        var audioDiv_main = document.createElement('div');
+        audioDiv_main.setAttribute("id", "audioplayer_main");
         
-        var pButton = document.createElement('button');
-        pButton.setAttribute("class", "play");
-        pButton.setAttribute("id", "pButton");
+        var pButton_main = document.createElement('button');
+        pButton_main.setAttribute("class", "play");
+        pButton_main.setAttribute("id", "pButton_main");
         //pButton.setAttribute('onclick','play();'); // for FF
       //pButton.onclick = function() {play();}; // for IE
         
-        var timeline = document.createElement('div');
-        timeline.setAttribute("id", "timeline");
+        var timeline_main = document.createElement('div');
+        timeline_main.setAttribute("id", "timeline_main");
         
-        var playhead = document.createElement('div');
-        playhead.setAttribute("id", "playhead");
+        var playhead_main = document.createElement('div');
+        playhead_main.setAttribute("id", "playhead_main");
         
 
 // timeline width adjusted for playhead
-var timelineWidth = timeline.offsetWidth - playhead.offsetWidth;
+var timelineWidth_main = timeline_main.offsetWidth - playhead_main.offsetWidth;
 
 // play button event listenter
-pButton.addEventListener("click", play);
+pButton_main.addEventListener("click", play_main);
 
 // returns click as decimal (.77) of the total timelineWidth
-function clickPercent(event) {
-    console.log(timelineWidth);
-    return (event.clientX - getPosition(timeline)) / timelineWidth;
+function clickPercent_main(event) {
+    console.log(timelineWidth_main);
+    return (event.clientX - getPosition_main(timeline_main)) / timelineWidth_main;
 }
 
 // makes playhead draggable
-playhead.addEventListener('mousedown', mouseDown, false);
-window.addEventListener('mouseup', mouseUp, false);
+playhead_main.addEventListener('mousedown', mouseDown_main, false);
+window.addEventListener('mouseup', mouseUp_main, false);
 
 // Boolean value so that audio position is updated only when the playhead is released
-var onplayhead = false;
+var onplayhead_main = false;
 
 // mouseDown EventListener
-function mouseDown() {
-    onplayhead = true;
-    window.addEventListener('mousemove', moveplayhead, true);
-    music.removeEventListener('timeupdate', timeUpdate, false);
+function mouseDown_main() {
+    onplayhead_main = true;
+    window.addEventListener('mousemove', moveplayhead_main, true);
+    music_main.removeEventListener('timeupdate', timeUpdate_main, false);
 }
 
 // mouseUp EventListener
 // getting input from all mouse clicks
-function mouseUp(event) {
-    if (onplayhead == true) {
-        moveplayhead(event);
-        window.removeEventListener('mousemove', moveplayhead, true);
+function mouseUp_main(event) {
+    if (onplayhead_main == true) {
+        moveplayhead_main(event);
+        window.removeEventListener('mousemove', moveplayhead_main, true);
         // change current time
-        music.currentTime = duration * clickPercent(event);
-        music.addEventListener('timeupdate', timeUpdate, false);
+        music_main.currentTime = duration_main * clickPercent_main(event);
+        music_main.addEventListener('timeupdate', timeUpdate_main, false);
     }
-    onplayhead = false;
+    onplayhead_main = false;
 }
 // mousemove EventListener
 // Moves playhead as user drags
-function moveplayhead(event) {
-    var newMargLeft = event.clientX - getPosition(timeline);
+function moveplayhead_main(event) {
+    var newMargLeft = event.clientX - getPosition_main(timeline_main);
 
-    if (newMargLeft >= 0 && newMargLeft <= timelineWidth) {
-        playhead.style.marginLeft = newMargLeft + "px";
+    if (newMargLeft >= 0 && newMargLeft <= timelineWidth_main) {
+        playhead_main.style.marginLeft = newMargLeft + "px";
     }
     if (newMargLeft < 0) {
-        playhead.style.marginLeft = "0px";
+        playhead_main.style.marginLeft = "0px";
     }
-    if (newMargLeft > timelineWidth) {
-        playhead.style.marginLeft = timelineWidth + "px";
+    if (newMargLeft > timelineWidth_main) {
+        playhead_main.style.marginLeft = timelineWidth_main + "px";
     }
 }
 
 // timeUpdate
 // Synchronizes playhead position with current point in audio
-function timeUpdate() {
-    var playPercent = timelineWidth * (music.currentTime / duration);
-    playhead.style.marginLeft = playPercent + "px";
-    if (music.currentTime == duration) {
-        pButton.className = "";
-        pButton.className = "play";
+function timeUpdate_main() {
+    var playPercent = timelineWidth_main * (music_main.currentTime / duration_main);
+    playhead_main.style.marginLeft = playPercent + "px";
+    if (music_main.currentTime == duration_main) {
+        pButton_main.className = "";
+        pButton_main.className = "play";
     }
 }
 
 //Play and Pause
-function play() {
+function play_main() {
     
+    music_main = document.getElementById('music_main'); // id for audio element\
     //CB when we know recording is available
-   durationCB(setDurationCB);
+   durationCB_main(setDurationCB_main);
 
     // start music
-    if (music.paused) {
-        music.play();
+    if (music_main.paused) {
+        music_main.play();
         // remove play, add pause
-        pButton.className = "";
-        pButton.className = "pause";
+        pButton_main.className = "";
+        pButton_main.className = "pause";
     } else { // pause music
-        music.pause();
+        music_main.pause();
         // remove pause, add play
-        pButton.className = "";
-        pButton.className = "play";
+        pButton_main.className = "";
+        pButton_main.className = "play";
     }
 }
 
 
 // getPosition
 // Returns elements left position relative to top-left of viewport
-function getPosition(el) {
+function getPosition_main(el) {
     return el.getBoundingClientRect().left;
 }

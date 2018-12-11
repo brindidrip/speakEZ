@@ -189,17 +189,17 @@ function startUserMedia(stream) {
         li.setAttribute("class", "recording-item-sample");
         li.setAttribute("id", "recording-item-sample");
         
-        var au = document.getElementById('music');
+        var au = document.getElementById('music_main');
 
         au.src = url;
 
         // audio player appending
-        audioDiv.appendChild(pButton);
-        timeline.appendChild(playhead);
-        audioDiv.appendChild(timeline);
+        audioDiv_main.appendChild(pButton_main);
+        timeline_main.appendChild(playhead_main);
+        audioDiv_main.appendChild(timeline_main);
 
         li.appendChild(au);
-        li.appendChild(audioDiv);
+        li.appendChild(audioDiv_main);
  
         recordingslist.appendChild(li);
   

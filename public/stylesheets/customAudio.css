@@ -64,3 +64,58 @@
     background: rgba(0, 0, 0,1);
 
 }
+
+
+#audioplayer_main{
+    width: 480px;
+    height: 5px;
+    margin: 5px auto auto auto;
+}
+
+
+#pButton_main{
+    height:60px; 
+    width: 60px;
+    color:#FF7619;
+    border: none;
+    background-size: 50% 50%;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin-bottom: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
+    float:left;
+    outline:none;
+}
+
+.play{background: url('../images/play.png') ;}
+.pause{background: url('../images/pause.png') ;}
+
+#timeline_main{
+    width: 400px;
+    height: 20px;
+    margin-top: 20px;
+    float: left;
+    border-radius: 15px;
+    background: rgba(0,0,0,.3);
+  
+}
+
+
+#playhead_main{
+    width: 19px;
+    height: 20px;
+    border-radius: 50%;
+    margin-top: 1px;
+    background: rgba(0, 0, 0,1);
+
+}
+
+.playhead_main{
+    width: 19px;
+    height: 20px;
+    border-radius: 50%;
+    margin-top: 1px;
+    background: rgba(0, 0, 0,1);
+
+}

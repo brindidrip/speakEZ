@@ -170,6 +170,15 @@ https://stackoverflow.com/questions/13023361/how-does-node-bcrypt-js-compare-has
 =================================================================================
 
 
+redis
+=============================
+Installing redis on EC2 
+https://gist.github.com/FUT/7db4608e4b8ee8423f31
+
+
+ssh -i sshkeys/redisAWS.pem ec2-user@ec2-18-216-6-163.us-east-2.compute.amazonaws.co
+m     
+
 
 BUGS
 =================================================================================

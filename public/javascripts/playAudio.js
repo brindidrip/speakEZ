@@ -1,4 +1,4 @@
-var music_main = document.getElementById('music_main'); // id for audio element\
+var music_main = document.getElementById('music_main'); // id for audio element
 var duration_main = 0;
 
 if (music_main != null){
@@ -29,21 +29,20 @@ var durationCB_main = function(cb) {
 
 
 // create a custom audio player 
-        var audioDiv_main = document.createElement('div');
-        audioDiv_main.setAttribute("id", "audioplayer_main");
+var audioDiv_main = document.createElement('div');
+audioDiv_main.setAttribute("id", "audioplayer_main");
         
-        var pButton_main = document.createElement('button');
-        pButton_main.setAttribute("class", "play");
-        pButton_main.setAttribute("id", "pButton_main");
-        //pButton.setAttribute('onclick','play();'); // for FF
-      //pButton.onclick = function() {play();}; // for IE
+var pButton_main = document.createElement('button');
+pButton_main.setAttribute("class", "play");
+pButton_main.setAttribute("id", "pButton_main");
+//pButton.setAttribute('onclick','play();'); // for FF
+//pButton.onclick = function() {play();}; // for IE
         
-        var timeline_main = document.createElement('div');
-        timeline_main.setAttribute("id", "timeline_main");
+var timeline_main = document.createElement('div');
+timeline_main.setAttribute("id", "timeline_main");
         
-        var playhead_main = document.createElement('div');
-        playhead_main.setAttribute("id", "playhead_main");
-        
+var playhead_main = document.createElement('div');
+playhead_main.setAttribute("id", "playhead_main");
 
 // timeline width adjusted for playhead
 var timelineWidth_main = timeline_main.offsetWidth - playhead_main.offsetWidth;
@@ -113,9 +112,10 @@ function timeUpdate_main() {
 //Play and Pause
 function play_main() {
     
-    music_main = document.getElementById('music_main'); // id for audio element\
+    music_main = document.getElementById('music_main');
+
     //CB when we know recording is available
-   durationCB_main(setDurationCB_main);
+    durationCB_main(setDurationCB_main);
 
     // start music
     if (music_main.paused) {

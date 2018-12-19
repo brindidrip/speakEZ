@@ -6,11 +6,16 @@
     
     <meta name="application-name" content="speakEZ - A voice embedding tool.">
     <meta name="author" content="Domenico Martinelli">
-    
+
     <link href="/stylesheets/milligram.min.css" rel="stylesheet">
     <link rel='stylesheet' href='/stylesheets/customAudio.css' />
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
     <link rel='stylesheet' href='/stylesheets/style.css' />
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/google/code-prettify/master/loader/prettify.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.css">
+    
 
     <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
     <script src="https://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
@@ -21,40 +26,36 @@
 
     <script src="/javascripts/globalScripts.js"></script>
     
-    <link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/google/code-prettify/master/loader/prettify.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.css">
 
     <title>speakEZ - A way to easily embed your voice across the internet.</title>
 
     <script type="text/javascript">
 
-var storedBlobArr = [];
-var url = 0;
+    var storedBlobArr = [];
+    var url = 0;
 
-   function toArrayBuffer(buf) {
-    var ab = new ArrayBuffer(buf.length);
-    var view = new Uint8Array(ab);
-    for (var i = 0; i < buf.length; ++i) {
-        view[i] = buf[i];
+       function toArrayBuffer(buf) {
+        var ab = new ArrayBuffer(buf.length);
+        var view = new Uint8Array(ab);
+        for (var i = 0; i < buf.length; ++i) {
+            view[i] = buf[i];
+        }
+        return ab;
     }
-    return ab;
-}
 
-  function loadBlob(index){
-    var musicID = "music" + index;    
+      function loadBlob(index){
+        var musicID = "music" + index;    
 
-    $("#"+musicID).attr("src",storedBlobArr[index]);
-    $("#"+musicID).attr("preload","metadata");
-       
-  }
+        $("#"+musicID).attr("src",storedBlobArr[index]);
+        $("#"+musicID).attr("preload","metadata");
+           
+      }
 
 </script>
   
   </head>
   
-    <body>
-
+  <body>
    <main class="wrapper">
      <nav class="navigation">
        <section class="container">
@@ -126,16 +127,39 @@ var url = 0;
         
       <button id="saveButton" class="button" >Save</button>
 
-      <h5 id="no-audio-error" style="color:red;"></h6>
+      <h5 id="no-audio-error" style="color:red;"></h5>
 
       
       <div class="recordings">
+
+
         <ul class="recordingslist" id="recordingslist">
         <audio id="music_main">
           
         </audio>
         
       </ul>
+
+
+          <div id="recordDetailBox" style="display:none;" >
+          <div class="standardBox">
+            <h5 class="shareSubHeading">Recording details</h5>
+              <div class="shareHorizontalSeparator"></div>
+              <div id="detailBoxItem">
+            <div>Title:
+            <input type="text" id="recordingTitle" class="recordDetailinput" placeholder="Enter a title..." maxlength="60">
+          </div>
+        </div>
+        <div id="detailBoxItem">
+            <div>Description:
+              <textarea rows="1" cols="50" wrap="physical" id="recordingDesc" class="recordDetailinputDesc" placeholder="Enter a description..." maxlength="120"></textarea>
+            </div>
+
+        </div>
+
+
+      </div>
+        </div>
     </div>
     
 
@@ -143,16 +167,16 @@ var url = 0;
         <div class="standardBox">
           <div class="shareSubHeading">Sharing options</div>
           
-          <input type="text" id="idShareMediaLink" class="shareVocarooLinkBox" title="For sharing..." onclick="this.select();" readonly value="">
+          <input type="text" id="idShareMediaLink" class="shareSEZLinkBox" title="For sharing..." onclick="this.select();" readonly value="">
           
           <input type="button" class="shareSmallButton" value="Embed" onclick="javascript:toggle_visibility('idShareMediaEmbedCodeContainer');">
           
           <input type="button" class="shareSmallButton" value="Email" onclick="javascript:sendEmailPopup();">
           <div class="shareHorizontalSeparator"></div>
-            <div id ="tokenBlob">
-        <p id="tokenBlobTxt"></p>
-        
-        
+            <div id ="tokenBlob"> Token: 
+
+
+            <input type="text" id="tokenBlobTxt" class="shareSEZLinkBox" onclick="this.select();" readonly value="">
       </div>
           
           <div class="shareHorizontalSeparator"></div>
@@ -160,6 +184,7 @@ var url = 0;
           <p style="font-size:smaller;"> Download as... </p>
         </div>
       </div>
+      
 
     </section>
  
@@ -185,13 +210,13 @@ var url = 0;
 
 
             <%console.log(blobArray.length);
-            if(blobArray != null && blobArray.length > 0){ %>
-            <% for(var i = 0; i < 2; i++) {%>
+            if(blobArray != undefined && blobArray.length > 0){ %>
+            <% for(var i = 0; i < 1; i++) {%>
             <div class="recording-grid-item<%=i%>">
               <h5>blobToken:</h5>
-              <p> <%=blobArray[i].blobToken%></p>
-              <h6>Recording Description:</h6>
-              <p>Some description limited by 140 chars.</p>
+              <p id="recording-token<%=i%>"><%=blobArray[i].blobToken%></p>
+              <h6>Recording Description: </h6>
+              <p><%=blobArray[i].description%></p>
 
          <script>
             // pass object over ejs
@@ -217,7 +242,7 @@ var url = 0;
         </audio>
 
                 <div id="audioplayer-grid">
-            <button class="play" id="pButton" value="<%=i%>" download onclick="loadBlob(this.value), play(this.value)"></button>
+            <button class="play" id="pButton" value="<%=i%>" onclick="loadBlob(this.value), play(this.value)"></button>
             <div id="timeline-grid">
                 <div id="playhead<%=i%>" class="playhead">
                     
@@ -423,22 +448,28 @@ function callback(confirm,target) {
 $("[id^='download']").click(function(e) {
   e.preventDefault();
 
-    var index = e.target.id.split("download")[1];
+  var index = e.target.id.split("download")[1];
+
+  console.log("Index:" + index);
+
+  loadBlob(index);
     
-    //create a temporary a element
-    var link = document.createElement("a");
+  //create a temporary a element
+  var link = document.createElement("a");
 
-    $("#music"+ index).attr("src",storedBlobArr[index]);
+  var token = document.getElementById("recording-token" + index).innerHTML;
 
-    //set audio div src
-    link.href = $("#music"+ index)[0].currentSrc;
+  $("#music"+ index).attr("src",storedBlobArr[index]);
 
-    link.setAttribute("download", storedBlobTokens[index] + ".wav");
-    document.body.appendChild(link);
-    link.click();
+  //set audio div src
+  link.href = $("#music"+ index)[0].currentSrc;
 
-    document.body.removeChild(link);
-    delete link;
+  link.setAttribute("download", token + ".wav");
+  document.body.appendChild(link);
+  link.click();
+
+  document.body.removeChild(link);
+  delete link;
 
 });
 
@@ -453,14 +484,26 @@ $("[id^='delete']").click(function(e) {
 
 });
 
-
+// Adding here because of jquery conflict
 // Save a recording and generate a unique blobToken  
 $("#saveButton").click(function(e) {
   e.preventDefault();
   navigator.getUserMedia({audio: true}, function(){
+
+  // Append recording title & description to formdata
+  var recordingTitle = document.getElementById("recordingTitle").value;
+  var recordingDesc = document.getElementById("recordingDesc").value;
+
+  console.log(recordingTitle);
+
+  // Validate input then sanitize on the backend
+  currentBlob.append('title', recordingTitle);
+  currentBlob.append('description', recordingDesc);
+
+  //data.append('description', recordingDesc);
   
   // ajax POST method
-  // POSTS blob data to route /speakEZ/DB which stores data in mongoDB
+  // POSTS blob to route /speakEZ/DB which stores data in mongoDB
   // Returns a uniquely identifiable token to represent the blob
   // or returns an error
           
@@ -503,21 +546,32 @@ $("#saveButton").click(function(e) {
                       
       // If successful POST, then use recorder library to append a text      
       // node containing a unique blobToken
-                  
-      var txtNode = document.getElementById("tokenBlobTxt");
-      txtNode.innerHTML = "speakEZ://" + unqBlobToken;
-                  
+      $("#tokenBlobTxt").val("speakEZ://" + unqBlobToken);
+
+
       // Create a blobURL
       var url = URL.createObjectURL(storedBlob);
                   
       // Replaces existing token
       var parent = document.getElementById("recordingslist");
       var child = document.getElementById("recording-item-sample")
-      parent.removeChild(child);
-                 
+      parent.disabled = true;
+
+      e.disabled = true;
+
+      // Recording details box
+      //var recordDetailTitle = document.getElementById("recordingDetailinput").value;
+      var detailBox = document.getElementById("recordDetailBox").style.display = 'none';
+
+      //console.log(recordDetailTitle);
+
       // Sharebox
       $("#idShareMediaBox").css("display", "");
-      $("#idShareMediaLink").val("https://www.s-cord0.com/" + unqBlobToken);
+      $("#idShareMediaLink").val("https://www.s-cord0.com/recordings/a/" + unqBlobToken);
+
+      var saveButton = document.getElementById("saveButton");
+      saveButton.disabled = true;
+
     }, error: function(result) {
       alert('error: ' + result);
     }
@@ -527,7 +581,6 @@ $("#saveButton").click(function(e) {
   console.log('No live audio input: ' + e);
 });
 });
-
 
   window.onload = function init() {
     try {

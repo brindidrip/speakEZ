@@ -89,18 +89,40 @@
       <button class="button" onclick="startRecording(this);">record</button>
       <button class="button" onclick="stopRecording(this);" disabled>stop</button>
         
-      <button id="saveButton" class="button" >Save</button>
+      <button id="saveButton" class="button" disabled>Save</button>
 
-      <h5 id="no-audio-error" style="color:red;"></h6>
+      <h5 id="no-audio-error" style="color:red;"></h5>
 
       
       <div class="recordings">
+
+
         <ul class="recordingslist" id="recordingslist">
         <audio id="music_main">
           
         </audio>
         
       </ul>
+
+      <div id="recordDetailBox" style="display:none;" >
+          <div class="standardBox">
+            <h5 class="shareSubHeading">Recording details</h5>
+              <div class="shareHorizontalSeparator"></div>
+              <div id="detailBoxItem">
+            <div>Title:
+            <input type="text" id="recordingTitle" class="recordDetailinput" placeholder="Enter a title..." maxlength="60">
+          </div>
+        </div>
+        <div id="detailBoxItem">
+            <div>Description:
+              <textarea rows="1" cols="50" wrap="physical" id="recordingDesc" class="recordDetailinputDesc" placeholder="Enter a description..." maxlength="120"></textarea>
+            </div>
+
+        </div>
+
+
+      </div>
+        </div>
     </div>
     
 
@@ -108,16 +130,16 @@
         <div class="standardBox">
           <div class="shareSubHeading">Sharing options</div>
           
-          <input type="text" id="idShareMediaLink" class="shareVocarooLinkBox" title="For sharing..." onclick="this.select();" readonly value="">
+          <input type="text" id="idShareMediaLink" class="shareSEZLinkBox" title="For sharing..." onclick="this.select();" readonly value="">
           
           <input type="button" class="shareSmallButton" value="Embed" onclick="javascript:toggle_visibility('idShareMediaEmbedCodeContainer');">
           
           <input type="button" class="shareSmallButton" value="Email" onclick="javascript:sendEmailPopup();">
           <div class="shareHorizontalSeparator"></div>
-            <div id ="tokenBlob">
-        <p id="tokenBlobTxt"></p>
-        
-        
+            <div id ="tokenBlob"> Token: 
+
+
+            <input type="text" id="tokenBlobTxt" class="shareSEZLinkBox" onclick="this.select();" readonly value="">
       </div>
           
           <div class="shareHorizontalSeparator"></div>
@@ -131,7 +153,6 @@
     
   </header>
   
-
 
   <section class="container" id="index_container">
     <h3 class="title">Summary of how it works</h3>

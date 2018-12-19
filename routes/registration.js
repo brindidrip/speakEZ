@@ -1,7 +1,8 @@
+//registration.js
 var express = require('express');
 var router = express.Router();
 var bodyParser = require('body-parser');
-var filter = require('content-filter')
+var sanitizer = require('sanitize')();
 
 var bcrypt = require('bcrypt');
 var saltRounds = 10;
@@ -10,105 +11,61 @@ var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
 var ObjectId = require('mongodb').ObjectID;
 
-var url = 'mongodb://35.185.126.172:27017/admin'
+// Modules
+var dataRT = require('../public/javascripts/modules/dataRetrieval.js');
+var dataIN = require('../public/javascripts/modules/dataInsertion.js');
+var persist = require('../public/javascripts/modules/persistency.js');
     
 router.use(bodyParser.json());
-router.use(filter({bodyBlackList:['test'], dispatchToErrorHandler: true} )) 
 
+var sanitizeReg = function(req, cb){
+    //Sanitize username, name and email
+    //TODO 
+    //var sanitizerUser = sanitizer.value(req.body.user_reg, "str");
 
-var insertUserDebug = function(db, req, hash, callback){
-    console.log("Inserting this recording into the collection userDB:" +
-    "\nfullName: " + req.body.firstName + " " + req.body.lastName +
-    "\ncountry: " + req.body.country +
-    "\nbirthDate: " + req.body.dobMonth + "/" + req.body.dobDay + "/" + req.body.dobYear + 
-    "\nusername: " + req.body.user_reg +
-    "\nemailAddress: " + req.body.emailAddress +
-    "\nhashedPass: " + hash);
-    
-    console.log("Inserting " + req.body.user_reg + "'s user session into the sessionDB collection" +
-    "\ncurrent_sessionID: " + 0);
-    callback();
-}
-
-var insertUser = function(db, req, hash, callback) {
-  var today = new Date();
-   db.collection('userDB').insertOne( {
-      "bio-data" : {
-         "fullName" : req.body.firstName + " " + req.body.lastName, 
-         "country" : req.body.country,
-         "birthdate" :  req.body.dobMonth + req.body.dobDay + req.body.dobYear,
-         "creation" : today.getMonth() + '-' + today.getDate() + '-' + today.getFullYear(),
-         "membership" : false
-      },
-      "username" : req.body.user_reg,
-      "emailAddress" : req.body.emailAddress,
-      "hashedPass" : hash
-   }, function(err, result) {
-    assert.equal(err, null);
-    console.log("Inserted a user_document into the userDB collection.");
-    callback();
-  });
-  
-};
-
-var insertUserSession = function(db, req, callback) {
-   db.collection('sessionDB').insertOne({
-      "username" : req.body.user_reg,
-      "current_sessionID" : 0
-  }, function(err, result) {
-    assert.equal(err, null);
-    console.log("Inserted a user session into the sessionDB collection.");
-    callback();
-  });
-  
-};
-  
-var sanitizeReg = function(req){
-    // Sanitize username
-    
-    
-    
-}
+    dataRT.lookupUser(req.body.user_reg, function(res){
+        cb(res);
+    });
+  }
 
 /* GET registration page. */
 router.get('/', function(req, res, next) {
 
-  res.render('registration', { title: 'Google+'});
+  res.render('registration', { error: '' });
 });
 
+/* POST registration page. */
 router.post('/', function(req,res,next){
-
-// Connect to DB
-MongoClient.connect(url, function(err, db) {
-  assert.equal(null, err);
   
-  // Authenticate
-    db.authenticate('domenico', 'default', function(err, result) {
-      assert.equal(true, result);
-
-    });
-
-bcrypt.genSalt(saltRounds, function(err, salt) {
+  persist.connectDB(function(db){
+  
+  // Hash user password
+  bcrypt.genSalt(saltRounds, function(err, salt) {
     bcrypt.hash(req.body.password, salt, function(err, hash) {
-        //insertUserDebug(db,req,hash, function(){
-        //    res.redirect("/registration");
-        //    })
-//      if(sanitizeReg(req)){
-        insertUser(db, req, hash, function(){
-            insertUserSession(db,req,function() {
-                db.close();
-            
-                res.redirect("/login");
+
+        /* debug
+          insertUserDebug(db,req,hash, function(){
+            res.redirect("/registration");
+            })
+        */
+
+      sanitizeReg(req, function(success){
+        if(success){
+          dataIN.insertUser(db, req, hash, function(){
+            dataIN.insertUserSession(db, req, function() {
+              db.close();
+              res.redirect("/login");
             });
-       
-            
-        });
-  //      }
-       
-        })
-    });
-    
+          });
+        }
+        // redirect back to /registration since user already exists or sanitization failed
+        else{
+          res.render('registration', { error: "User already exists"});
+        }
+      });
+  });
+  }); 
+});
 });
 
-});
 module.exports = router;

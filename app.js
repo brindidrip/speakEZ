@@ -21,7 +21,7 @@ var ObjectId = require('mongodb').ObjectID;
 const mongodb = require('mongodb');
 
 
-var url = 'mongodb://domenico:default@35.227.19.224:27017/admin'
+var url = 'mongodb://domenico:default@35.185.126.172:27017/admin'
 var app = express();
 
 app.use(bodyParser.json());
@@ -45,16 +45,7 @@ app.use(session({
   resave: false,
   saveUninitialized: true }));
 
-/*
-app.use(session({
-    secret: '2C44-4D44-WppQ38S',
-    resave: true,
-    saveUninitialized: true
-}));
-*/
-
 app.use(express.static(path.join(__dirname, 'public')));
-
 
 app.use('/', index);
 app.use('/speakEZ', speakEZ);

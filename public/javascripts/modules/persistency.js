@@ -1,15 +1,47 @@
 //persistency.js
-var dataRT = require('./dataRetrieval.js');
-
 var assert = require('assert');
+
+exports.MongoClient = require('mongodb').MongoClient;
+exports.url = 'mongodb://domenico:default@35.185.126.172:27017/admin'
+
 var bcrypt = require('bcrypt');
 var saltRounds = 10;
 
+exports.connectDB = function(callback){
+  // Connect to DB
+  exports.MongoClient.connect(exports.url, function(err, db) {
+    assert.equal(null, err);
+  
+    // Authenticate
+    db.authenticate('domenico', 'default', function(err, result) {
+      assert.equal(true, result);
+    });
+
+    callback(db);
+  });
+};
+
+exports.updateSessionID = function(user, sessionPass, callback){
+  exports.MongoClient.connect(exports.url, function(err, db) {
+    assert.equal(null, err);
+    //console.log("login.js, fn(updateSessionID): connected to db.");
+
+    //Authenticate
+    db.authenticate('domenico', 'default', function(err, result) {
+      assert.equal(true, result);
+      //console.log("login.js, fn(updateSessionID): authenticated to db.\n");
+
+      db.collection('sessionDB').updateOne({'username': user}, {$set: {current_sessionID: sessionPass}});
+      db.close();
+      callback();
+    });
+  });
+}
 
 exports.comparePass = function(user, password, req, res, callback) {
   var infoUser = null;
 
-  dataRT.MongoClient.connect(dataRT.url, function(err, db) {
+  exports.MongoClient.connect(exports.url, function(err, db) {
     assert.equal(null, err);
     //console.log("login.js, fn(comparePass): connected to db.");
 
@@ -31,16 +63,31 @@ exports.comparePass = function(user, password, req, res, callback) {
         //  "Comparing entered password: " + password + " and stored user password: " + infoUser.hashedPass + "\n");
 
         bcrypt.compare(password, infoUser.hashedPass, function(err, res) {
-          //console.log("login.js, fn(comparePass): Inside bcrypt.\n");        
+          //console.log("login.js, fn(comparePass): Inside bcrypt.\n");
+          console.log(req.session);        
 
           if(res){
-            console.log("login.js, fn(comparePass): Successful compare");
-	       callback(infoUser, true);
+            //console.log("login.js, fn(comparePass): Successful compare");
+            // Generate a sessionID for the user
+            // Set session username
 
-
+            bcrypt.genSalt(saltRounds, function(err, salt) {
+              bcrypt.hash(user, salt, function(err, hash) {
+                //update user's doc with the new sessionID
+                exports.updateSessionID(user,hash,function(){
+                  //console.log("login.js, fn(comparePass): Setting sessionID: " + hash + " for user: " + user);
+                  req.session.loginID = hash;
+                  req.session.username = user;
+                  req.session.logged = true;
+                  //console.log("login.js, fn(comparePass): Set sessionID: " + req.session.loginID + " for user: " + req.session.username)
+                  //console.log("login.js, fn(comparePass): Updating session id for user: " + req.session.username + "\n");
+                  callback(hash, infoUser, true);
+                });
+              });
+            });
           }
           else{
-            console.log("login.js, fn(comparePass): Compare failed: " + res);
+            //console.log("login.js, fn(comparePass): Compare failed: " + res);
             req.session.logged = false;
             callback(null, false);
           }
@@ -48,8 +95,12 @@ exports.comparePass = function(user, password, req, res, callback) {
       });
     });
   });
-}
+};
 
+exports.sanitizeInput = function(input, callback) {
+
+
+  }
 
 exports.auth = function(req, res, next) {
 	////console.log("Trying to authenticate user now");

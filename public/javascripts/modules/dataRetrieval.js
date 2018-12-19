@@ -5,6 +5,7 @@ exports.MongoClient = require('mongodb').MongoClient;
 exports.url = 'mongodb://domenico:default@35.185.126.172:27017/admin'
 
 exports.updateProfile = function(user, email, callback){
+	//TODO sanitize
 	exports.MongoClient.connect(exports.url, function(err,db){
 		assert.equal(null,err);
 
@@ -18,8 +19,31 @@ exports.updateProfile = function(user, email, callback){
 				callback(email);
 			});
 		});
-	//});
-}
+};
+
+exports.lookupUser = function(user, callback){
+	exports.MongoClient.connect(exports.url, function(err,db){
+		assert.equal(null,err);
+
+		db.authenticate('domenico', 'default', function(err,result){
+			assert.equal(true, result);
+
+			db.collection('userDB').findOne({'username': user}, function (findErr, result) {
+        		if (findErr) throw findErr;
+
+        		// Check if user document already exists in DB,
+        		if (result == null){
+        			callback(true);
+        		}
+        		else{
+        			callback(false);
+        		}
+        		db.close();
+
+	});
+});
+});
+};
 
 exports.deleteRecording = function(spEZtoken){
 	exports.MongoClient.connect(exports.url, function(err,db){
@@ -64,7 +88,7 @@ exports.fetchRecording = function(spEZtoken, callback) {
 exports.fetchRecordings = function(username, reverse, callback){
 	exports.MongoClient.connect(exports.url, function(err, db) {
 		assert.equal(null, err);
-  
+
 		// Authenticate
 		db.authenticate('domenico', 'default', function(err, result) {
 		assert.equal(true, result);
@@ -106,4 +130,3 @@ exports.fetchRecordings = function(username, reverse, callback){
 	});
 });
 };
-

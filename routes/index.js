@@ -17,15 +17,17 @@ router.get('/', function(req, res, next) {
   });
 
 
-router.get('/home', function(req, res, next) {
+router.get('/home', function(req, res, next) {  
 	if(req.session.username == undefined || req.session.logged != true){
 		res.render('login', { error: 'Session expired. Please re-login.'});
 	}
 	else{
+      // TODO
     	// Make sure they have the fresh sessionID in DB before serving personal recordings
     	// persist.AuthenticateUser(req.session.loginID, req.session.username, function(boolVal){
       //		if(boolVal){
       			dataRT.fetchRecordings(req.session.username, true, function(blobArr,blobBuffArray,username){
+              //console.log(req.session.username + '\nblobArr: ' + blobArr + '\nblobBuffArray: ' + blobBuffArray + '\nusername: ' + username);
           		res.render('speakEZ', { session: req.session, blobArray: blobArr, blobBuffArray: blobBuffArray});
         	}); 
       //  	}
@@ -55,14 +57,10 @@ router.get('/home/settings', function(req, res, next) {
     }
 });
 
-
-
-
 router.get('/logout', function(req, res, next) {
 	req.session.destroy();
 	res.redirect('/');
 
 });
-
 
 module.exports = router;

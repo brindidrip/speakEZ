@@ -42,11 +42,11 @@
 				<div class="registration">
 					<h2>Registration</h2>
 					<div class="registrationlist">
-						<form action="/registration" id="account-creation" method="post" name="account-creation" novalidate="novalidate">
+						<form action="/registration" id="account-creation" method="post" name="account-creation" novalidate>
 							<ul>
 								<li class="registration_item">
 									<div class="control-group">
-										<input class="input-date" id="user_reg" maxlength="12" name="user_reg" placeholder="Username" required="required" type="text"
+										<input class="input-date" id="user_reg" maxlength="12" name="user_reg" pattern="[^' ']+" placeholder="Username" required="required" type="text"
 										value="">
 									</div>
 								</li>
@@ -845,7 +845,7 @@
 										}%>
 									</select>
 									
-									<select class="registration_item_dropdown" id="dobYear" name="dobYear" required="required">
+									<select class="registration_item_dropdown" id="dobYear" name="dobYear">
 										<option data-placeholder="placeholder" selected="selected" value="1900">
 											Year
 										</option>
@@ -862,27 +862,27 @@
 							
 							<li class="registration_item">
 								<div class="control-group" id="control-email">
-									<input autocomplete="off" class="grid-100" id="emailAddress" maxlength="320" name="emailAddress" placeholder="Email" required=
+									<input class="grid-100" id="emailAddress" maxlength="320" name="emailAddress" placeholder="Email" required=
 									"true" spellcheck="false" type="email" value="">
 									<span class="help-block" id="emailAddress-error-inline"></span>
 									<input autocomplete="off" class="grid-100" id="emailAddressConfirmation" maxlength="320" name="emailAddressConfirmation"
-									placeholder="Confirm Email" required="true" spellcheck="false" type="email" value=""> <span class="help-block" id=
+									placeholder="Confirm Email" spellcheck="false" type="email" oninput="check(this)" value=""> <span class="help-block" id=
 									"emailAddressConfirmation-error-inline"></span>
 								</div>
 								<div class="control-group" id="control-pass">
 									<input autocomplete="off" class="password-input" data-email_field="#emailAddress" id="password" maxlength="16"
-									name="password" placeholder="Password" required="true" spellcheck="false" type="password" value=""><input class="password-input"
-									id="rePassword" maxlength="16" name="rePassword" placeholder="Confirm Password" type="password" value="">
-									<div class="password-rating">
-									</div>
-									<span class="help-block" id="password-error-inline"></span>
+									name="password" placeholder="Password" spellcheck="false" type="password" value="" required><input class="password-input"
+									id="rePassword" maxlength="16" name="rePassword" placeholder="Confirm Password" type="password" oninput="check(this)" value="">
 								</div>
+								<span class="help-block" id="password-error-inline"></span>
 							</li>
 						</ul>
 						
 						<button class="button" id="creation-submit-button" type="submit">
 						<span class="button-text">Create a free
 						account</span></button>
+						<h6 style="color:red;"> <%=error%></h6>
+
 					</form>
 				</div>
 			</div>
@@ -938,8 +938,41 @@
 										</footer>
 									</main>
 									
-									<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-									<script src="/javascripts/globalScripts.js"></script>
-									
-								</body>
-							</html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="/javascripts/globalScripts.js"></script>
+<script>
+	function check(input) {
+		var form_button = document.getElementById("creation-submit-button");
+		var emailConfirm = document.getElementById("emailAddressConfirmation-error-inline");
+		var passwordConfirm = document.getElementById("password-error-inline");
+
+	    if(input.id == 'emailAddressConfirmation'){
+	    	if (input.value != document.getElementById('emailAddress').value) {
+	    		emailConfirm.textContent = "Please ensure that both fields match.";
+	    		emailConfirm.style.color = "red";
+
+	    		form_button.disabled = true;
+	    	}
+	    	else {
+	    		emailConfirm.textContent = "";
+	    		form_button.disabled = false;
+
+	    	}
+	    }
+	    else if(input.id == 'rePassword'){
+	    	if (input.value != document.getElementById('password').value) {
+	    		passwordConfirm.textContent = "Please ensure that both fields match.";
+	    		passwordConfirm.style.color = "red";
+	    		form_button.disabled = true;
+	    	}
+	    	else{
+	    		passwordConfirm.textContent = "";
+	    		form_button.disabled = false;
+
+	    	}
+	    }
+
+    }
+</script>
+	</body>
+		</html>

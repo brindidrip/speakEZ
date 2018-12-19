@@ -12,6 +12,9 @@
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
     <link rel='stylesheet' href='/stylesheets/style.css' />
 
+    <link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/google/code-prettify/master/loader/prettify.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.css">   
 
     
     <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
@@ -22,36 +25,34 @@
     <script src="/javascripts/customAudio.js"></script>
     <script src="/javascripts/globalScripts.js"></script>
  
-<script type="text/javascript">
-
-var storedBlobArr = [];
-var storedBlobTokens = [];
-var url = 0;
-
-   function toArrayBuffer(buf) {
-    var ab = new ArrayBuffer(buf.length);
-    var view = new Uint8Array(ab);
-    for (var i = 0; i < buf.length; ++i) {
-        view[i] = buf[i];
-    }
-    return ab;
-}
-
-  function loadBlob(index){
-    var musicID = "music" + index;    
-
-    $("#"+musicID).attr("src",storedBlobArr[index]);
-    $("#"+musicID).attr("preload","metadata");
-       
-  }
-
-</script>
     
-    <link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/google/code-prettify/master/loader/prettify.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.css">   
 
     <title>speakEZ - A way to easily embed your voice across the internet.</title>
+
+    <script type="text/javascript">
+
+    var storedBlobArr = [];
+    var storedBlobTokens = [];
+    var url = 0;
+
+       function toArrayBuffer(buf) {
+        var ab = new ArrayBuffer(buf.length);
+        var view = new Uint8Array(ab);
+        for (var i = 0; i < buf.length; ++i) {
+            view[i] = buf[i];
+        }
+        return ab;
+    }
+
+      function loadBlob(index){
+        var musicID = "music" + index;    
+
+        $("#"+musicID).attr("src",storedBlobArr[index]);
+        $("#"+musicID).attr("preload","metadata");
+           
+      }
+
+    </script>
   
   </head>
   
@@ -147,21 +148,15 @@ var url = 0;
 
             // pass object over ejs
             var abs = <%- JSON.stringify(blobBuffArray[i])%>;
-
             //console.log(Object.getOwnPropertyNames(abs));
-
             // convert from binary buffer to arraybuffer 
             var ab = toArrayBuffer(abs.data);
-
             // create blob from arraybuffer
             var storedBlob = new Blob([ab], {type: 'audio/wav'});
-
-
             // store all blobs in array for dynamic loading
             var url = URL.createObjectURL(storedBlob);
             storedBlobArr.push(url);
             storedBlobTokens.push(<%- JSON.stringify(blobArray[i].blobToken)%>);
-
             
           </script>          
              <div class="recordings">
@@ -308,8 +303,9 @@ $("[id^='download']").click(function(e) {
   e.preventDefault();
 
     var index = e.target.id.split("download")[1];
+    loadBlob(index);
     
-    //create a temporary a element
+     //create a temporary a element
     var link = document.createElement("a");
 
     $("#music"+ index).attr("src",storedBlobArr[index]);

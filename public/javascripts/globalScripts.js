@@ -1,5 +1,4 @@
 //globalScripts.js
-//Clientside scripts
 
 // Pop-over list button functionality
 $(document).ready(function(){
@@ -56,9 +55,20 @@ function toArrayBuffer(buf) {
 $("#saveButton").click(function(e) {
   e.preventDefault();
   navigator.getUserMedia({audio: true}, function(){
+
+  // Append recording title & description to formdata
+  var recordingTitle = document.getElementById("recordingTitle").value;
+  var recordingDesc = document.getElementById("recordingDesc").value;
+
+  console.log(recordingDesc);
+
+  currentBlob.append('title', recordingTitle);
+  currentBlob.append('description', recordingDesc);
+
+  //data.append('description', recordingDesc);
   
   // ajax POST method
-  // POSTS blob data to route /speakEZ/DB which stores data in mongoDB
+  // POSTS blob to route /speakEZ/DB which stores data in mongoDB
   // Returns a uniquely identifiable token to represent the blob
   // or returns an error
           
@@ -101,21 +111,32 @@ $("#saveButton").click(function(e) {
                       
       // If successful POST, then use recorder library to append a text      
       // node containing a unique blobToken
-                  
-      var txtNode = document.getElementById("tokenBlobTxt");
-      txtNode.innerHTML = "speakEZ://" + unqBlobToken;
-                  
+      $("#tokenBlobTxt").val("speakEZ://" + unqBlobToken);
+
+
       // Create a blobURL
       var url = URL.createObjectURL(storedBlob);
                   
       // Replaces existing token
       var parent = document.getElementById("recordingslist");
       var child = document.getElementById("recording-item-sample")
-      parent.removeChild(child);
-                 
+      parent.disabled = true;
+
+      e.disabled = true;
+
+      // Recording details box
+      //var recordDetailTitle = document.getElementById("recordingDetailinput").value;
+      var detailBox = document.getElementById("recordDetailBox").style.display = 'none';
+
+      //console.log(recordDetailTitle);
+
       // Sharebox
       $("#idShareMediaBox").css("display", "");
-      $("#idShareMediaLink").val("https://www.s-cord0.com/" + unqBlobToken);
+      $("#idShareMediaLink").val("https://www.s-cord0.com/recordings/a/" + unqBlobToken);
+
+      var saveButton = document.getElementById("saveButton");
+      saveButton.disabled = true;
+
     }, error: function(result) {
       alert('error: ' + result);
     }
@@ -140,12 +161,12 @@ function startUserMedia(stream) {
         // Reset text node & share box
         $("#idShareMediaBox").css("display", "none");
 
-        var txtNode = document.getElementById("tokenBlobTxt");
-        txtNode.innerHTML = "";
+        var txtNode = document.getElementById("tokenBlobTxt").value = "";
         
         recorder && recorder.record();
         button.disabled = true;
         button.nextElementSibling.disabled = false;
+
         console.log('Recording...');
 
 
@@ -157,51 +178,53 @@ function startUserMedia(stream) {
     
   }
 
-  function stopRecording(button) {
-    recorder && recorder.stop();
-    button.disabled = true;
-    button.previousElementSibling.disabled = false;
-    console.log('Stopped recording.');
+function stopRecording(button) {
+  recorder && recorder.stop();
+  button.disabled = true;
+  button.previousElementSibling.disabled = false;
+  button.nextElementSibling.disabled = false;
+  console.log('Stopped recording.');
     
-    // create WAV download link using audio data blob
-    generateSample();
-    recorder.clear();
-    
-  }
+  // create WAV download link using audio data blob
+  generateSample();
+  recorder.clear();
+}
   
-  function generateSample() {
-    
-    recorder && recorder.exportWAV(function(blob) {
-        var url = URL.createObjectURL(blob);
-        
-        // Store blob into FormData
-        var data = new FormData();
-        data.append('upl', blob);
-        
-        currentBlob = data;
+function generateSample() {
+  recorder && recorder.exportWAV(function(blob) {
+  var url = URL.createObjectURL(blob);
   
-        //console.log(new Blob([currentBlob.get('upl')], {type: 'audio/wav'}));
+  // Store audio blob into FormData
+  var data = new FormData();
+  data.append('upl', blob);
 
-        // li to hold audio player
-        var recordingslist = document.getElementById("recordingslist");
-
-        var li = document.createElement('li');
-        li.setAttribute("class", "recording-item-sample");
-        li.setAttribute("id", "recording-item-sample");
-        
-        var au = document.getElementById('music_main');
-
-        au.src = url;
-
-        // audio player appending
-        audioDiv_main.appendChild(pButton_main);
-        timeline_main.appendChild(playhead_main);
-        audioDiv_main.appendChild(timeline_main);
-
-        li.appendChild(au);
-        li.appendChild(audioDiv_main);
- 
-        recordingslist.appendChild(li);
+  currentBlob = data;
   
-    });
-  }
+  // console.log(new Blob([currentBlob.get('upl')], {type: 'audio/wav'}));
+
+  // Add detail to recording
+  
+  var detailBox = document.getElementById("recordDetailBox").style.display = '';
+
+  // li to hold audio player
+  var recordingslist = document.getElementById("recordingslist");
+
+  var li = document.createElement('li');
+  li.setAttribute("class", "recording-item-sample");
+  li.setAttribute("id", "recording-item-sample");
+        
+  var au = document.getElementById('music_main');
+  au.src = url;
+
+  // audio player appending
+  audioDiv_main.appendChild(pButton_main);
+  timeline_main.appendChild(playhead_main);
+  audioDiv_main.appendChild(timeline_main);
+
+  li.appendChild(au);
+  li.appendChild(audioDiv_main);
+      
+  //recordingslist.appendChild(detailBox)
+  recordingslist.appendChild(li);
+  });
+}

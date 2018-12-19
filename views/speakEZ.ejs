@@ -499,7 +499,8 @@ $("#saveButton").click(function(e) {
   // Validate input then sanitize on the backend
   currentBlob.append('title', recordingTitle);
   currentBlob.append('description', recordingDesc);
-
+  currentBlob.append('date-recorded',new Date())
+  
   //data.append('description', recordingDesc);
   
   // ajax POST method

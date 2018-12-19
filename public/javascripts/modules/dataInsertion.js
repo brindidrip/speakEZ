@@ -49,12 +49,13 @@ exports.insertUserSession = function(db, req, callback) {
   }); 
 };
 
-exports.insertBlob = function(db, blob, user, filename, title, desc, fp, callback) {
+exports.insertBlob = function(db, blob, user, filename, title, desc, date, fp, callback) {
    db.collection('recordingsDB').insertOne({
       "username" : user,
       "blobToken" : filename,
       "title" : title,
       "description": desc,
+      "recordDate": date,
       "blob" : blob
   }, function(err, result) {
     assert.equal(err, null);

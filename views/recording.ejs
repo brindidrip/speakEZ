@@ -119,7 +119,7 @@ var url = 0;
                 
                           <script>
                             // pass object over ejs
-                            var abs = <%- JSON.stringify(blobBuff)%>;
+                            var abs = <%- JSON.stringify(result.blob.buffer)%>;
 
                             // convert from binary buffer to arraybuffer 
                             var ab = toArrayBuffer(abs.data);
@@ -155,20 +155,23 @@ var url = 0;
 
     </div>
              
-
  <div class="recordInfoBox">
           <div class="recordSubHeading">Record information</div>
           
           
           <div class="recordHorizontalSeparator"></div>
-            <p>Item1:
-            </p>
-             <p>Item2:
-            </p>
-             <p>Item3:
-            </p>
+            <label> Title: </label>
+              <p><%=result.title%></p>
+            <label> Description:  </label>
+              <p><%=result.description%></p>
+            <label> Date: </label>
+            <p><%=result.recordDate%></p>
            
            </div>
+
+<input type="button" class="shareSmallButton" value="Download"">
+
+
     </section>
  
     
@@ -215,5 +218,6 @@ var url = 0;
     </section>
   </footer>
 </main>
+
   </body>
 </html>

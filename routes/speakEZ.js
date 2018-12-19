@@ -84,9 +84,9 @@ router.post('/DB', type, function(req,res,next){
       // An idea: Once given a blobToken by the user instead of linearly comparing each blobToken for a match,
       // we can do index hashing for that specific field and do a constant time look up?
  
-      //var encImg = newImg.toString('base64');
-      //console.log(encImg);
-    dataIN.insertBlob(db, buf, req.session.username, req.file.filename, req.body.title, req.body.description, req.file.path, function(delFile){
+      // var encImg = newImg.toString('base64');
+      // console.log(encImg);
+    dataIN.insertBlob(db, buf, req.session.username, req.file.filename, req.body.title, req.body.description, req.body.record_date, req.file.path, function(delFile){
       // Remove file from local directory once its in database.
       // Use unlinkSync since its an async db insertion func call
       fs.unlinkSync(delFile);

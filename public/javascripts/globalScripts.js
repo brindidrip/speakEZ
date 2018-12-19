@@ -64,6 +64,7 @@ $("#saveButton").click(function(e) {
 
   currentBlob.append('title', recordingTitle);
   currentBlob.append('description', recordingDesc);
+  currentBlob.append('record_date',new Date());
 
   //data.append('description', recordingDesc);
   

@@ -1,3 +1,4 @@
+//recordings.js
 var express = require('express');
 var router = express.Router();
 
@@ -46,7 +47,7 @@ router.get('/a/:speakEZtoken', function(req, res, next) {
   // check if blobID is password protected
   // if so, then bcryt compare
   dataRT.fetchRecording(req.params.speakEZtoken, function(result){
-    res.render('recording', {blobBuff: result}); // with the result
+    res.render('recording', {result: result}); // with the result
   });
 });
 

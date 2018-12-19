@@ -69,7 +69,7 @@ function retrieveWAV() {
       console.log("Error. Response status: " + this.status);
     }
     else{
-    playWAV(this.response);
+    playWAV(this.response.blob.buffer);
       }
   }
   xhr.send();

@@ -122,7 +122,7 @@ exports.auth = function(req, res, next) {
 exports.AuthenticateUser = function(sessionCookie, sessionUser, callback) {
 	var infoUser = null;
 	// Connect to DB
-	dataRT.MongoClient.connect(dataRT.url, function(err, db) {
+	exports.MongoClient.connect(exports.url, function(err, db) {
 		assert.equal(null, err);
 		//console.log("persistency.js, fn(AuthenticateUser): connected to db");
   

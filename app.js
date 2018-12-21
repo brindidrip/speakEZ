@@ -77,7 +77,7 @@ async function AuthenticateUser(sessionCookie, sessionUser) {
   const cursor = db.collection('sessionDB').find({'username': sessionUser});
   // Use `next()` and `await` to exhaust the cursor
   for (let doc = await cursor.next(); doc != undefined; doc = await cursor.next()) {
-    console.log(doc);
+    console.log("doc:" + doc);
         
   db.close();
   

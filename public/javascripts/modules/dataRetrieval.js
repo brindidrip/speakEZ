@@ -115,7 +115,7 @@ exports.fetchRecordings = function(username, reverse, callback){
 
               }
             }, function(err) {
-            console.log(err);
+            //console.log(err);
             db.close();
 
             // fetch recordings from oldest to newest

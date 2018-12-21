@@ -1,35 +1,19 @@
 //globalScripts.js
 
-// Pop-over list button functionality
+// Pop-over button functionality
 $(document).ready(function(){
-  $('.navigation-link').on('click',function(evt){
-    evt.preventDefault();
-    
-    var aID = $(this).attr('href');
-    var theID = evt.target.attributes.class.ownerElement.hash;
+  var currentHover = 0;
+  var previousHover = 0;
 
-    if(evt.target.offsetParent.id == "navigation-item-login"){
-        window.location.href = "/login";
-    }
+ $(".navigation-link").hover(
+  // Mouse over
+  function(e){
 
-    if( $('#popover-grid').css('display') == 'block' && theID === '#popover-support' ) {
-      $('#popover-grid').toggle( "popover" );
-            }
+      //console.log(e.currentTarget.hash);
+      currentHover = e.currentTarget.hash;
+      console.log(" In mouse over, setting currentHover to: " + currentHover);
 
-    if( $('#popover-support').css('display') == 'block' && theID === '#popover-grid') {
-      $('#popover-support').toggle( "popover" );
-            }
 
-    $(theID).toggle( "popover popover-open" );
-
-    evt.stopImmediatePropagation();
-
-    return;
-    });
-});
-
-// Prevent two popovers from appearing at same time
-$(document).click(function(evt){
 
       if( $('#popover-grid').css('display') == 'block') {
         $('#popover-grid').toggle( "popover" );
@@ -38,9 +22,55 @@ $(document).click(function(evt){
       else if( $('#popover-support').css('display') == 'block') {
         $('#popover-support').toggle( "popover" );
             }
+            $(e.currentTarget.hash).toggle( "popover");
+
+        
+  },
+  // Mouse out
+  function(e){
+      previousHover = currentHover;
+      currentHover = e.currentTarget.hash;
+
+        console.log("Mouse out, the current hover: "+ currentHover + " previous hover: " + previousHover + "\n");
+      if( previousHover == currentHover){
+
+      }
+      else if(currentHover == "#popover-support" || currentHover == "popover-grid") {
+        $(currentHover).toggle( "popover");
+      
+      }
+
+      else{
+
+
+        if( $('#popover-grid').css('display') == 'block') {
+          $('#popover-grid').toggle( "popover" );
+              }
+
+        else if( $('#popover-support').css('display') == 'block') {
+          $('#popover-support').toggle( "popover" );
+              
+            }
+        }
+        
+  })
+ });
+
+$(".container").mouseenter( function(){
+
+  console.log("mouse has left the building");
+
+  if( $('#popover-grid').css('display') == 'block') {
+        $('#popover-grid').toggle( "popover" );
+            }
+
+      else if( $('#popover-support').css('display') == 'block') {
+        $('#popover-support').toggle( "popover" );
             
-      return;
-});
+          }
+        
+
+})      
 
 function toArrayBuffer(buf) {
   var ab = new ArrayBuffer(buf.length);

@@ -2,8 +2,8 @@
 var express = require('express');
 var router = express.Router();
 
-var dataRT = require('../public/javascripts/modules/dataRetrieval.js');
-var persist = require('../public/javascripts/modules/persistency.js');
+var dataRT = require('../public/javascript/modules/dataRetrieval.js');
+var persist = require('../public/javascript/modules/persistency.js');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {

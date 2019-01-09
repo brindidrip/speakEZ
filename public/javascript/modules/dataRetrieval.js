@@ -2,7 +2,7 @@
 var assert = require('assert');
 
 exports.MongoClient = require('mongodb').MongoClient;
-exports.url = 'mongodb://domenico:default@REDACTED:27017/admin'
+exports.url = 'mongodb://domenico:default@34.73.148.57:27017/admin'
 
 exports.updateProfile = function(user, email, callback){
 	//TODO sanitize

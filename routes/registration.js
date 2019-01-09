@@ -12,9 +12,9 @@ var assert = require('assert');
 var ObjectId = require('mongodb').ObjectID;
 
 // Modules
-var dataRT = require('../public/javascripts/modules/dataRetrieval.js');
-var dataIN = require('../public/javascripts/modules/dataInsertion.js');
-var persist = require('../public/javascripts/modules/persistency.js');
+var dataRT = require('../public/javascript/modules/dataRetrieval.js');
+var dataIN = require('../public/javascript/modules/dataInsertion.js');
+var persist = require('../public/javascript/modules/persistency.js');
     
 router.use(bodyParser.json());
 

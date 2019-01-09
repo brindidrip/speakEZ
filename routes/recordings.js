@@ -4,8 +4,8 @@ var router = express.Router();
 
 var cors = require('cors')
 
-var dataRT = require('../public/javascripts/modules/dataRetrieval.js');
-var persist = require('../public/javascripts/modules/persistency.js');
+var dataRT = require('../public/javascript/modules/dataRetrieval.js');
+var persist = require('../public/javascript/modules/persistency.js');
 
 // Needed by chrome extension to attach onto headers, otherwise cant play blobs cross origin
 router.use(cors());

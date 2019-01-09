@@ -14,9 +14,9 @@ var bcrypt = require('bcrypt');
 var saltRounds = 10;
 
 // Modules
-var dataRT = require('../public/javascripts/modules/dataRetrieval.js');
-var dataIN = require('../public/javascripts/modules/dataInsertion.js');
-var persist = require('../public/javascripts/modules/persistency.js');
+var dataRT = require('../public/javascript/modules/dataRetrieval.js');
+var dataIN = require('../public/javascript/modules/dataInsertion.js');
+var persist = require('../public/javascript/modules/persistency.js');
 
 var fs = require('fs');
 

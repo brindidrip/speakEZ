@@ -5,6 +5,7 @@ Idea
 
 This application exists to make sharing audio clips easier. Upon visiting the domain the user is greeted with the homepage, where a description of the program's functionality lives. The user has the ability to record/save recordings without registration. Once a recording is made, they are given access to a speakEZ token that allows for the recording to be shared through a Google Chrome extension, an option to download the recording, or a separate link to the individual recording. The chrome extension allows a user to place any speakEZ token and place it into the extension, prompting an API call which will automatically retrieve the recording and play it in the user's browser. 
 
+
 BLOB
 =================================================================================
 
@@ -71,7 +72,9 @@ Once I set up node and npm using YUM, I was able to generate an express applicat
     sudo PORT=8080 node ./bin/www launched the server.
 
 Instead of running app with SUDO:
+
     sudo iptables -t nat -A PREROUTING -p tcp --dport 8080 -j REDIRECT --to-ports 3000
+
 Redirect incoming port 80 traffic to port 3000 using iptables.
 
 MongoDB
@@ -80,6 +83,7 @@ MongoDB
 This application uses MongoDB. The mongodb instance is stored on a google cloud platform VM instance. I have created a VM with linux and have installed MongoDB there. In order to authenticate with admin, the user is "domenico" and the password is "default". 
 
 Command line entry:
+
     mongo [ip]/admin --authenticationDatabase admin -u domenico -p default
 
 
@@ -138,7 +142,7 @@ redis
 Installing redis on EC2 
 https://gist.github.com/FUT/7db4608e4b8ee8423f31
 
-ssh -i sshkeys/redisAWS.pem ec2-user@[ip].us-east-2.compute.amazonaws.com
+    ssh -i sshkeys/redisAWS.pem ec2-user@[ip].us-east-2.compute.amazonaws.com
 
 BUGS/TODO
 =================================================================================

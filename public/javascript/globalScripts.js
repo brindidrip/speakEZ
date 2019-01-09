@@ -1,19 +1,34 @@
 //globalScripts.js
 
-// Pop-over button functionality
+// Pop-over list button functionality
 $(document).ready(function(){
-  var currentHover = 0;
-  var previousHover = 0;
+  $('.navigation-link').on('click',function(evt){
+    evt.preventDefault();
+    
+    var aID = $(this).attr('href');
+    var theID = evt.target.attributes.class.ownerElement.hash;
 
- $(".navigation-link").hover(
-  // Mouse over
-  function(e){
+    if(evt.target.offsetParent.id == "navigation-item-login"){
+        window.location.href = "/login";
+    }
 
-      //console.log(e.currentTarget.hash);
-      currentHover = e.currentTarget.hash;
-      console.log(" In mouse over, setting currentHover to: " + currentHover);
+    if( $('#popover-grid').css('display') == 'block' && theID === '#popover-support' ) {
+      $('#popover-grid').toggle( "popover" );
+            }
 
+    if( $('#popover-support').css('display') == 'block' && theID === '#popover-grid') {
+      $('#popover-support').toggle( "popover" );
+            }
 
+    $(theID).toggle( "popover popover-open" );
+
+    evt.stopImmediatePropagation();
+
+    return;
+    });
+
+// Prevent two popovers from appearing at same time
+$(document).click(function(evt){
 
       if( $('#popover-grid').css('display') == 'block') {
         $('#popover-grid').toggle( "popover" );
@@ -22,64 +37,60 @@ $(document).ready(function(){
       else if( $('#popover-support').css('display') == 'block') {
         $('#popover-support').toggle( "popover" );
             }
-            $(e.currentTarget.hash).toggle( "popover");
+            
+      return;
+});
 
-        
+/*
+// Hover Pop-over button functionality
+$(document).ready(function(){
+  var currentHover = 0;
+  var previousHover = 0;
+
+ $(".navigation-link").hover(
+    // Mouse over
+    function(e){
+    e.preventDefault();
+      currentHover = e.currentTarget.hash;
+      if( $('#popover-grid').css('display') == 'block') {
+        $('#popover-grid').toggle( "popover" );
+      }
+      else if( $('#popover-support').css('display') == 'block') {
+        $('#popover-support').toggle( "popover" );
+      }
+      $(e.currentTarget.hash).toggle( "popover");
   },
   // Mouse out
   function(e){
-      previousHover = currentHover;
-      currentHover = e.currentTarget.hash;
+    previousHover = currentHover;
+    currentHover = e.currentTarget.hash;
 
-        console.log("Mouse out, the current hover: "+ currentHover + " previous hover: " + previousHover + "\n");
-      if( previousHover == currentHover){
+    if( previousHover == currentHover){
 
-      }
-      else if(currentHover == "#popover-support" || currentHover == "popover-grid") {
-        $(currentHover).toggle( "popover");
-      
-      }
-
-      else{
-
-
-        if( $('#popover-grid').css('display') == 'block') {
-          $('#popover-grid').toggle( "popover" );
-              }
-
-        else if( $('#popover-support').css('display') == 'block') {
-          $('#popover-support').toggle( "popover" );
-              
-            }
-        }
-        
-  })
- });
-
-$(".container").mouseenter( function(){
-
-  console.log("mouse has left the building");
-
-  if( $('#popover-grid').css('display') == 'block') {
+    }
+    else if(currentHover == "#popover-support" || currentHover == "#popover-grid") {
+      $(currentHover).toggle( "popover");
+    }
+    else {
+      if( $('#popover-grid').css('display') == 'block') {
         $('#popover-grid').toggle( "popover" );
-            }
-
+      }
       else if( $('#popover-support').css('display') == 'block') {
         $('#popover-support').toggle( "popover" );
-            
-          }
-        
+      }
+    }
+  })
 
-})      
-
-function toArrayBuffer(buf) {
-  var ab = new ArrayBuffer(buf.length);
-  var view = new Uint8Array(ab);
-  for (var i = 0; i < buf.length; ++i) {
-    view[i] = buf[i];
+$(".container").mouseenter( function(){
+  console.log("mouse is entered into contianer")
+  if( $('#popover-grid').css('display') == 'block') {
+    $('#popover-grid').toggle( "popover" );
   }
-  return ab;
-}
+  else if( $('#popover-support').css('display') == 'block') {
+    $('#popover-support').toggle( "popover" );
+  }
+})      
+*/
 
 // Save a recording and generate a unique blobToken  
 $("#saveButton").click(function(e) {
@@ -90,7 +101,7 @@ $("#saveButton").click(function(e) {
   var recordingTitle = document.getElementById("recordingTitle").value;
   var recordingDesc = document.getElementById("recordingDesc").value;
 
-  console.log(recordingDesc);
+  //console.log(recordingDesc);
 
   currentBlob.append('title', recordingTitle);
   currentBlob.append('description', recordingDesc);
@@ -115,7 +126,7 @@ $("#saveButton").click(function(e) {
     processData: false,
     success: function(result) {
       try {
-        alert("um, success");
+        alert("success");
 
         // Store buffer from response in a buffer array and then into a Blob
         var bf = toArrayBuffer(result.blob.data);
@@ -177,7 +188,107 @@ $("#saveButton").click(function(e) {
   console.log('No live audio input: ' + e);
 });
 });
-  
+
+$("[id^='download']").click(function(e) {
+  e.preventDefault();
+
+    var index = e.target.id.split("download")[1];
+    loadBlob(index);
+    
+     //create a temporary a element
+    var link = document.createElement("a");
+
+    $("#music"+ index).attr("src",storedBlobArr[index]);
+
+    //set audio div src
+    link.href = $("#music"+ index)[0].currentSrc;
+
+    link.setAttribute("download", storedBlobTokens[index] + ".wav");
+    document.body.appendChild(link);
+    link.click();
+
+    document.body.removeChild(link);
+    delete link;
+
+});
+
+$("[id^='delete']").click(function(e) {
+  e.preventDefault();
+
+  var token = e.target.value;
+  var index = e.target.id.split("delete")[1];
+  var recording = ".recording-grid-item" + index;
+
+  confirmDialogue(recording, "Are you sure you want to delete this recording? This decision cannot be reversed.");
+});
+});
+
+function confirmDialogue(target,dialogue) {
+    $("#dialog-confirm").html(dialogue);
+
+    $("#dialog-confirm").dialog({
+        resizable: false,
+        modal: true,
+        title: "Delete a recording",
+        height: 135,
+        width: 250,
+        buttons: {
+            "Yes": function () {
+                $(this).dialog('close');
+                callback(true,target);
+            },
+                "No": function () {
+                $(this).dialog('close');
+                callback(false,target);
+            }
+        }
+    });
+}
+
+function callback(confirm,target) {
+  if(confirm){
+    // Delete from database
+    $(target).fadeOut(1500);
+
+    var token = $(target)[0].attributes[1].nodeValue;
+    var ape = "eooeadlp2d"
+
+    $.ajax({
+    type: "POST",
+    url: "/speakEZ/delete",
+    data: {"speakEZtoken" : token},
+    success: function(result) {
+      try {
+        alert("um, success");
+
+       
+      }
+
+     
+      catch(e) {
+        alert(e);
+      }
+      
+    },
+    error: function(result) {
+      alert('error: ' + result);
+    }});
+  }
+  else{
+    // do nothing
+  }
+    
+}  
+
+function toArrayBuffer(buf) {
+  var ab = new ArrayBuffer(buf.length);
+  var view = new Uint8Array(ab);
+  for (var i = 0; i < buf.length; ++i) {
+    view[i] = buf[i];
+  }
+  return ab;
+}
+
 function startUserMedia(stream) {
   var input = audio_context.createMediaStreamSource(stream);
   console.log('Media stream created.');

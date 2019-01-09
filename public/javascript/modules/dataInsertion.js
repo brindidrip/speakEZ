@@ -2,7 +2,7 @@
 var assert = require('assert');
 
 exports.MongoClient = require('mongodb').MongoClient;
-exports.url = 'mongodb://domenico:default@35.185.126.172:27017/admin'
+exports.url = 'mongodb://domenico:default@REDCATED:27017/admin'
 
 exports.insertUser = function(db, req, hash, callback) {
   var today = new Date();

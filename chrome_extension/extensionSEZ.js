@@ -26,7 +26,6 @@ function toArrayBuffer(buf) {
     return ab;
 }
 
-
 function playWAV(blob) {
   var url = window.URL.createObjectURL(blob);
   //console.log(blob);
@@ -46,14 +45,10 @@ function playWAV(blob) {
     // Show a UI element to let the user manually start playback.
   });
 }
-
 //  chrome.tabs.executeScript({
  //   code: script
  // });
 }
-
-
-
 
 function retrieveWAV() {
   alert("here we go")

@@ -10,7 +10,7 @@ BLOB
 
 The application is based off of the ability to generate BLOBs. Using a recorder module that measures the samples of a recording, a blob is generated on the front end. Once the user decides they want to save this, then an ajax call is fired to post the BLOB to the server and into a database. AJAX does not play nicely with BLOBs, so the BLOB was appended to a FormData object and then posted to the server, as seen below:
 
-$("#saveButton").click(function(e) {
+    $("#saveButton").click(function(e) {
     e.preventDefault();
     $.ajax({
         type: "POST",

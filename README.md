@@ -67,10 +67,11 @@ TO SSH IN: sudo ssh -i sshkeys/scord-mainkey.pem ec2-user@[ip].us-east-2.compute
 
 REQUIREMENT: Use nvm install 7.4 to run async functions.
 
-Once I set up node and npm using YUM, I was able to generate an express application and test out the functionality. Using sudo PORT=8080 node ./bin/www launched the server.
+Once I set up node and npm using YUM, I was able to generate an express application and test out the functionality. Using   
+    sudo PORT=8080 node ./bin/www launched the server.
 
 Instead of running app with SUDO:
-sudo iptables -t nat -A PREROUTING -p tcp --dport 8080 -j REDIRECT --to-ports 3000
+    sudo iptables -t nat -A PREROUTING -p tcp --dport 8080 -j REDIRECT --to-ports 3000
 Redirect incoming port 80 traffic to port 3000 using iptables.
 
 MongoDB
@@ -79,8 +80,7 @@ MongoDB
 This application uses MongoDB. The mongodb instance is stored on a google cloud platform VM instance. I have created a VM with linux and have installed MongoDB there. In order to authenticate with admin, the user is "domenico" and the password is "default". 
 
 Command line entry:
-
-mongo [ip]/admin --authenticationDatabase admin -u domenico -p default
+    mongo [ip]/admin --authenticationDatabase admin -u domenico -p default
 
 
 Collections 

@@ -78,7 +78,7 @@ exports.fetchRecording = function(spEZtoken, callback) {
         			}
 
 				db.close();
-				callback(result);    
+				callback(result, result.blob.buffer);    
 			})          
 		});
 	});

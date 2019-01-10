@@ -6,7 +6,8 @@ Idea
 This application exists to make sharing audio clips easier. Upon visiting the domain the user is greeted with the homepage, where a description of the program's functionality lives and the ability to quickly generate a recording along with a shareable link. The user has the ability to record/save recordings without registration. Once a recording is made, they are given access to a speakEZ token that allows for the recording to be shared through a Google Chrome extension, an option to download the recording, or a separate link to the individual recording. The chrome extension allows a user to place any speakEZ token and place it into the extension, prompting an API call which will automatically retrieve the recording and play it in the user's browser. 
 
 [Quick Demo](https://www.youtube.com/watch?v=LLqZFrmpqeM)
-[80185938f1da02bfb4c10f3b957cb784.png](https://postimg.cc/tZpWpCxx)
+
+[![80185938f1da02bfb4c10f3b957cb784.png](https://i.postimg.cc/QtWbgFN0/80185938f1da02bfb4c10f3b957cb784.png)](https://postimg.cc/tZpWpCxx)
 
 BLOB
 =================================================================================

@@ -134,6 +134,6 @@ https://gist.github.com/FUT/7db4608e4b8ee8423f31
 
     ssh -i sshkeys/redisAWS.pem ec2-user@[ip].us-east-2.compute.amazonaws.com
 
-## BUGS/TODO
+## TODO
 
 [ ] - Implement user input sanitization/validation

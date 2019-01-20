@@ -1,6 +1,6 @@
 # speakEZ
 
-[[Quick VIDEO Demo]](https://www.youtube.com/watch?v=LLqZFrmpqeM)
+[[Quick Video Demo]](https://www.youtube.com/watch?v=LLqZFrmpqeM)
 
 [![80185938f1da02bfb4c10f3b957cb784.png](https://i.postimg.cc/QtWbgFN0/80185938f1da02bfb4c10f3b957cb784.png)](https://postimg.cc/tZpWpCxx)
 

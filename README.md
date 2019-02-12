@@ -6,12 +6,11 @@
 
 ## Introduction
 
-This application exists to make sharing audio clips easier. Upon visiting the domain the user is greeted with the homepage, where a description of the program's functionality lives and the ability to quickly generate a recording along with a shareable link. The user has the ability to record/save recordings without registration. Once a recording is made, they are given access to a speakEZ token that allows for the recording to be shared through a Google Chrome extension, an option to download the recording, or a separate link to the individual recording. The chrome extension allows a user to place any speakEZ token and place it into the extension, prompting an API call which will automatically retrieve the recording and play it in the user's browser. 
-
+This application exists to make sharing audio clips easier. Users can quickly generate a recording along with a shareable link. The user has the ability to record/save recordings without registration. Once a recording is made, they are given access to a speakEZ token that allows for the recording to be shared through a Google Chrome extension, along with an option to download the recording, or a separate link to the individual recording. The chrome extension allows a user to place any speakEZ token into the extension, prompting an API call which will automatically retrieve the recording and play it in the user's browser. 
 
 ### BLOB
 
-The application is based off of the ability to generate BLOBs. Using a recorder module that measures the samples of a recording, a blob is generated on the front end. Once the user decides they want to save this, then an ajax call is fired to post the BLOB to the server and into a database. AJAX does not play nicely with BLOBs, so the BLOB was appended to a FormData object and then posted to the server, as seen below:
+The application is based off of the ability to generate BLOBs. Using a recorder module that measures the samples of a recording, a blob is generated on the front end. Once the user decides they want to save this, then an ajax call is fired to post the BLOB to the server and into the database. AJAX does not play nicely with BLOBs, so the BLOB was appended to a FormData object and then posted to the server, as seen below:
 
     $("#saveButton").click(function(e) {
     e.preventDefault();
@@ -46,17 +45,6 @@ The application makes use of express' sessions. During each log-in made by a reg
 
 Users login/passwords are validated using the hashed (salted) password and a plaintext password that is submitted by the user upon login. 
 
-    function updateDoc(user, sessionPass){
-      MongoClient.connect(url, function(err, db) {
-        assert.equal(null, err);
-        //Authenticate
-        db.authenticate('domenico', 'default', function(err, result) {
-          assert.equal(true, result);
-          db.collection('sessionDB').updateOne({'username': user}, {$set: {current_sessionID: sessionPass}});
-          db.close();
-        });
-      });
-
 ### Web Server
 
 Domain:
@@ -88,7 +76,7 @@ This application uses MongoDB. The mongodb instance is stored on a google cloud 
 
 #### recordingsDB
 
-When a user tries to record a WAV, the generated BLOB gets stored in the collection document, along with their username and a unique token to represent the BLOB. NOTE: Each document holds a maximum of 16MB. 
+When a user tries to record a WAV, the generated BLOB gets stored in the collection document, along with their username and a unique token to represent the BLOB.
 
 #### sessionDB
 
@@ -99,23 +87,6 @@ for authentication purposes.
 
 The userDB holds information about the registered user as seen below.
 All passwords are hashed for security using bcrypt. 
-
-    var insertUser = function(db, req, hash, callback) {
-       db.collection('userDB').insertOne( {
-          "bio-data" : {
-             "fullName" : req.body.firstName + " " + req.body.lastName, 
-             "country" : "USA",
-             "birthdate" :  req.body.dobYear,
-             "membership" : false
-          },
-          "username" : req.body.user_reg,
-          "emailAddress" : req.body.emailAddress,
-          "hashedPass" : hash
-       }, function(err, result) {
-        assert.equal(err, null);
-        console.log("Inserted a user_document into the userDB collection.");
-        callback();
-      });
 
 ## bcrypt     
 
